@@ -1,0 +1,74 @@
+{% set page = 'settings' %}
+{% extends "base.html.j2" %}
+{% set title %}Available Voices - {{ config.STORE_NAME }}{% endset %}
+{% from 'macros/voices.html.j2' import render_voices with context %}
+{% block content %}
+
+{% include 'includes/app_heading.html.j2' %}
+{% include 'includes/app_sidebar.html.j2' %}
+
+<div id="content" class="app-content">
+  <!-- BEGIN container -->
+  <div class="container">
+    <!-- BEGIN row -->
+    <div class="row justify-content-center">
+      <!-- BEGIN col-10 -->
+      <div class="col-xl-10">
+        <!-- BEGIN row -->
+        <div class="row">
+          <!-- BEGIN col-9 -->
+          <div class="col-xl-9" hx-ext="response-targets">
+
+            <h1><i class="bi bi-text-paragraph text-theme"></i> Add Content</h1>
+            <p>Add content directly to your podcast feed.</p>
+
+
+
+            <form
+              hx-post="/partials/app/add-podcast-content"
+              hx-trigger="submit"
+              hx-target="#dead-end"
+              hx-on::after-request="
+                window.showToast(event.detail.xhr.response, !event.detail.successful);
+                setTimeout(function() {
+                  window.location.href = '/app';
+                }, 2000);
+              "
+            >
+              <div class="form-group mb-3">
+                <textarea
+                  class="form-control"
+                  id="add-content-textarea"
+                  rows="6"
+                  name="content"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-outline-theme btn-lg d-block fw-500 mb-3 hx-disable"
+                id="add-content-submit-button"
+              >
+                <span class="default-button-text">Submit</span>
+                <span id="loading-indicator" class="htmx-indicator">
+                  Submitting ... <i class="fa fa-spinner fa-spin"></i>
+                </span>
+              </button>
+            </form>
+
+
+          </div>
+          <!-- END col-9-->
+        </div>
+        <!-- END row -->
+      </div>
+      <!-- END col-10 -->
+    </div>
+    <!-- END row -->
+  </div>
+  <!-- END container -->
+
+</div>
+
+<a href="#" data-toggle="scroll-to-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+
+{% endblock %}

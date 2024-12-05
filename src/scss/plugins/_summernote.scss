@@ -1,0 +1,305 @@
+.note-editor {
+	background: none;
+	font-family: $font-family-base !important;
+	
+	&.note-frame,
+	&.note-airframe {
+		color: var(--#{$prefix}body-color);
+		
+		& .note-toolbar {
+			padding: ($card-spacer-y - rem(8px)) $card-spacer-x ($card-spacer-y - rem(4px));
+			background: none;
+			border-color: var(--#{$prefix}border-color);
+			border-radius: 0;
+			
+			& .note-btn-group {
+				display: inline-flex;
+				
+				& > .note-btn {
+					--#{$prefix}btn-padding-x: #{$btn-padding-x};
+					--#{$prefix}btn-padding-y: #{$btn-padding-y};
+					--#{$prefix}btn-font-family: #{$btn-font-family};
+					@include rfs($btn-font-size, --#{$prefix}btn-font-size);
+					--#{$prefix}btn-font-weight: #{$btn-font-weight};
+					--#{$prefix}btn-line-height: #{$btn-line-height};
+					--#{$prefix}btn-color: #{$body-color};
+					--#{$prefix}btn-border-width: #{$btn-border-width};
+					--#{$prefix}btn-border-radius: #{$btn-border-radius};
+					--#{$prefix}btn-box-shadow: #{$btn-box-shadow};
+					--#{$prefix}btn-disabled-opacity: #{$btn-disabled-opacity};
+					--#{$prefix}btn-font-weight: $btn-font-weight;
+					--#{$prefix}btn-color: var(--#{$prefix}component-color);
+					--#{$prefix}btn-bg: var(--#{$prefix}body-bg);
+					--#{$prefix}btn-border-color: var(--#{$prefix}border-color);
+					--#{$prefix}btn-hover-color: var(--#{$prefix}component-color);
+					--#{$prefix}btn-hover-bg: var(--#{$prefix}border-color);
+					--#{$prefix}btn-hover-border-color: var(--#{$prefix}border-color);
+					--#{$prefix}btn-focus-shadow-rgb: var(--#{$prefix}violet-rgb);
+					--#{$prefix}btn-active-color: var(--#{$prefix}component-color);
+					--#{$prefix}btn-active-bg: var(--#{$prefix}border-color);
+					--#{$prefix}btn-active-border-color: var(--#{$prefix}border-color);
+					
+					display: inline-block;
+					padding: var(--#{$prefix}btn-padding-y) var(--#{$prefix}btn-padding-x);
+					font-family: var(--#{$prefix}btn-font-family);
+					@include font-size(var(--#{$prefix}btn-font-size));
+					font-weight: var(--#{$prefix}btn-font-weight);
+					line-height: var(--#{$prefix}btn-line-height);
+					color: var(--#{$prefix}btn-color);
+					text-align: center;
+					text-decoration: if($link-decoration == none, null, none);
+					white-space: $btn-white-space;
+					vertical-align: middle;
+					cursor: if($enable-button-pointers, pointer, null);
+					user-select: none;
+					border: var(--#{$prefix}btn-border-width) solid var(--#{$prefix}btn-border-color);
+					@include border-radius(var(--#{$prefix}btn-border-radius));
+					@include gradient-bg(var(--#{$prefix}btn-bg));
+					@include box-shadow(var(--#{$prefix}btn-box-shadow));
+					@include transition($btn-transition);
+					
+					&:hover {
+						color: var(--#{$prefix}btn-hover-color);
+						text-decoration: if($link-hover-decoration == underline, none, null);
+						background-color: var(--#{$prefix}btn-hover-bg);
+						border-color: var(--#{$prefix}btn-hover-border-color);
+					}
+					&:first-child:not(:last-child):not(.dropdown-toggle) {
+						@if $enable-rtl {
+							border-top-left-radius: 0;
+							border-bottom-left-radius: 0;
+						} @else {
+							border-top-right-radius: 0;
+							border-bottom-right-radius: 0;
+						}
+					}
+					&:last-child:not(:first-child):not(.dropdown-toggle) {
+						@if $enable-rtl {
+							border-top-right-radius: 0;
+							border-bottom-right-radius: 0;
+						} @else {
+							border-top-left-radius: 0;
+							border-bottom-left-radius: 0;
+						}
+					}
+					&:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+						border-radius: 0;
+					}
+					& .note-icon-caret {
+						&:before {
+							content: '';
+						}
+					}
+					& > .note-icon-caret {
+						&:first-child {
+							@if $enable-rtl {
+								margin-right: rem(-7px);
+							} @else {
+								margin-left: rem(-7px);
+							}
+						}
+					}
+				}
+				&.note-color {
+					& > .note-btn.dropdown-toggle {
+						@if $enable-rtl {
+							border-top-right-radius: 0;
+							border-bottom-right-radius: 0;
+						} @else {
+							border-top-left-radius: 0;
+							border-bottom-left-radius: 0;
+						}
+					}
+				}
+				&.note-para {
+					& > .note-btn-group > .note-btn {
+						@if $enable-rtl {
+							border-top-right-radius: 0;
+							border-bottom-right-radius: 0;
+						} @else {
+							border-top-left-radius: 0;
+							border-bottom-left-radius: 0;
+						}
+					}
+				}
+			}
+			& .note-dropdown-menu {
+				border: 0;
+				padding: $dropdown-padding-y $dropdown-padding-x;
+				background: $dropdown-bg;
+				box-shadow: $dropdown-box-shadow;
+				border-radius: $border-radius;
+				
+				& .note-dropdown-item {
+					padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+					color: $dropdown-link-color;
+					
+					&:hover {
+						background: $dropdown-link-hover-bg;
+						color: $dropdown-link-hover-color;
+					}
+				}
+			}
+			& .note-palette {
+				& .note-color-palette {
+					& .note-color-row {
+						display: flex;
+						
+						& .note-color-btn {
+							display: block;
+							min-height: initial;
+						}
+					}
+				}
+			}
+			& .note-para {
+				& .note-dropdown-menu {
+					min-width: rem(235px);
+				}
+			}
+		}
+		& .note-editing-area {
+			& .note-editable {
+				padding: $card-spacer-y $card-spacer-x !important;
+			}
+		}
+		&.fullscreen {
+			top: $app-header-height !important;
+			background: $dropdown-bg;
+			
+			@include media-breakpoint-up(md) {
+				left: $app-sidebar-width !important;
+			}
+		}
+		&.codeview {
+			& .note-editing-area {
+				& .note-codable {
+					background: none;
+				}
+			}
+		}
+		& .note-statusbar .note-resizebar .note-icon-bar {
+			border-color: rgba(var(--#{$prefix}inverse-rgb), .25) !important; 
+		}
+	}
+	& .note-tooltip {
+		& .note-tooltip-content {
+			border-radius: $border-radius-sm;
+		}
+	}
+	& .note-modal {
+		padding: $app-header-height 0;
+		overflow: scroll;
+		
+		& .note-modal-content {
+			border: 0;
+			background: $modal-backdrop-bg;
+			border-radius: $modal-content-border-radius;
+			box-shadow: none;
+			
+			& .note-modal-header {
+				border: 0;
+				padding: $modal-inner-padding;
+				border-bottom: 1px solid $modal-header-border-color;
+				
+				& .note-modal-title {
+					color: $headings-color;
+					font-weight: $headings-font-weight;
+					font-size: $h5-font-size;
+				}
+				& .close {
+					color: $headings-color;
+				}
+			}
+			& .note-modal-body {
+				padding: $modal-inner-padding;
+				
+				& .form-group {
+					padding-bottom: $spacer;
+					
+					& .note-form-label {
+						margin-bottom: $form-label-margin-bottom;
+						font-size: $font-size-base;
+						font-weight: $font-weight-normal;
+						color: inherit;
+						display: block;
+						padding: 0;
+					}
+					& .note-form-control {
+						border: $input-border-width solid $input-border-color;
+						padding: $input-padding-y $input-padding-x;
+						font-family: $input-font-family;
+						font-size: $input-font-size;
+						font-weight: $input-font-weight;
+						line-height: $input-line-height;
+						background: $input-bg;
+						
+						&:focus {
+							border-color: $input-focus-border-color;
+						}
+					}
+				}
+				& .checkbox {
+					& label {
+						padding: 0;
+						margin: 0;
+						display: flex;
+						align-items: center;
+						
+						& input {
+							@if $enable-rtl {
+								margin-left: $spacer * 0.5;
+							} @else {
+								margin-right: $spacer * 0.5;
+							}
+						}
+					}
+				}
+			}
+			& .note-modal-footer {
+				border: 0;
+				height: auto;
+				padding: $modal-inner-padding;
+				border-top: 1px solid $modal-header-border-color;
+				display: flex;
+				justify-content: flex-end;
+				
+				& .note-btn {
+					border: none;
+					border-radius: $border-radius;
+					
+					&.note-btn-primary {
+						background: none;
+						border: 1px solid var(--#{$prefix}theme);
+						color: var(--#{$prefix}theme);
+			
+						&:hover,
+						&:focus {
+							background: var(--#{$prefix}theme);
+							color: var(--#{$prefix}theme-color);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+body .note-modal-backdrop {
+	background: $modal-backdrop-bg;
+	opacity: $modal-backdrop-opacity;
+	display: none !important;
+}
+.card {
+	& > .note-editor {
+		&.note-frame {
+			border: none;
+		}
+	}
+	& > form {
+		& > .note-editor {
+			&.note-frame {
+				border: none;
+			}
+		}
+	}
+}

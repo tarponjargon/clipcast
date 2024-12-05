@@ -1,0 +1,39 @@
+{% from 'macros/email_field.html.j2' import render_email %}
+<div class="w-100 d-flex justify-content-center border-bottom slide-it">
+  <div class="col-12 col-md-8 col-lg-6 border p-3 m-md-3">
+    <form
+      hx-target="#profile-email"
+      hx-target-error="#email-update-response"
+      hx-post="/partials/updateemail"
+      class="row"
+    >
+      <div class="col-12 text-start">
+        <label class="form-label" for="email-entry-field">Update Your E-Mail</label>
+        {{ render_email(session_safe_get('email')) }}
+      </div>
+      <div class="col-12 text-danger my-2" id="email-update-response"></div>
+      <div class="col-6">
+        <a
+          href="javascript:;"
+          hx-get="/partials/profile-email"
+          hx-trigger="click"
+          hx-target="#profile-email"
+          hx-swap="innerHTML"
+          class="btn btn-outline-default w-100"
+        >Cancel</a>
+      </div>
+      <div class="col-6">
+        <button
+          type="submit"
+          class="btn btn-theme w-100 hx-disable"
+          id="email-submit-button"
+        >
+          <span class="default-button-text">Update</span>
+          <span id="loading-indicator" class="htmx-indicator">
+            Updating ... <i class="fa fa-spinner fa-spin"></i>
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

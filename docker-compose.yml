@@ -1,0 +1,173 @@
+# this should be a non-site-specific file so the same one can be used across all brands
+# use environment variables
+
+version: "3.1"
+
+services:
+  redis_server:
+    image: redis
+    container_name: redis_server
+    restart: unless-stopped
+    command: --port ${REDIS_PORT}
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ./.dev_redis:/data
+    networks:
+      - my_network
+
+  database_server:
+    image: mysql
+    container_name: ${MYSQL_HOST}
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_TCP_PORT: 3306
+    volumes:
+      - ./dev-sql:/docker-entrypoint-initdb.d
+      - ./config/mysql-dev.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./.dev_db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    cap_add:
+      - SYS_NICE # trying to prevent mbind: Operation not permitted error
+    networks:
+      - my_network
+
+  application:
+    container_name: ${APP_HOST}
+    tty: true
+    build:
+      context: ./
+      dockerfile: ./config/Dockerfile-flask
+    command:
+      [
+        "./bin/wait-for-it.sh",
+        "${MYSQL_HOST}:3306",
+        "--",
+        "gunicorn",
+        "--config",
+        "./config/gunicorn.py",
+        "manage:app",
+      ]
+    environment:
+      ENV: "${ENV}"
+      STORE_CODE: "${STORE_CODE}"
+      REMOTE_HOST: "${REMOTE_HOST}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_HOST: "${MYSQL_HOST}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      FLASK_APP: "${FLASK_APP}"
+      APP_PORT: "${APP_PORT}"
+      SECRET_KEY: "${SECRET_KEY}"
+      RUN_HOST: "${RUN_HOST}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_CACHE_DB: "${REDIS_CACHE_DB}"
+      REDIS_SESSION_DB: "${REDIS_SESSION_DB}"
+      SESSION_COOKIE_NAME: "${STORE_CODE}"
+      REDIS_CART_DB: "${REDIS_CART_DB}"
+      GUNICORN_WORKERS: "${GUNICORN_WORKERS}"
+      GUNICORN_THREADS: "${GUNICORN_THREADS}"
+      GUNICORN_LOGLEVEL: "${GUNICORN_LOGLEVEL}"
+      S3_URL: "${S3_URL}"
+      S3_BUCKET: "${S3_BUCKET}"
+      S3_ACCESS_KEY: "${S3_ACCESS_KEY}"
+      S3_SECRET_ACCESS_KEY: "${S3_SECRET_ACCESS_KEY}"
+      S3_PUBLIC_URL: "${S3_PUBLIC_URL}"
+      GOOGLE_APPLICATION_CREDENTIALS: "${GOOGLE_APPLICATION_CREDENTIALS}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      STORE_EMAIL: "${STORE_EMAIL}"
+      ERROR_NOTIFY_URL: "${ERROR_NOTIFY_URL}"
+      ERROR_NOTIFY_AUTH: "${ERROR_NOTIFY_AUTH}"
+      MAIL_USERNAME: "${MAIL_USERNAME}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      OBSCURE_SALT: "${OBSCURE_SALT}"
+      RANDOM_STRING: "${RANDOM_STRING}"
+
+      DEV_URL: "${DEV_URL}"
+      WEB_HOST: "${WEB_HOST}"
+      DEVSERVER_HOST: "${DEVSERVER_HOST}"
+    depends_on:
+      - database_server
+      - redis_server
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - ${HOME}/.ssh:/root/.ssh
+      - ./config:/project/config
+      - ./flask_app:/project/flask_app
+      - ./public_html:/project/public_html
+      - ./tmp:/project/tmp
+      - ./bin:/project/bin
+      - ./tests:/project/tests
+      - ./dev-sql:/project/dev-sql
+      - ./migrations:/project/migrations
+      - ./requirements.txt:/project/requirements.txt
+    restart: unless-stopped
+    networks:
+      my_network:
+
+  webserver:
+    container_name: webserver
+    hostname: ${WEB_HOST}
+    tty: true
+    build:
+      context: ./config
+      dockerfile: Dockerfile-apache
+    environment:
+      APP_HOST: ${APP_HOST}
+      APP_PORT: "${APP_PORT}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_HOST: "${MYSQL_HOST}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      REMOTE_HOST: "${REMOTE_HOST}"
+      ENV: "${ENV}"
+    depends_on:
+      - application
+    ports:
+      - "80:80"
+      # - "443:443"
+    volumes:
+      - ./apacheconf/apache-rewrites.inc.conf:/etc/apache2/conf-available/apache-rewrites.inc.conf
+      - ./apacheconf/htpasswd:/etc/apache2/conf-available/htpasswd
+      - ./config:/project/config
+      - ./bin:/var/www/html/bin
+      - ./public_html:/var/www/html/public_html
+      - ${HOME}/.ssh:/root/.ssh
+    restart: unless-stopped
+    networks:
+      my_network:
+        aliases:
+          - ${WEB_HOST}
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - database_server
+    ports:
+      - "8080:80"
+    logging:
+      driver: none
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      PMA_HOST: database_server
+    networks:
+      - my_network
+
+networks:
+  my_network:

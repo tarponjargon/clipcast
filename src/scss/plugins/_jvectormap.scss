@@ -1,0 +1,101 @@
+.jvectormap-container {
+	position: relative;
+	
+	& .jvectormap-zoomin, 
+	& .jvectormap-zoomout, 
+	& .jvectormap-goback {
+		width: rem(18px);
+		height: rem(18px);
+		padding: 0 0 rem(2px);
+		box-sizing: border-box;
+		font-size: rem(16px);
+		background: var(--#{$prefix}body-bg);
+		color: var(--#{$prefix}body-color);
+		border: 1px solid var(--#{$prefix}border-color);
+		left: $card-spacer-x;
+		box-shadow: none;
+		border-radius: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 10;
+		
+		@if $enable-rtl {
+			right: $card-spacer-x;
+			left: auto;
+		} @else {
+			left: $card-spacer-x;
+		}
+		
+		.jvectormap-without-padding & {
+			@if $enable-rtl {
+				right: 0;
+				left: auto;
+			} @else {
+				left: 0;
+			}
+		}
+		
+		&:hover {
+			color: var(--#{$prefix}theme-color);
+			background: var(--#{$prefix}theme);
+		}
+	}
+	& .jvectormap-zoomin {
+		top: $card-spacer-x;
+		
+		.jvectormap-without-padding & {
+			top: 0;
+		}
+	}
+	& .jvectormap-zoomout {
+		top: $card-spacer-x + rem(25px);
+		
+		.jvectormap-without-padding & {
+			top: rem(25px);
+		}
+	}
+	& .jvectormap-legend {
+		background: var(--#{$prefix}body-bg);
+		color: var(--#{$prefix}body-color);
+		box-shadow: $dropdown-box-shadow;
+		border-radius: 0;
+	}
+	& .jvectormap-legend-title {
+		font-size: $font-size-base - rem(3px);
+		padding: $spacer * .3 $spacer * .5;
+		background: rgba(var(--#{$prefix}inverse-rgb), .15);
+	}
+	& .jvectormap-legend-cnt-v {
+		& .jvectormap-legend {
+			padding: 0;
+			margin: $card-spacer-x $card-spacer-x 0 0;
+			
+			& .jvectormap-legend-inner {
+				padding: $spacer * .5;
+			}
+			& .jvectormap-legend-tick {
+				display: flex;
+				align-items: center;
+			}
+			& .jvectormap-legend-tick-sample {
+				width: rem(16px);
+				height: rem(16px);
+			}
+			& .jvectormap-legend-tick-text {
+				padding-left: $spacer * .5;
+			}
+		}
+	}
+}
+.jvectormap-tip {
+	background: rgba(var(--#{$prefix}inverse-rgb), .9) !important;
+	color: var(--#{$prefix}body-bg) !important;
+	font-weight: $font-weight-bold !important;
+	padding: rem(4px) rem(8px) !important;
+	border: none !important;
+	font-family: inherit !important;
+	font-size: $font-size-base * .9 !important;
+	z-index: 1000;
+	border-radius: $border-radius !important;
+}

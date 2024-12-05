@@ -1,0 +1,45 @@
+{% set page = 'app' %}
+{% extends "base.html.j2" %}
+{% set title %}Application Dashboard - {{ config.STORE_NAME }}{% endset %}
+
+
+<div id="app" class="app">
+{% block content %}
+{% include 'includes/app_heading.html.j2' %}
+{% include 'includes/app_sidebar.html.j2' %}
+
+<!-- BEGIN #content -->
+<div id="content" class="app-content">
+
+  {% include 'includes/podcast_feed_url.html.j2' %}
+
+  <p class="my-4"></p>
+
+  <div class="d-flex align-items-center mb-3">
+    <div>
+      <h1 class="page-header mb-0">Your Podcast Queue</h1>
+    </div>
+  </div>
+
+  <div class="card p-4">
+
+    {% if queue and queue | length %}
+      {% include 'partials/profile/queue.html.j2' %}
+    {% else %}
+      No episodes yet.
+    {% endif %}
+
+    <div class="card-arrow">
+      <div class="card-arrow-top-left"></div>
+      <div class="card-arrow-top-right"></div>
+      <div class="card-arrow-bottom-left"></div>
+      <div class="card-arrow-bottom-right"></div>
+    </div>
+  </div>
+
+
+</div>
+<!-- END #content -->
+
+{% endblock %}
+</div>

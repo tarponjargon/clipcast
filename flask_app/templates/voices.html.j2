@@ -1,0 +1,94 @@
+{% set page = 'settings' %}
+{% extends "base.html.j2" %}
+{% set title %}Available Voices - {{ config.STORE_NAME }}{% endset %}
+{% from 'macros/voices.html.j2' import render_voices with context %}
+{% block content %}
+
+{% include 'includes/app_heading.html.j2' %}
+{% include 'includes/app_sidebar.html.j2' %}
+
+<div id="content" class="app-content">
+  <!-- BEGIN container -->
+  <div class="container">
+    <!-- BEGIN row -->
+    <div class="row justify-content-center">
+      <!-- BEGIN col-10 -->
+      <div class="col-xl-10">
+        <!-- BEGIN row -->
+        <div class="row">
+          <!-- BEGIN col-9 -->
+          <div class="col-xl-9">
+
+            <h1><i class="bi bi-broadcast text-theme"></i> Voices</h1>
+            <p>Customize the <a name="#provoices">Pro</a> and <a name="#provoices">Basic</a> voices for your podcast episodes.</p>
+
+            <!-- BEGIN #pro voices -->
+            <div id="provoices" class="mb-5">
+              <h2>Pro Voices</h2>
+              <form>
+                <div class="row custom-radio">
+                  {{ render_voices(premium_voices, session_safe_get('premium_voice'), session_safe_get('plan', 'premium')) }}
+                  <div class="col-md-6">
+                    <div class="radiobtn">
+                      <input
+                        type="radio"
+                        id="voice-random"
+                        name="voice"
+                        value="random"
+                        {% if session_safe_get('premium_voice') == 'random' %}checked{% endif %}
+                        hx-get="/partials/app/update-voice?voice=random&plan={{ session_safe_get('plan', 'premium') }}"
+                        hx-trigger="click"
+                        hx-target="#dead-end"
+                        hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
+                      />
+                      <label class="d-flex align-items-center" for="voice-random">
+                        &nbsp;<i class="bi bi-shuffle"></i>
+                        &nbsp;<span class="ps-2">Random Voice per Episode</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- END #basic voices -->
+
+            <!-- BEGIN #basic voices -->
+            <div id="basicvoices" class="mb-5">
+              <h2>Basic Voices</h2>
+
+              <form>
+                <div class="row custom-radio">
+                  {{ render_voices(base_voices, session_safe_get('base_voice'), "base") }}
+                </div>
+              </form>
+            </div>
+            <!-- END #basic voices -->
+
+          </div>
+          <!-- END col-9-->
+          <!-- BEGIN col-3 -->
+          <div class="col-xl-3">
+            <!-- BEGIN #sidebar-bootstrap -->
+            <nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
+              <nav class="nav">
+                <a class="nav-link" href="#provoices" data-toggle="scroll-to">Pro Voices</a>
+                <a class="nav-link" href="#basicvoices" data-toggle="scroll-to">Basic Voices</a>
+              </nav>
+            </nav>
+            <!-- END #sidebar-bootstrap -->
+          </div>
+          <!-- END col-3 -->
+        </div>
+        <!-- END row -->
+      </div>
+      <!-- END col-10 -->
+    </div>
+    <!-- END row -->
+  </div>
+  <!-- END container -->
+
+</div>
+
+<a href="#" data-toggle="scroll-to-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+
+{% endblock %}

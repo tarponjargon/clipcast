@@ -1,0 +1,157 @@
+<div id="header" class="app-header" hx-ext="response-targets">
+
+  <!-- BEGIN mobile-toggler -->
+  <div class="mobile-toggler">
+    <button type="button" class="menu-toggler" data-toggle-class="app-sidebar-mobile-toggled" data-toggle-target=".app">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+  <!-- END mobile-toggler -->
+
+  <!-- BEGIN brand -->
+  <div class="brand">
+    <a class="navbar-brand d-flex align-items-center position-relative me-auto brand px-0 w-auto" href="/">
+      <span class="brand-logo d-flex">
+        <span class="brand-text">clip<strong>Cast</strong></span>
+        <iconify-icon icon="bi:soundwave"></iconify-icon>
+      </span>
+    </a>
+  </div>
+  <!-- END brand -->
+
+  <div class="d-none d-sm-flex justify-content-start align-items-center col-8 col-md-6">
+    <form
+      hx-post="/partials/app/add-podcast-url"
+      hx-trigger="submit"
+      hx-target="#dead-end"
+      hx-on::after-request="
+        window.showToast(event.detail.xhr.response, !event.detail.successful);
+        if (event.detail.successful) {
+            setTimeout(function() {
+            window.location = '/app';
+          }, 1300);
+        }
+      "
+      class="w-100"
+    >
+      <div class="input-group w-auto">
+        <input
+          id="add-url-input"
+          type="url"
+          class="form-control"
+          placeholder="Add a URL to your podcast feed"
+          required="required"
+          name="url"
+        >
+        <button type="submit" class="btn btn-theme btn hx-disable">
+          <span class="default-button-text">
+            <i class="fa fa-plus-circle fa-fw me-1"></i> Add URL
+          </span>
+          <span id="loading-indicator" class="htmx-indicator">
+            Adding ... <i class="fa fa-spinner fa-spin"></i>
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- BEGIN menu -->
+  <div class="menu">
+    <div class="d-flex d-sm-none menu-item">
+      <a
+        href="#"
+        data-toggle-class="app-header-menu-search-toggled"
+        data-toggle-target=".app"
+        class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 me-3 fs-6 text-nowrap"
+      >
+        <i class="fa fa-plus-circle fa-fw me-1"></i> Add a URL<span class="d-none d-sm-inline-block"> to your feed</span>
+      </a>
+    </div>
+
+    <div class="menu-item d-flex align-item-center justify-content-center">
+      <a
+        href="javascript:;"
+        data-bs-toggle="modal"
+        data-bs-target="#myModal"
+        data-bs-url="/rss-feed-info"
+        class="text-white me-3"
+        title="Your Podcast Feed URL"
+      ><i class="bi bi-rss fs-4"></i></a>
+    </div>
+
+    <div
+      hx-get="/partials/app/notifications"
+      hx-target="this"
+      hx-swap="innerHTML"
+      hx-trigger="load, every 15s"
+      class="menu-item align-self-end dropdown dropdown-mobile-full"
+    >
+    </div>
+
+
+    <div class="menu-item dropdown dropdown-mobile-full">
+      <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link ps-0">
+        <div class="menu-img online menu-img online d-flex align-items-center justify-content-end">
+          <iconify-icon icon="bi:person-circle" width="22" height="22"></iconify-icon>
+        </div>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+        <a class="dropdown-item d-flex align-items-center" href="/app">EPISODES <i class="bi bi bi-collection-play ms-auto text-theme fs-16px my-n1"></i></a>
+        <a class="dropdown-item d-flex align-items-center" href="/app/content">ADD CONTENT <i class="bi bi-text-paragraph ms-auto text-theme fs-16px my-n1"></i></a>
+        <a class="dropdown-item d-flex align-items-center" href="/app/voices">VOICES <i class="bi bi-soundwave ms-auto text-theme fs-16px my-n1"></i></a>
+        <a class="dropdown-item d-flex align-items-center" href="/app/profile">ACCOUNT <i class="bi bi-person-circle ms-auto text-theme fs-16px my-n1"></i></a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item d-flex align-items-center" href="/logout">LOGOUT <i class="bi bi-toggle-off ms-auto text-theme fs-16px my-n1"></i></a>
+      </div>
+    </div>
+  </div>
+  <!-- END menu -->
+
+  <div class="menu-search">
+    <form
+      hx-post="/partials/app/add-podcast-url"
+      hx-trigger="submit"
+      hx-target="#dead-end"
+      hx-on::after-request="
+        window.showToast(event.detail.xhr.response, !event.detail.successful);
+        setTimeout(function() {
+          window.location.href = '/app';
+        }, 2000);
+      "
+    >
+      <div class="menu-search-container input-group">
+        <div class="menu-search-icon">
+          <a
+            href="#"
+            data-toggle-class="app-header-menu-search-toggled"
+            data-toggle-target=".app"
+          ><i onclick="document.getElementById('add-url-input-2').value = ''" class="bi bi-x-lg"></i>
+          </a>
+        </div>
+        <div class="menu-search-input">
+          <input
+            id="add-url-input-2"
+            type="url"
+            class="form-control form-control-lg"
+            placeholder="Add a url to your podcast feed"
+            required="required"
+            name="url"
+          >
+        </div>
+        <button type="submit" class="btn btn-theme btn-lg hx-disable">
+          <span class="default-button-text">
+            <i class="fa fa-plus-circle fa-fw me-1"></i> Add URL
+          </span>
+          <span id="loading-indicator" class="htmx-indicator">
+            Adding ... <i class="fa fa-spinner fa-spin"></i>
+          </span>
+        </button>
+        </div>
+      </form>
+   </div>
+
+ </div>
+
+ <div id="dead-end" style="display: none"></div>

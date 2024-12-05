@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="utf-8">
+	<title>{{ title if title else config.STORE_NAME + ' - ' + config.STORE_TAGLINE }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+  <link rel="shortcut icon" href="/assets/img/favicon.png">
+  {% include 'includes/assets.inc' %}
+
+  {# <!--
+  <meta name="htmx-config" content='{"responseHandling": [{"code":".*", "swap": true}]}' />
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+  <script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
+  --> #}
+
+</head>
+<body>
+	<div id="app" class="app">
+		{% block content %}{% endblock %}
+	</div>
+
+  {% include 'includes/footer.html.j2' %}
+
+  <!-- Modal HTML -->
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Loading...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts-container">
+    <div class="toast fade mb-3" data-autohide="false" id="toast-2">
+      <div class="toast-header">
+        <i class="far fa-bell text-muted me-2"></i>
+        <strong class="me-auto" id="toast-2-header"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body fw-bold" id="toast-2-body">
+      </div>
+    </div>
+  </div>
+
+  {% include 'includes/footer_assets.inc' %}
+</body>
+</html>

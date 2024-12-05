@@ -1,0 +1,221 @@
+.datepicker {
+	&.datepicker-dropdown {
+		width: rem(300px);
+		padding: rem(6px) rem(12px) rem(12px);
+		z-index: $zindex-dropdown !important;
+		border-radius: 0;
+		
+		&:before,
+		&:after {
+			display: none;
+		}
+	}
+	& .datepicker-switch,
+	& .prev,
+	& .next {
+		padding: rem(10px);
+		min-width: rem(40px);
+		
+		&:hover {
+			background: none !important;
+			color: var(--#{$prefix}theme);
+		}
+	}
+	& .next,
+	& .prev {
+		overflow: hidden;
+		text-indent: -100px;
+		max-width: rem(30px);
+		padding: rem(5px) 0;
+  	text-align: center;
+		
+		&:before {
+			font-family: Font Awesome\ 5 Free,Font Awesome\ 5 Pro,FontAwesome !important;
+			font-weight: 900;
+			font-style: normal;
+			font-variant: normal;
+			text-rendering: auto;
+			position: absolute;
+			width: rem(30px);
+			text-indent: 0;
+		}
+	}
+	& .next {
+		&:before {
+			content: '\f061';
+			
+			@if $enable-rtl {
+				left: 0;
+			} @else {
+				right: 0;
+			}
+    }
+  }
+  & .prev {
+		&:before {
+			content: '\f060';
+			
+			@if $enable-rtl {
+				right: 0;
+			} @else {
+				left: 0;
+			}
+    }
+	}
+	& .datepicker-switch {
+		font-weight: $font-weight-bold;
+		font-size: $font-size-base * 1.1;
+		color: var(--#{$prefix}theme);
+		width: 100% !important;
+	}
+	& .datepicker-switch,
+	& .next,
+	& .prev {
+		padding: rem(5px);
+	}
+	& .datepicker-days,
+	& .datepicker-months,
+	& .datepicker-years {
+		position: relative;
+	}
+	& .datepicker-days {
+		& table {
+			width: 100%;
+			
+			& thead {
+				& tr {
+					& th {
+						&.dow {
+							color: rgba(var(--#{$prefix}inverse-rgb), .5);
+							font-size: $font-size-base * .85;
+							font-weight: $font-weight-bold;
+							border-radius: 0;
+							padding: rem(5px) 0;
+						}
+					}
+				}
+			}
+			& tbody {
+				& tr {
+					& td {
+						padding: rem(8px) rem(0);
+						border-radius: 0;
+						font-weight: $font-weight-bold;
+						font-size: $font-size-base * .85;
+						border: 1px solid $dropdown-border-color;
+						color: var(--#{$prefix}inverse);
+						width: 14%;
+						
+						&.old {
+							color: rgba(var(--#{$prefix}inverse-rgb), .25);
+						}
+						&.new {
+							color: rgba(var(--#{$prefix}inverse-rgb), .5);
+						}
+						&:hover,
+						&.focused,
+						&.range {
+							color: var(--#{$prefix}theme-color);
+							background: var(--#{$prefix}theme) !important;
+						}
+						&.today,
+						&.active,
+						&.selected {
+							background: var(--#{$prefix}theme) !important;
+							border-color: var(--#{$prefix}theme) !important;
+							color: var(--#{$prefix}theme-color);
+							text-shadow: none;
+							position: relative;
+							
+							&:before,
+							&:after {
+								content: '';
+								position: absolute;
+								top: 0;
+								bottom: -1px;
+								background: var(--#{$prefix}theme);
+								width: 1px;
+								
+								@if $enable-rtl {
+									right: -1px;
+								} @else {
+									left: -1px;
+								}
+							}
+							&:after {
+								bottom: auto;
+								top: -1px;
+								width: auto;
+								height: 1px;
+								
+								@if $enable-rtl {
+									left: -1px;
+								} @else {
+									right: -1px;
+								}
+							}
+						}
+					}
+				}
+				& tr {
+					& td {
+						&:first-child {
+						
+						}
+					}
+				}
+			}
+		}
+	}
+	& .datepicker-months,
+	& .datepicker-years,
+	& .datepicker-decades,
+	& .datepicker-centuries {
+		& table {
+			& tbody {
+				& tr {
+					& td {
+						padding-top: rem(3px);
+						
+						& span {
+							width: 25%;
+							margin: 0;
+							border-radius: 0;
+							border: 1px solid var(--#{$prefix}border-color-translucent);
+							font-weight: $font-weight-bold;
+							font-size: $font-size-base * .9;
+							margin: 0 -1px -1px 0;
+							color: var(--#{$prefix}inverse);
+							
+							&:hover,
+							&.focused {
+								color: var(--#{$prefix}theme-color) !important;
+								background: var(--#{$prefix}theme) !important;
+							}
+							&.focused {
+								color: var(--#{$prefix}theme);
+							}
+							&.active {
+								border-color: var(--#{$prefix}theme);
+								position: relative;
+								background: var(--#{$prefix}theme) !important;
+								color: var(--#{$prefix}theme-color) !important;
+								text-shadow: none;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.input-daterange {
+	& input.form-control {
+		&:first-child {
+			border-radius: $border-radius 0 0 $border-radius;
+		}
+		&:last-child {
+			border-radius: 0 $border-radius $border-radius 0;
+		}
+	}
+}

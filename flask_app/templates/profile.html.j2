@@ -1,0 +1,134 @@
+{% set page = 'profile' %}
+{% extends "base.html.j2" %}
+{% set title %}Your Profile - {{ config.STORE_NAME }}{% endset %}
+{% block content %}
+
+{% include 'includes/app_heading.html.j2' %}
+{% include 'includes/app_sidebar.html.j2' %}
+
+<div id="content" class="app-content" data-url="{{ request.path }}">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-10">
+        <div class="row">
+          <div class="col-xl-9">
+            <div id="general" class="mb-5" hx-ext="response-targets">
+              <h4 class="mb-3"><i class="far fa-user fa-fw text-theme"></i> Your Profile</h4>
+              <div class="card">
+                <div class="list-group list-group-flush">
+
+                  <div
+                    id="profile-email"
+                    hx-get="/partials/profile-email"
+                    hx-trigger="load"
+                    hx-swap="innerHTML"
+                    hx-on::after-request="
+                    if (event.detail.successful && event.detail.pathInfo.responsePath === '/partials/updateemail') {
+                      window.showToast('E-Mail updated successfully');
+                    }"
+                  ></div>
+
+                  <div
+                    id="profile-password"
+                    hx-get="/partials/profile-password"
+                    hx-trigger="load"
+                    hx-swap="innerHTML"
+                    hx-on::after-request="
+                    if (event.detail.successful && event.detail.pathInfo.responsePath === '/partials/updatepassword') {
+                      window.showToast('Password updated successfully');
+                    }"
+                  ></div>
+
+                </div>
+                <div class="card-arrow">
+                  <div class="card-arrow-top-left"></div>
+                  <div class="card-arrow-top-right"></div>
+                  <div class="card-arrow-bottom-left"></div>
+                  <div class="card-arrow-bottom-right"></div>
+                </div>
+              </div>
+            </div>
+            <!-- END #general -->
+
+            <!-- BEGIN #notifications -->
+            <div id="notifications" class="mb-5">
+              <h4 class="mb-3"><i class="far fa-bell fa-fw text-theme"></i> Notifications</h4>
+              <div class="card py-2">
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex align-items-center">
+                    <div class="flex-1 text-break">
+                      <div>E-Mail Subscription</div>
+                    </div>
+                    <div
+                      class="form-switch me-4"
+                      id="profile-subscription"
+                      hx-get="/partials/profile-subscription"
+                      hx-trigger="load"
+                      hx-swap="innerHTML"
+                      hx-on::after-request="
+                      if (event.detail.successful && event.detail.pathInfo.responsePath.startsWith('/partials/update-profile-subscription')) {
+                        window.showToast('Subscription updated successfully');
+                      }"
+                    ></div>
+                  </div>
+                </div>
+                <div class="card-arrow">
+                  <div class="card-arrow-top-left"></div>
+                  <div class="card-arrow-top-right"></div>
+                  <div class="card-arrow-bottom-left"></div>
+                  <div class="card-arrow-bottom-right"></div>
+                </div>
+              </div>
+            </div>
+            <!-- END #notifications -->
+
+
+            <!-- BEGIN #payment -->
+            <div id="payment" class="mb-5">
+              <h4><i class="far fa-credit-card fa-fw text-theme"></i> Payment</h4>
+              <p>Manage your website payment provider</p>
+              <div class="card">
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item d-flex align-items-center">
+                    <div class="flex-1 text-break">
+                      <div>Allowed payment method</div>
+                      <div class="text-inverse text-opacity-50">
+                        Paypal, Credit Card, Apple Pay, Amazon Pay, Google Wallet, Alipay, Wechatpay
+                      </div>
+                    </div>
+                    <div>
+                      <a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-arrow">
+                  <div class="card-arrow-top-left"></div>
+                  <div class="card-arrow-top-right"></div>
+                  <div class="card-arrow-bottom-left"></div>
+                  <div class="card-arrow-bottom-right"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- BEGIN col-3 -->
+          <div class="col-xl-3">
+            <!-- BEGIN #sidebar-bootstrap -->
+            <nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
+              <nav class="nav">
+                <a class="nav-link" href="#general" data-toggle="scroll-to">Your Profile</a>
+                <a class="nav-link" href="#notifications" data-toggle="scroll-to">Notifications</a>
+                <a class="nav-link" href="#payment" data-toggle="scroll-to">Payment</a>
+              </nav>
+            </nav>
+            <!-- END #sidebar-bootstrap -->
+          </div>
+          <!-- END col-3 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a href="#" data-toggle="scroll-to-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+
+{% endblock %}

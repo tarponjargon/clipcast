@@ -1,0 +1,86 @@
+.sp-original-input-container {
+	& .sp-add-on {
+		min-width: rem(35px);
+		background-image: none;
+		
+		@if $enable-rtl {
+			body & {
+				border-radius: 0 !important;
+				border-top-right-radius: $dropdown-border-radius !important;
+				border-bottom-right-radius: $dropdown-border-radius !important;
+			}
+		}
+		
+		& .sp-colorize {
+			position: relative;
+			overflow: hidden;
+			
+			&:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				border: 5px solid transparent;
+			}
+		}
+	}
+	
+	@if $enable-rtl {
+		body & {
+			& .spectrum.with-add-on {
+				border-radius: 0 !important;
+				border-left: 1px solid $input-border-color;
+				border-top-left-radius: $dropdown-border-radius !important;
+				border-bottom-left-radius: $dropdown-border-radius !important;
+				
+				&:focus {
+					border-color: $input-focus-border-color;
+				}
+			}
+		}
+	}
+}
+.sp-container {
+	body & {
+		background: $dropdown-bg;
+		border: $dropdown-border-width solid $dropdown-border-color;
+		border-radius: $dropdown-border-radius;
+		box-shadow: $dropdown-box-shadow;
+		
+		& .sp-palette-container {
+			border-color: rgba(var(--#{$prefix}inverse-rgb), .15);
+		}
+		& .sp-picker-container {
+			& .sp-input-container {
+				& .sp-input {
+					color: $input-color !important;
+					border-color: $input-border-color !important;
+				}
+			}
+			& .sp-cancel {
+				background: none;
+				border: 1px solid var(--#{$prefix}default);
+				color: var(--#{$prefix}default);
+				
+				&:hover,
+				&:focus {
+					background: var(--#{$prefix}default);
+					color: var(--#{$prefix}inverse);
+				}	
+			}
+			& .sp-choose {
+				background: var(--#{$prefix}theme);
+				border: 1px solid var(--#{$prefix}theme);
+				color: var(--#{$prefix}theme-color);
+				
+				&:hover,
+				&:focus {
+					background: var(--#{$prefix}theme);
+					color: var(--#{$prefix}theme-color);
+				}
+			}
+		}
+	}
+}

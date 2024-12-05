@@ -1,0 +1,45 @@
+<a
+  href="#"
+  data-bs-toggle="dropdown"
+  data-bs-display="static"
+  class="menu-link"
+  id="notifications-link"
+  onClick="markNotificationAsViewed(event)"
+>
+  <div class="menu-icon"><i class="bi bi-bell nav-icon"></i></div>
+
+  {# "NEW" badge, clunky but I can't get selectattr() to work #}
+  {% for x in notifications if not x.viewed_at %}
+    {% if loop.index == 1 %}
+      <div class="menu-badge bg-theme" id="notifications-badge"></div>
+    {% endif %}
+  {% endfor %}
+
+</a>
+<div class="dropdown-menu dropdown-menu-end mt-1 w-300px fs-11px pt-1">
+  <h6 class="dropdown-header fs-10px mb-1">NOTIFICATIONS</h6>
+  <div class="dropdown-divider mt-1"></div>
+  <div>
+    {% if notifications | length %}
+    {% for notification in notifications %}
+      {% if loop.index > 1 %}
+        <div class="dropdown-divider mt-1"></div>
+      {% endif %}
+      <a
+        href="/app#{{ notification.content_id }}"
+        class="d-flex align-items-center py-10px dropdown-item text-wrap fw-semibold"
+      >
+        <div class="fs-20px">
+          <i class="bi {{ 'bi-bell' if notification.viewed_at else 'bi-bell-fill text-theme' }} nav-icon"></i>
+        </div>
+        <div class="flex-1 flex-wrap ps-3">
+          <div class="mb-1 text-inverse">{{ notification.message }}</div>
+          <div class="small text-inverse text-opacity-50">{{ notification.created_at }}</div>
+        </div>
+      </a>
+    {% endfor %}
+    {% else %}
+      <div class="dropdown-item text-center">No notifications</div>
+    {% endif %}
+  </div>
+</div>

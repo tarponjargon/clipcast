@@ -1,0 +1,36 @@
+{% macro render_voices(voices, selected_voice, plan) -%}
+  {% for voice in voices %}
+  <div class="col-md-6">
+    <div class="radiobtn">
+      {% if voice.recommended %}
+        <span class="badge">
+          <i class="fa fa-heart" title="Recommended"></i>
+        </span>
+      {% endif %}
+      <input
+        type="radio"
+        id="voice-{{ voice.voice_code }}"
+        name="voice" value="{{ voice.voice_code }}"
+        {% if voice.voice_code == selected_voice %}checked{% endif %}
+        hx-get="/partials/app/update-voice?voice={{ voice.voice_code }}&plan={{ plan }}"
+        hx-trigger="click"
+        hx-target="#dead-end"
+        hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
+      />
+      <label class="d-flex align-items-center" for="voice-{{ voice.voice_code }}">
+        <a
+          href="#"
+          data-content-id="{{ voice.voice_code }}"
+          data-mp3="{{ sanitize(voice.sample_mp3) }}"
+          data-title="{{ loop.index}} {{ voice.language_name }} - {{ voice.gender}}"
+          data-author="{{ config.STORE_NAME }}"
+          data-image="{{ config.DEFAULT_IMAGE }}"
+          data-duration="00:00:05"
+          title="Play sample"
+        ><i class="fa fa-play-circle fa-2x"></i></a>
+        <span class="ps-2">{{ loop.index}}. {{ voice.language_name }} - {{ voice.gender}}</span>
+      </label>
+    </div>
+  </div>
+  {% endfor %}
+{%- endmacro %}

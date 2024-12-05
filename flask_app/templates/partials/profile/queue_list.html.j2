@@ -1,0 +1,39 @@
+<tbody id="queue-list" hx-on::before-request="
+  if (event.detail.pathInfo.requestPath.includes('page')) {
+    window.scrollToSelector('#queue-form');
+  }
+">
+{% for item in queue %}
+  {% include 'partials/profile/queue_item.html.j2' %}
+{% endfor %}
+{% if next_page or previous_page %}
+  <tr>
+    <td colspan="7" class="border-bottom-0 py-4">
+      <div class="d-md-flex align-items-center gap-3 justify-content-center">
+        {% if previous_page %}
+        <button hx-get="/partials/app/queue-list?page={{ previous_page }}"
+          hx-trigger="click"
+          hx-swap="outerHTML"
+          hx-target="#queue-list"
+          type="button"
+          class="btn btn-success btn-lg"
+        ><i class="fa fa-arrow-left"></i> Previous</button>
+        {% endif %}
+
+        {% if next_page %}
+        <button hx-get="/partials/app/queue-list?page={{ next_page }}"
+          hx-trigger="click"
+          hx-swap="outerHTML"
+          hx-target="#queue-list"
+          type="button"
+          class="btn btn-success btn-lg"
+        >Next <i class="fa fa-arrow-right"></i></button>
+        {% endif %}
+      </div>
+    </td>
+  </tr>
+{% endif %}
+</tbody>
+
+
+

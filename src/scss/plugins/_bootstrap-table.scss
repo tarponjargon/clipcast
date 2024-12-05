@@ -1,0 +1,88 @@
+.bootstrap-table {
+	& .dropdown-toggle {
+		& .caret {
+			display: none;
+		}
+	}
+	& .fixed-table-container {
+		&.fixed-height {
+			& .fixed-table-header {
+				& .table {
+					border-bottom: none;
+				}
+			}
+			& .fixed-table-body {
+				& .table {
+					& thead {
+						& tr {
+							& th {
+								border-top: none;
+								border-bottom: none;
+							}
+						}	
+					}
+				}
+			}
+		}
+		& .table {
+			& thead {
+				& tr {
+					border-bottom-width: 0 !important;
+					
+					& th {
+						border-bottom-color: initial !important;
+						
+						& .sortable {
+							position: relative;
+							background-image: none !important;
+						
+							&:after {
+								content: '';
+								position: absolute;
+								
+								@include fontawesome();
+								@if $enable-rtl {
+									left: rem(10px);
+								} @else {
+									right: rem(10px);
+								}
+							}
+							&.both {
+								&:after {
+									content: '\f0dc';
+									color: rgba(var(--#{$prefix}inverse-rgb), .5);
+								}
+							}
+							&.asc {
+								&:after {
+									content: '\f0de';
+									color: var(--#{$prefix}theme);
+								}
+							}
+							&.desc {
+								&:after {
+									content: '\f0dd';
+									color: var(--#{$prefix}theme);
+								}
+							}
+						}
+					}
+				}
+			}
+			& tbody {
+				& tr {
+					&:first-child {
+						border-top: none;
+						
+						& td {
+							border-top: none;
+						}	
+					}
+				}
+			}
+		}
+	}
+	&.fullscreen {
+		background: var(--#{$prefix}app-header-bg) !important;
+	}
+}

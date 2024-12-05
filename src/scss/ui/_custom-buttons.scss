@@ -1,0 +1,88 @@
+// @mixin middle-break() {
+//   max-height: 320px;
+//   display: flex;
+//   flex-wrap: wrap;
+//   flex-direction: column;
+// }
+
+.custom-radio {
+  font-size: 0.9rem;
+  position: relative;
+  .radiobtn {
+    min-height: 52px;
+    border-radius: 5px;
+    background: transparent;
+    padding: 10px;
+    border: 1px solid $gray-100;
+    margin: 10px 0;
+    .fa-3x {
+      font-size: 2em;
+    }
+    position: relative;
+    display: flex;
+    align-items: center;
+    .badge {
+      position: absolute;
+      top: -12px;
+      right: -15px;
+      color: $white;
+      i {
+        font-size: 16px;
+      }
+    }
+
+    // Apply background change to the radiobtn when the radio is checked
+    &:has(input[type="radio"]:checked) {
+      background: $theme;      // Set background color for the radiobtn
+      border-color: $theme;    // Update border color if desired
+    }
+
+    label {
+      display: flex;
+      color: $white;
+      cursor: pointer;
+
+      &:after,
+      &:before {
+        content: "";
+        position: absolute;
+        right: 11px;
+        top: 16px;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        border: 1px solid $gray-100;
+      }
+      &:before {
+        background: transparent;
+        z-index: 2;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        background-size: 13px;
+        background-position: center;
+        width: 0;
+        height: 0;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNS4zIDEzLjIiPiAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE0LjcuOGwtLjQtLjRhMS43IDEuNyAwIDAgMC0yLjMuMUw1LjIgOC4yIDMgNi40YTEuNyAxLjcgMCAwIDAtMi4zLjFMLjQgN2ExLjcgMS43IDAgMCAwIC4xIDIuM2wzLjggMy41YTEuNyAxLjcgMCAwIDAgMi40LS4xTDE1IDMuMWExLjcgMS43IDAgMCAwLS4yLTIuM3oiIGRhdGEtbmFtZT0iUGZhZCA0Ii8+PC9zdmc+);
+      }
+    }
+    input[type="radio"] {
+      display: none;
+      position: absolute;
+      width: 100%;
+      appearance: none;
+
+      &:checked + label {
+        background: $theme;
+        border-color: $theme;
+        &:after {
+          background: $theme;
+        }
+        &:before {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+

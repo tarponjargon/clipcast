@@ -1,0 +1,321 @@
+{% set page = 'index' %}
+{% set title %}{{ config.STORE_NAME }} - {{ config.STORE_TAGLINE }}{% endset %}
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+{% include 'includes/heading.html.j2' %}
+
+<!-- BEGIN #home -->
+<div id="home" class="py-5 position-relative bg-body bg-opacity-50" data-bs-theme="dark">
+  <!-- BEGIN container -->
+  <div class="container-xxl p-3 p-lg-5 mb-0">
+    <!-- BEGIN div-hero-content -->
+    <div class="div-hero-content z-1 position-relative">
+      <!-- BEGIN row -->
+      <div class="row">
+        <!-- BEGIN col-8 -->
+        <div class="col-lg-6">
+          <!-- BEGIN hero-title-desc -->
+          <h1 class="display-6 fw-600 mb-2 mt-4">
+            {{ config.STORE_TAGLINE }}
+          </h1>
+
+          <div class="d-block d-lg-none my-4">
+            <img class="w-100 d-block shadow-lg" style="border-radius: 20px;" alt="ClipCast Hero depicting an article in a web borwser being converted to a podcast" src="assets/img/clipcast-hero.jpg">
+          </div>
+
+          <div class="fs-18px text-body text-opacity-75 mb-4">
+            {{ config.STORE_META_DESCRIPTION }}
+          </div>
+
+          <div class="text-body mb-4">
+            Compatible with all major podcast apps, including:
+          </div>
+
+          <div class="mb-4">
+            <a href="https://www.spotify.com"><img class="m-2" src="/assets/img/spotify-icon.svg" width="48" title="Spotify" alt="Spotify" /></a>
+            <a href="https://www.apple.com/apple-podcasts/"><img class="m-2" src="/assets/img/apple-podcasts-logo.svg" width="48" title="Apple Podcasts" alt="Apple Podcasts" /></a>
+            <a href="https://overcast.fm/"><img class="m-2" src="/assets/img/overcast-logo.svg" width="48" title="Overcast" alt="Overcast" /></a>
+            <a href="https://podcasts.google.com"><img class="m-2" src="/assets/img/google-podcasts-logo.svg" width="48" title="Google Podcasts" alt="Google Podcasts" /></a>
+            <a href="https://pocketcasts.com/"><img class="m-2" src="/assets/img/pocketcasts-logo.svg" width="48" title="Pocket Casts" alt="Pocket Casts" /></a>
+            <a href="https://downcastapp.com"><img class="m-2" src="/assets/img/downcast-site-logo.svg" width="48" title="Downcast" alt="Downcast" /></a>
+          </div>
+
+          <div class="mb-2">
+            {% if session.get('user_id') %}
+            <a href="/app" class="btn btn-lg btn-outline-white px-3">Open App <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
+            {% else %}
+            <a href="/signup" class="btn btn-lg btn-outline-white px-3">Get Started <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
+            {% endif %}
+          </div>
+
+        </div>
+        <!-- END col-8 -->
+      </div>
+      <!-- END row -->
+    </div>
+    <!-- END div-hero-content -->
+
+    <div class="position-absolute top-0 bottom-0 end-0 w-50 p-5 z-1 overflow-hidden d-none d-lg-flex align-items-center">
+      <img class="w-100 d-block shadow-lg" style="border-radius: 20px;" alt="ClipCast Hero depicting an article in a web borwser being converted to a podcast" src="assets/img/clipcast-hero.jpg">
+    </div>
+  </div>
+  <!-- END container -->
+  <div class="position-absolute bg-size-cover bg-position-center d-none2 bg-no-repeat top-0 start-0 w-100 h-100" style="background-image: url(assets/img/landing/cover.jpg);"></div>
+  <div class="position-absolute top-0 start-0 d-none2 w-100 h-100 opacity-95" style="background: var(--bs-body-bg-gradient);"></div>
+  <div class="position-absolute top-0 start-0 d-none2 w-100 h-100 opacity-95" style="background-size: var(--bs-body-bg-image-size);"></div>
+</div>
+<!-- END #home -->
+
+<!-- BEGIN #about -->
+<div id="features" class="py-5 bg-component">
+  <div class="container-xxl p-3 p-lg-5 text-center">
+    <h1 class="mb-3">clipCast Features</h1>
+    <p class="fs-16px text-body text-opacity-50 mb-5"></p>
+
+    <div class="row text-start g-3 gx-lg-5 gy-lg-4">
+
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:widget-5-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Simple To Use</h4>
+          <p class="mb-0">Just sign up, subscribe to your podcast feed, and start sending content!</p>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:chat-round-call-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Natural Voice</h4>
+          <p class="mb-0">Your content becomes audible using the latest in AI Text-to-Speech technology.</p>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:settings-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Customizable</h4>
+          <p class="mb-0">Selection of male, female and accented voices available.</p>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:tuning-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Flexible</h4>
+          <p class="mb-0">Get your content to clipCast in a variety of ways: Chrome extension, send an email or just enter the link into a form.</p>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:bolt-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Fast</h4>
+          <p class="mb-0">Content sent to clipCast is available in your podcast feed within minutes.</p>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:lock-keyhole-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Private</h4>
+          <p class="mb-0">Content you send to clipCast is available in your own, private podcast feed.</p>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:airbuds-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Compatible</h4>
+          <p class="mb-0">Works in all major podcast apps like Apple Podcasts, Overcast, Spotify and many more.</p>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-sm-6 d-flex">
+        <div class="w-50px h-50px bg-theme bg-opacity-15 text-theme fs-32px d-flex align-items-center justify-content-center">
+          <iconify-icon icon="solar:dialog-2-line-duotone"></iconify-icon>
+        </div>
+        <div class="flex-1 ps-3">
+          <h4>Help</h4>
+          <p class="mb-0">We're here to support you in case you get stuck.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- END #about -->
+
+<!-- BEGIN divider -->
+<div class="container-xxl px-3 px-lg-5"><hr class="opacity-4 m-0" /></div>
+<!-- END divider -->
+
+
+<!-- BEGIN divider -->
+<div class="container-xxl px-3 px-lg-5"><hr class="opacity-4 m-0" /></div>
+<!-- END divider -->
+
+<!-- BEGIN #pricing -->
+<div id="pricing" class="py-5 text-body text-opacity-75">
+  <div class="container-xxl p-3 p-lg-5">
+    <h1 class="mb-3 text-center">Pricing</h1>
+    <p class="fs-16px text-body text-opacity-50 text-center mb-0">
+    Choose the perfect plan that suits your needs.
+    <br>Move between plans at any time.</p>
+
+    <div class="row g-3 py-3 gx-lg-5 pt-lg-5">
+      <div class="col-xl-4 col-md-4 col-sm-6 py-xl-5">
+        <div class="card h-100">
+          <div class="card-body p-4 d-flex flex-column">
+            <div class="d-flex align-items-center">
+              <div class="flex-1">
+                <div class="h6 font-monospace">Starter Plan</div>
+                <div class="h1 fw-semibold mb-0">FREE! <small class="h6 fw-semibold text-body text-opacity-50">(ad supported)</small></div>
+              </div>
+              <div>
+                <iconify-icon icon="solar:usb-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
+              </div>
+            </div>
+            <hr class="my-20px">
+            <div class="mb-5 text-body text-opacity-75 flex-1">
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 5 episodes per month</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 1000 words per link</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Select male or female voice</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Submit links via form on your account page</div>
+              </div>
+            </div>
+            <div class="mx-n2">
+              <a href="/signup" class="btn btn-outline-default btn-lg w-100 font-monospace">Get Started <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="card-arrow">
+            <div class="card-arrow-top-left"></div>
+            <div class="card-arrow-top-right"></div>
+            <div class="card-arrow-bottom-left"></div>
+            <div class="card-arrow-bottom-right"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-md-6 py-3 py-xl-5">
+        <div class="card h-100">
+          <div class="card-body p-4 d-flex flex-column">
+            <h5><span class="badge rounded-pill bg-danger">Coming Soon</span></h5>
+            <div class="d-flex align-items-center">
+              <div class="flex-1">
+                <div class="h6 font-monospace">Premium Plan</div>
+                <div class="h1 fw-semibold mb-0">$12 <small class="h6 fw-semibold text-body text-opacity-50">/month*</small></div>
+              </div>
+              <div>
+                <iconify-icon icon="solar:map-arrow-up-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
+              </div>
+            </div>
+            <hr class="my-20px">
+            <div class="mb-5 text-body text-opacity-75 flex-1">
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">No ads</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 10 episodes per month</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 2500 words per link</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Select between male, female and accented voices</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Submit links via form on your account page or Chrome extension</div>
+              </div>
+            </div>
+            <div class="mx-n2">
+              <span class="btn btn-outline-default btn-lg w-100 font-monospace disabled">Coming Soon!</span>
+            </div>
+          </div>
+          <div class="card-arrow">
+            <div class="card-arrow-top-left"></div>
+            <div class="card-arrow-top-right"></div>
+            <div class="card-arrow-bottom-left"></div>
+            <div class="card-arrow-bottom-right"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-md-6 py-3 py-xl-0">
+        <div class="card border-theme h-100">
+          <div class="card-body p-30px h-100 d-flex flex-column">
+            <h5><span class="badge rounded-pill bg-danger">Coming Soon</span></h5>
+            <div class="d-flex align-items-center">
+              <div class="flex-1">
+                <div class="h6 font-monospace text-theme">Premium Plan</div>
+                <div class="display-6 fw-bold mb-0 text-theme">$20 <small class="h6 text-body text-opacity-50">/month*</small></div>
+              </div>
+              <div>
+                <iconify-icon icon="solar:cup-first-bold-duotone" class="display-5 text-theme"></iconify-icon>
+              </div>
+            </div>
+            <hr class="my-20px">
+            <div class="mb-5 text-body flex-1">
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">No ads</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 25 episodes per month</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 4000 words per link</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Large selection of voices</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Submit links via form on your account page, Chrome extension or a private email address</div>
+              </div>
+              <div class="d-flex align-items-center mb-1">
+                <i class="fa fa-check fa-lg text-theme"></i>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Upload your own RSS feed</div>
+              </div>
+            </div>
+            <span class="btn btn-outline-default btn-lg w-100 font-monospace disabled">Coming Soon!</span>
+          </div>
+          <div class="card-arrow">
+            <div class="card-arrow-top-left"></div>
+            <div class="card-arrow-top-right"></div>
+            <div class="card-arrow-bottom-left"></div>
+            <div class="card-arrow-bottom-right"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

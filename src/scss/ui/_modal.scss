@@ -1,0 +1,65 @@
+.modal {
+	& .modal-content {
+		& > * {
+			position: relative;
+		}
+    .feed-url {
+      width: 100%!important;
+    }
+	}
+	& .modal-dialog{
+		&.modal-full {
+			max-width: 100%;
+			width: 100%;
+
+			& .modal-content {
+				border-radius: 0;
+			}
+		}
+	}
+	&.modal-cover {
+		& .modal-dialog {
+			min-height: 100%;
+			margin-top: 0;
+			margin-bottom: 0;
+			display: flex;
+			align-items: center;
+		}
+		& .modal-content,
+		& .modal-header,
+		& .modal-footer {
+			background: none;
+			border: none;
+		}
+	}
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark, true) {
+  	.modal-backdrop {
+  		--#{$prefix}backdrop-bg: #{$modal-backdrop-bg-dark};
+  	}
+  }
+}
+
+.podcast-player-container {
+  position: fixed;
+  z-index: 9999;
+  .shk {
+    button {
+      color: white;
+    }
+  }
+}
+
+#podcast-player-close {
+  position: fixed;
+  bottom: 112px;
+  right: 3px;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  z-index: 99999;
+}

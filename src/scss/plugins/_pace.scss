@@ -1,0 +1,66 @@
+.pace {
+	pointer-events: none;
+	user-select: none;
+	
+	& .pace-progress {
+		position: fixed;
+		z-index: 2000;
+		top: $app-header-height;
+		width: 100%;
+		height: rem(2px);
+		background: var(--#{$prefix}theme);
+		
+		@if $enable-rtl {
+			left: 100%;
+		} @else {
+			right: 100%;
+		}
+		
+		.pace-top & {
+			top: 0;
+		}
+	}
+	& .pace-progress-inner {
+		display: block;
+		position: absolute;
+		width: rem(100px);
+		height: 100%;
+		opacity: 1.0;
+		box-shadow: none;
+		
+		@if $enable-rtl {
+			left: 0;
+		} @else {
+			right: 0;
+		}
+	}
+	& .pace-activity {
+		display: block;
+		position: fixed;
+		z-index: 2000;
+		top: $app-header-height + $spacer;
+		width: rem(18px);
+		height: rem(18px);
+		border: solid rem(2px) transparent;
+		border-top-color: var(--#{$prefix}theme);
+		
+		@if $enable-rtl {
+			border-right-color: rgba(var(--#{$prefix}inverse-rgb), .25);
+			left: $spacer;
+		} @else {
+			border-left-color: rgba(var(--#{$prefix}inverse-rgb), .25);
+			right: $spacer;
+		}
+		.pace-top & {
+			top: $spacer;
+		}
+	}
+	&.pace-inactive {
+		display: none;
+	}
+}
+
+@keyframes pace-spinner {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

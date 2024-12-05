@@ -1,0 +1,15 @@
+<div class="card text-white bg-info my-4 fs-5 p-2 fade-in">
+  <div class="card-body p-1">
+    <p class="card-text">
+      {% if message %}
+        {{ message }}
+      {% endif %}
+      {% if messages and messages is iterable and messages | length %}
+        {% for message in messages %}
+          {{ message }}
+          {{ '<br />' if loop.index > 1 else ''}}
+        {% endfor %}
+      {% endif %}
+    </p>
+</div>
+</div>

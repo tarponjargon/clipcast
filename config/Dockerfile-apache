@@ -1,0 +1,17 @@
+# for local web development
+
+FROM amd64/debian
+
+# install base packages
+RUN apt-get update && apt-get install -y --no-install-recommends apache2 mariadb-client less curl wget vim locate zip iputils-ping \
+  libcurl4-openssl-dev ssh rsync
+
+# config apache
+RUN a2dismod mpm_event && a2enmod mpm_worker && a2enmod http2 && a2enmod proxy && a2enmod proxy_http && a2enmod alias && a2enmod rewrite && a2enmod headers && a2enmod actions
+COPY ./apache-conf.conf /etc/apache2/sites-available/000-default.conf
+RUN echo "Mutex posixsem" >> /etc/apache2/apache2.conf # fix for couldnt create proxy mutex https://stackoverflow.com/questions/73294020/docker-couldnt-create-the-mpm-accept-mutex
+
+EXPOSE 80
+WORKDIR /var/www/html
+ENTRYPOINT ["/usr/sbin/apache2ctl"]
+CMD ["-D", "FOREGROUND"]

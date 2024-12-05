@@ -1,0 +1,61 @@
+<div id="header" class="app-header navbar navbar-expand-lg p-0">
+  <div class="container-xxl px-3 px-lg-5">
+    <button class="navbar-toggler border-0 p-0 me-3 fs-24px shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="h-2px w-25px bg-gray-500 d-block mb-1"></span>
+      <span class="h-2px w-25px bg-gray-500 d-block mb-1"></span>
+      <span class="h-2px w-25px bg-gray-500 d-block"></span>
+    </button>
+    <a class="navbar-brand d-flex align-items-center position-relative me-auto brand px-0 w-auto" href="/">
+      <span class="brand-logo d-flex">
+        <span class="brand-text">clip<strong>Cast</strong></span>
+        <iconify-icon icon="bi:soundwave"></iconify-icon>
+      </span>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <div class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase small fw-semibold fs-6">
+        <div class="nav-item me-2">
+          <a href="{{ config.STORE_URL }}#home" class="nav-link link-body-emphasis">Home</a>
+        </div>
+        <div class="nav-item me-2">
+          <a href="{{ config.STORE_URL }}#features" class="nav-link link-body-emphasis">Features</a>
+        </div>
+        <div class="nav-item me-2">
+          <a href="{{ config.STORE_URL }}#pricing" class="nav-link link-body-emphasis">Pricing</a>
+        </div>
+        <div class="nav-item me-2">
+          <a href="{{ config.STORE_URL }}/contact" class="nav-link link-body-emphasis">Contact</a>
+        </div>
+        {% if session.get('user_id') %}
+        <div class="nav-item me-2">
+          <a href="{{ config.STORE_URL }}/logout" class="nav-link link-body-emphasis">Log Out</a>
+        </div>
+        <div class="nav-item me-2 d-block d-sm-none my-2">
+          <a href="{{ config.STORE_URL }}/app" class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap">Open App</a>
+        </div>
+        {% else %}
+        <div class="nav-item me-2">
+          <a href="{{ config.STORE_URL }}/login" class="nav-link link-body-emphasis">Log In</a>
+        </div>
+        <div class="nav-item me-2 d-block d-sm-none my-2">
+          <a href="{{ config.STORE_URL }}/signup" class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap">Get Started</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="ms-3">
+      {% if session.get('user_id') %}
+        <a
+          href="{{ config.STORE_URL }}/app"
+          class="btn btn-outline-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap d-none d-sm-inline-block">
+          Open App <i class="fa fa-arrow-right ms-1"></i>
+        </a>
+      {% else %}
+        <a
+          href="{{ config.STORE_URL }}/signup"
+          class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap d-none d-sm-inline-block">
+          Get started <i class="fa fa-arrow-right ms-1"></i>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

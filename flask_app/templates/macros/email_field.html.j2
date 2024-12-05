@@ -1,0 +1,14 @@
+{% macro render_email(email="", placeholder="") -%}
+  <input
+    id="email-entry-field"
+    type="email"
+    name="email"
+    placeholder="{{ placeholder }}"
+    value="{{ email }}"
+    class="form-control form-control-lg fs-15px"
+    title="Please enter an email address"
+    oninvalid="this.setCustomValidity('Please enter an E-Mail address')"
+    onchange="this.setCustomValidity('')"
+    required="required"
+  >
+{%- endmacro %}

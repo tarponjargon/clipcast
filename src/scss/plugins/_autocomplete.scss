@@ -1,0 +1,32 @@
+.ui-menu.ui-autocomplete.search-bar-autocomplete {
+	border: none;
+	border-radius: 0;
+	box-shadow: 0 rem(2px) rem(6px) rgba(var(--#{$prefix}inverse-rgb), .3);
+	font-family: inherit;
+	z-index: 1030;
+	padding: rem(5px) rem(0);
+	border-radius: rem($border-radius);
+	
+	& .ui-menu-item {
+		& a,
+		& .ui-menu-item-wrapper {
+			padding: rem(8px) rem(15px);
+			border-radius: 0;
+			margin: 0;
+			font-weight: 600;
+		}
+	}
+	& .ui-state-hover, 
+	& .ui-widget-content .ui-state-hover, 
+	& .ui-widget-header .ui-state-hover, 
+	& .ui-state-focus, 
+	& .ui-widget-content .ui-state-focus, 
+	& .ui-widget-header .ui-state-focus,
+	& .ui-state-active, 
+	& .ui-widget-content .ui-state-active, 
+	& .ui-widget-header .ui-state-active {
+		border: none;
+		background: darken($white, 10%);
+		color: $black;
+	}
+}

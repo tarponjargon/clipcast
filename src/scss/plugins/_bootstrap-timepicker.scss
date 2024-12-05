@@ -1,0 +1,86 @@
+.bootstrap-timepicker-widget {
+  &.dropdown-menu {
+    &.open {
+      width: rem(240px);
+      padding: rem(15px);
+    
+      &:before,
+      &:after {
+        display: none;
+      }
+      & table {
+        & tbody {
+          & tr {
+            & td {
+              padding: 0;
+              height: auto;
+              
+              &.separator {
+                padding: 0 rem(5px);
+              }
+              &:not(.separator) {
+                min-width: rem(60px);
+              }
+              & input {
+                border-radius: $border-radius;
+                border: 1px solid $input-border-color;
+                height: $input-height;
+                padding: rem(5px);
+                line-height: $input-line-height;
+                background: none;
+                color: $input-color;
+                display: block;
+                width: 100%;
+                margin: rem(5px) 0;
+                transition: all .15s ease-in-out;
+                
+                &:focus {
+                  border-color: $input-focus-border-color;
+                  outline: none;
+                  box-shadow: $input-btn-focus-box-shadow;
+                }
+              }
+              & a {
+                padding: 0;
+                outline: 0;
+                color: rgba(var(--#{$prefix}inverse-rgb), .3);
+                display: block;
+                line-height: rem(36px);
+                height: rem(36px);
+                width: auto;
+                margin: 0 auto;
+                border: none;
+                text-decoration: none;
+                border-radius: $border-radius;
+                transition: all .15s linear;
+                
+                &:hover {
+                  background: rgba(var(--#{$prefix}inverse-rgb), .15);
+                  color: rgba(var(--#{$prefix}inverse-rgb), .75);
+                }
+                & .glyphicon {
+                  font-family: Font Awesome\ 5 Free,Font Awesome\ 5 Pro,FontAwesome!important;
+                  font-weight: 900;
+                  font-style: normal;
+                  font-variant: normal;
+                  text-rendering: auto;
+                  
+                  &.glyphicon-chevron-up {
+                    &:before {
+                      content: '\f077';
+                    }
+                  }
+                  &.glyphicon-chevron-down {
+                    &:before {
+                      content: '\f078';
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

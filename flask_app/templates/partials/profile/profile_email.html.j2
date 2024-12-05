@@ -1,0 +1,16 @@
+<div class="list-group-item d-flex align-items-center">
+  <div class="flex-1 text-break">
+    <div>E-Mail</div>
+    <div class="text-inverse text-opacity-50">{{ session_safe_get('email') }}</div>
+  </div>
+  <div class="flex-1 text-end">
+    <a
+      href="javascript:;"
+      hx-get="/partials/update-email-form"
+      hx-trigger="click"
+      hx-target="#profile-email"
+      hx-swap="innerHTML transition:true"
+      class="btn btn-outline-default w-100px"
+    >Edit</a>
+  </div>
+</div>

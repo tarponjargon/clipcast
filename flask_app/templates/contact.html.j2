@@ -1,0 +1,72 @@
+{% set page = 'contact' %}
+{% set title %}Contact Form - {{ config.STORE_NAME }}{% endset %}
+{% extends "base.html.j2" %}
+{% from 'macros/email_field.html.j2' import render_email %}
+{% block content %}
+{% include 'includes/heading.html.j2' %}
+
+<div id="app" class="app app-full-height app-without-header">
+  <div class="login" hx-ext="response-targets">
+    <div class="login-content" id="contact-container">
+      <div class="text-center">
+        <h1 class="mb-3 text-center">Get in Touch</h1>
+      </div>
+      <form
+        data-js="contact-form"
+        hx-post="/partials/contact-form"
+        hx-trigger="submit"
+        hx-target="#contact-container"
+        hx-target-error="#response-card"
+        hx-swap="innerHTML transition:true"
+      >
+        <div class="row gy-3 mb-3">
+          <div class="col-12">
+            <label class="form-label" for="email-entry-field">Your E-Mail <span class="text-danger">*</span></label>
+            {{ render_email() }}
+          </div>
+          <div class="col-12">
+            <label class="form-label">Message <span class="text-theme">*</span></label>
+            <textarea
+              class="form-control form-control-lg fs-15px"
+              rows="8"
+              name="message"
+              oninvalid="this.setCustomValidity('Please enter a message')"
+              onchange="this.setCustomValidity('')"
+              required="required"
+            ></textarea>
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="customCheck2"
+                name="marketing_subscribed"
+                value="1"
+              >
+              <label
+                class="form-check-label"
+                for="customCheck2"
+              >Keep me informed of news and features.</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div id="response-card" class="slide-it"></div>
+            <button
+              id="contact-submit-button"
+              type="submit"
+              class="btn btn-outline-theme btn-lg btn-block px-4 fs-15px hx-disable"
+            >
+              <span class="default-button-text">Send</span>
+              <span id="loading-indicator" class="htmx-indicator">
+                Submitting ... <i class="fa fa-spinner fa-spin"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

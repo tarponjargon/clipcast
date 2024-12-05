@@ -1,0 +1,72 @@
+<div id="footer" class="py-5 bg-gray-900 bg-opacity-75 text-body text-opacity-75" data-bs-theme="dark">
+  <div class="container px-3 px-lg-5">
+    <div class="row gx-lg-5 gx-3 gy-lg-4 gy-3 justify-content-center">
+      <div class="col-lg-4 col-md-12">
+        <div class="mb-3">
+          <div class="h2">clipCast <iconify-icon icon="bi:soundwave"></iconify-icon></div>
+        </div>
+        <p class="mb-4">
+          clipCast is made for consumers of audio content like podcasts and audiobooks. It converts text articles into audio files that can be listened to on any podcast app.
+        </p>
+      </div>
+      <div class="col-lg-2 col-md-12">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled">
+          <li class="mb-3px"><a href="{{ config.STORE_URL }}#home" class="text-decoration-none text-body text-opacity-75">Home</a></li>
+          <li class="mb-3px"><a href="{{ config.STORE_URL }}/signup" class="text-decoration-none text-body text-opacity-75">Sign Up</a></li>
+          <li class="mb-3px"><a href="{{ config.STORE_URL }}#features" class="text-decoration-none text-body text-opacity-75">Features</a></li>
+          <li class="mb-3px"><a href="{{ config.STORE_URL }}#pricing" class="text-decoration-none text-body text-opacity-75">Pricing</a></li>
+          <li class="mb-3px"><a href="{{ config.STORE_URL }}/contact" class="text-decoration-none text-body text-opacity-75">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-12">
+        <h5>Legal</h5>
+        <ul class="list-unstyled">
+          <li class="mb-3px"><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-url="/privacy" class="text-decoration-none text-body text-opacity-75">Privacy Policy</a></li>
+          <li class="mb-3px"><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-url="/termsofuse" class="text-decoration-none text-body text-opacity-75">Terms of Use</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-12" id="subscribe-container">
+        <div class="h2">Stay Updated</div>
+        Stay updated with new and the latest features by subscribing to our newsletter.
+        <form class="mt-3"
+          data-js="subscribe-form"
+          hx-post="/partials/subscribe"
+          hx-trigger="submit"
+          hx-target="#subscribe-container"
+          hx-swap="innerHTML transition:true"
+        >
+          <div class="input-group">
+            <input
+              aria-describedby="subscribe-button"
+              aria-label="Email address"
+              type="email"
+              name="email"
+              class="form-control"
+              placeholder="E-Mail"
+              title="Please enter an email address"
+              oninvalid="this.setCustomValidity('Please enter an E-Mail address')"
+              onchange="this.setCustomValidity('')"
+              required="required"
+            >
+            <button
+              class="btn btn-theme"
+              type="submit"
+              id="subscribe-button"
+            >
+              <span class="default-button-text">Subscribe</span>
+              <span id="loading-indicator" class="htmx-indicator">
+                Submitting ... <i class="fa fa-spinner fa-spin"></i>
+              </span>
+            </button>
+          </div>
+      </div>
+    </div>
+    <hr class="text-body text-opacity-50">
+    <div class="row">
+      <div class="col-12 mb-3 mb-lg-0">
+        <div class="footer-copyright-text">&copy; {{ datetime.now().strftime('%Y') }} clipCast All Rights Reserved</div>
+      </div>
+    </div>
+  </div>
+</div>

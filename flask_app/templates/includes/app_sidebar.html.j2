@@ -1,0 +1,69 @@
+
+<!-- BEGIN #sidebar -->
+<div id="sidebar" class="app-sidebar">
+  <!-- BEGIN scrollbar -->
+  <div class="app-sidebar-content" data-scrollbar="true" data-height="100%">
+    <!-- BEGIN menu -->
+    <div class="menu mt-4">
+      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app' else '' }}">
+        <a href="/app" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-collection-play"></i></span>
+          <span class="menu-text">Episodes</span>
+        </a>
+      </div>
+
+      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/voices' else '' }}">
+        <a href="/app/voices" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-gear"></i></span>
+          <span class="menu-text">Voices</span>
+        </a>
+      </div>
+
+      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/content' else '' }}">
+        <a href="/app/content" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-text-paragraph"></i></span>
+          <span class="menu-text">Add Content</span>
+        </a>
+      </div>
+
+      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/profile' else '' }}">
+        <a href="/app/profile" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-person-circle"></i></span>
+          <span class="menu-text">Account</span>
+        </a>
+      </div>
+
+      <div class="menu-item">
+        <a href="/logout" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-toggle-off"></i></span>
+          <span class="menu-text">Logout</span>
+        </a>
+      </div>
+    </div>
+    <!-- END menu -->
+    <div class="p-3 px-4 mt-auto">
+      <a href="/docs" target="_blank" class="btn d-block btn-outline-theme">
+        <i class="fa fa-code-branch me-2 ms-n2 opacity-5"></i> Documentation
+      </a>
+    </div>
+  </div>
+  <!-- END scrollbar -->
+</div>
+<!-- END #sidebar -->
+
+<!-- BEGIN mobile-sidebar-backdrop -->
+<button class="app-sidebar-mobile-backdrop" data-toggle-target=".app" data-toggle-class="app-sidebar-mobile-toggled"></button>
+<!-- END mobile-sidebar-backdrop -->
+
+<div class="podcast-player-container">
+  <div id="podcast-player">
+    <!-- this is where the player will be injected -->
+  </div>
+</div>
+<button
+  id="podcast-player-close"
+  type="button"
+  class="btn-close"
+  aria-label="Close"
+  style="display: none;"
+></button>

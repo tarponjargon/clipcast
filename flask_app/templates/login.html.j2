@@ -1,0 +1,58 @@
+{% set page = 'login' %}
+{% from 'macros/email_field.html.j2' import render_email %}
+{% from 'macros/password_field.html.j2' import render_password_field %}
+{% set title %}Login - {{ config.STORE_NAME }}{% endset %}
+{% extends "base.html.j2" %}
+{% block content %}
+
+{% include 'includes/heading.html.j2' %}
+
+<div id="app" class="app app-full-height app-without-header">
+  <div class="login" hx-ext="response-targets">
+    <div class="login-content">
+      <form
+        data-js="login-form"
+        hx-post="/partials/login"
+        hx-trigger="submit"
+        hx-target="#response-card"
+        hx-target-error="#response-card"
+        hx-swap="innerHTML transition:true"
+      >
+        <h1 class="text-center">Sign In</h1>
+
+        <div class="mb-3">
+          <label class="form-label" for="email-entry-field">Your E-Mail <span class="text-danger">*</span></label>
+          {{ render_email() }}
+        </div>
+
+        <div class="mb-3">
+          {{ render_password_field() }}
+          <div class="form-text text-end">
+            <a href="/forgotpassword">Forgot password?</a>
+          </div>
+        </div>
+
+        <div id="response-card" class="slide-it"></div>
+
+        <button
+          type="submit"
+          class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3 hx-disable"
+          id="login-submit-button"
+        >
+          <span class="default-button-text">Sign In</span>
+          <span id="loading-indicator" class="htmx-indicator">
+            Submitting ... <i class="fa fa-spinner fa-spin"></i>
+          </span>
+        </button>
+
+
+        <div class="text-center text-inverse text-opacity-50">
+          Don't have an account yet? <a href="/signup">Sign up</a>.
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

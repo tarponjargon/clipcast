@@ -1,0 +1,149 @@
+body {
+	& .picker {
+		display: block;
+		font-family: $form-select-font-family;
+		border: $form-select-border-width solid $form-select-border-color;
+		background-color: $form-select-bg;
+		border-radius: $border-radius;
+		
+		& > .pc-element {
+			margin: $form-select-padding-y 0 0 $form-select-padding-x;
+			padding: rem(2px) rem(10px) !important;
+			border: none;
+			background: var(--#{$prefix}tertiary-bg);
+			color: $input-color;
+			border-radius: 30px;
+			
+			&:hover {
+				background: var(--#{$prefix}tertiary-bg);
+				color: var(--#{$prefix}body-color);
+			}
+			
+			& .pc-close {
+				position: relative;
+				margin: 0;
+				top: 0;
+				color: var(--#{$prefix}body-color);
+				opacity: .5;
+				font-size: rem(12px);
+				
+				@include fontawesome();
+				@if $enable-rtl {
+					margin-right: $spacer * 0.5;
+					left: 0;
+				} @else {
+					margin-left: $spacer * 0.5;
+					right: 0;
+				}
+	
+				&:after {
+					content: '\f00d' !important;
+				}
+				&:hover {
+					opacity: 1;
+				}
+			}
+			& + .pc-select {
+				padding-top: $form-select-padding-y;
+				
+				& .pc-element {
+					margin-top: -$form-select-padding-y;
+				}
+			}
+		}
+		& .pc-select {
+			display: block;
+			width: 100%;
+			max-width: 100%;
+			min-width: initial;
+			
+			& .pc-element {
+				--#{$prefix}form-select-bg-img: #{escape-svg($form-select-indicator)};
+				
+				display: block;
+				margin: 0;
+				appearance: none;
+				border: none;
+				padding: $form-select-padding-y $form-select-indicator-padding $form-select-padding-y $form-select-padding-x;
+				-moz-padding-start: subtract($form-select-padding-x, 3px); // See https://github.com/twbs/bootstrap/issues/32636
+				font-family: $form-select-font-family;
+				font-weight: $form-select-font-weight;
+				line-height: $form-select-line-height;
+				color: $form-select-color;
+				background-color: $form-select-bg;
+				background-image: var(--#{$prefix}form-select-bg-img), var(--#{$prefix}form-select-bg-icon, none);
+				background-repeat: no-repeat;
+				background-position: $form-select-bg-position;
+				background-size: $form-select-bg-size;
+				border-radius: $border-radius;
+				
+				@include font-size($form-select-font-size);
+			}
+			& .pc-list {
+				padding: $dropdown-padding-y $dropdown-padding-x;
+				top: 100%;
+				background: $dropdown-bg;
+				border: $dropdown-border-width solid $dropdown-border-color;
+				box-shadow: $dropdown-box-shadow;
+				border-radius: $dropdown-border-radius;
+				
+				& input[type=search] {
+					display: block;
+					width: calc(100% - 20px);
+					margin: 0 rem(10px) rem(5px);
+					padding: $input-padding-y $input-padding-x;
+					font-family: $input-font-family;
+					font-weight: $input-font-weight;
+					line-height: $input-line-height;
+					color: $input-color;
+					background-color: $input-bg;
+					background-clip: padding-box;
+					border: $input-border-width solid $input-border-color;
+					appearance: none;
+					transition: $input-transition;
+					border-radius: $border-radius;
+					
+					@include font-size($input-font-size);
+
+					&:focus {
+						color: $input-focus-color;
+						background-color: $input-focus-bg;
+						border-color: $input-focus-border-color;
+						outline: 0;
+						box-shadow: $input-focus-box-shadow;
+					}
+				}
+				
+				& ul {
+					& > li {
+						padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+						background: none;
+						color: $dropdown-link-color;
+						
+						&:nth-child(even) {
+							background: none;
+						}
+						&:hover {
+							background: $dropdown-link-hover-bg;
+							color: $dropdown-link-hover-color;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark) {
+    body {
+			& .picker {
+				& .pc-select {
+					& .pc-element {
+      			--#{$prefix}form-select-bg-img: #{escape-svg($form-select-indicator-dark)};
+					}
+				}
+			}
+		}
+  }
+}

@@ -1,0 +1,81 @@
+<tr
+    {% if item.current_status in ['processing', 'queued'] %}
+    hx-get="/partials/app/queue-item/{{ item.content_id }}"
+    hx-target="this"
+    hx-swap="outerHTML"
+    hx-trigger="every 2000ms"
+    {% endif %}
+>
+  <td class="w-10px align-middle">
+    <div class="form-check">
+      <input class="form-check" type="checkbox" value="{{ item.content_id }}" name="episodes[]">
+    </div>
+  </td>
+
+  <td class="align-middle">
+    <a name="{{ item.content_id }}"></a>
+    <div class="m-auto w-100px h-100px d-flex align-items-center justify-content-center">
+      {% if item.current_status == 'complete' and item.mp3_url %}
+      <a
+        href="#"
+        data-content-id="{{ item.content_id }}"
+        data-mp3="{{ sanitize(item.mp3_url) }}"
+        data-title="{{ sanitize(item.title)}}"
+        data-author="{{ sanitize(item.author) if item.author else sanitize(item.hostname) }}"
+        data-image="{{ sanitize(item.image) }}"
+        data-duration="{{ sanitize(item.duration) }}"
+        data-hostname="{{ sanitize(item.hostname) }}"
+        title="Play episode"
+      >
+        <i class="fa fa-play-circle fa-3x"></i>
+      </a>
+      {% elif item.current_status == 'queued' %}
+      <div class="d-block text-center">
+        <div class="fa-stack fa-2x hourglass-spin">
+          <i class="fa fa-stack-1x fa-hourglass-start"></i>
+          <i class="fa fa-stack-1x fa-hourglass-half"></i>
+          <i class="fa fa-stack-1x fa-hourglass-end"></i>
+          <i class="fa fa-stack-1x fa-hourglass-end spin"></i>
+        </div>
+        <div style="font-size: 0.75em">queued</div>
+      </div>
+
+      {% elif item.current_status == 'processing' %}
+        <div class="progress-pie">
+          <div class="pie" data-value="{{ item['progress']}}"></div>
+        </div>
+      {% else %}
+        <div class="d-block text-center">
+          <i class="fa fa-circle-exclamation fa-3x text-danger"></i>
+          <div style="font-size: 0.75em">error</div>
+        </div>
+      {% endif %}
+    </div>
+  </td>
+
+  <td class="align-middle text-start">
+    <div
+      class="text-truncate"
+      style="max-width: 350px;"
+      title="{{ sanitize(item.title) }}"
+    >
+      {{ item.title }}
+    </div>
+  </td>
+
+  <td class="align-middle">
+    {% if item.hostname %}
+    <a href="{{ item.url }}" target="_new" rel="noreferrer noopener">
+      {{ item.hostname }}
+    </a>
+    {% endif %}
+  </td>
+
+  <td class="align-middle">{{ item.mp3_duration if item.mp3_duration else ''}}</td>
+  <td class="align-middle">{{ item.article_date }}</td>
+  <td class="align-middle text-center">
+    <a href="/app/delete-episodes?episodes[]={{ item.content_id }}" title="Delete this episode">
+      <i class="fa fa-trash"></i>
+    </a>
+  </td>
+</tr>

@@ -1,0 +1,10 @@
+<div
+  hx-get="/partials/update-profile-subscription?subscribed={{ '1' if subscribed else '0'}}"
+  hx-trigger="click"
+  hx-target="#profile-subscription"
+  hx-target-error="#subscription-update-response"
+>
+<input type="checkbox" class="form-check-input" id="customSwitch2" {{ 'checked' if subscribed else ''}}>
+<label class="form-check-label" for="customSwitch2"></label>
+<div class="col-12 text-danger" id="subscription-update-response"></div>
+</div>

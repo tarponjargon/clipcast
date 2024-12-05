@@ -1,0 +1,127 @@
+.tagit {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	
+	&.form-control {
+		height: auto;
+		min-height: $input-height;
+	}
+	&.ui-widget {
+		margin-bottom: 0;
+		font-family: inherit;
+		box-shadow: none !important;
+		border-color: $input-border-color !important;
+		color: $input-color !important;
+		position: relative !important;
+		padding: ($input-padding-y - rem(3px)) $input-padding-x !important;
+		line-height: rem(21px) !important;
+		border-radius: $border-radius !important;
+		transition: all .15s ease-in-out;
+		display: flex;
+		flex-wrap: wrap;
+		
+		& li {
+			float: none;
+			
+			&.tagit-choice {
+				font-size: $font-size-base - rem(1px) !important;
+				font-weight: $font-weight-base;
+				padding: rem(2px) rem(10px) !important;
+				margin-top: rem(1px) !important;
+				margin-bottom: rem(1px) !important;
+				border: none;
+				background: rgba(var(--#{$prefix}inverse-rgb), .15) !important;
+				color: $input-color;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 20px;
+		
+				@if $enable-rtl {
+					margin-left: 4px !important;
+				} @else {
+					margin-right: 4px !important;
+				}
+				
+				& .tagit-close {
+					position: relative;
+					line-height: rem(21px);
+					text-align: center;
+					top: 0;
+					height: rem(21px);
+					text-decoration: none;
+					display: flex;
+					align-items: center;
+					
+					@if $enable-rtl {
+						margin: 0 rem(5px) rem(-1px) rem(-5px);
+					} @else {
+						margin: 0 rem(-5px) rem(-1px) rem(5px);
+					}
+					
+					& .ui-icon-close {
+						font-size: $font-size-base - rem(4px);
+						color: rgba(var(--#{$prefix}inverse-rgb), .5);
+						text-indent: 0;
+						height: 100%;
+						padding-top: rem(2px);
+						background-image: none;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						
+						@include fontawesome();
+			
+						&:after {
+							content: '\f00d' !important;
+						}
+						&:hover {
+							box-shadow: none !important;
+							color: rgba(var(--#{$prefix}inverse-rgb), 0.75);
+						}
+					}
+					&:hover,
+					&:focus {
+						& .ui-icon-close {
+							&:before {
+								color: rgba(var(--#{$prefix}inverse-rgb), .4);
+							}
+						}
+					}
+				}
+			}
+			&.tagit-new {
+				margin: rem(2px) 0;
+  			height: rem(23px);
+  			display: flex;
+  			align-items: center;
+  			
+  			& input {
+  				color: $input-color;
+  			}
+			}
+		}
+	}
+}
+.tagit-autocomplete {
+	border: $dropdown-border-width solid $dropdown-border-color !important;
+	padding: $dropdown-padding-y 0;
+	background: $dropdown-bg;
+	border-radius: $dropdown-border-radius;
+	box-shadow: $dropdown-box-shadow;
+	
+	& .ui-menu-item {
+		& .ui-menu-item-wrapper {
+			padding: $dropdown-item-padding-y $dropdown-item-padding-x;
+			border: none;
+			color: $dropdown-link-color;
+			
+			&.ui-state-active {
+				background: $dropdown-link-hover-bg;
+				color: $dropdown-link-color;
+				margin: 0;
+			}
+		}
+	}
+}

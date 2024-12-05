@@ -1,0 +1,104 @@
+{% set page = 'signup' %}
+{% from 'macros/email_field.html.j2' import render_email %}
+{% from 'macros/password_field.html.j2' import render_password_field %}
+{% from 'macros/password_confirm_field.html.j2' import render_confirm_password_field %}
+{% set title %}Sign Up - {{ config.STORE_NAME }}{% endset %}
+{% extends "base.html.j2" %}
+{% block content %}
+{% include 'includes/heading.html.j2' %}
+
+<div id="app" class="app app-full-height app-without-header">
+  <div class="register" hx-ext="response-targets">
+    <div class="register-content">
+      <form
+        data-js="signup-form"
+        hx-post="/partials/signup"
+        hx-trigger="submit"
+        hx-target="#response-card"
+        hx-target-error="#response-card"
+        hx-swap="innerHTML transition:true"
+      >
+        <h1 class="text-center">Sign Up</h1>
+        <p class="text-inverse text-opacity-50 text-center">Sign up and start using clipCast now!</p>
+
+        <div class="mb-3">
+          <label class="form-label" for="email-entry-field">Your E-Mail <span class="text-danger">*</span></label>
+          {{ render_email() }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password-field">Password <span class="text-danger">*</span></label>
+          {{ render_password_field() }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password-confirm-field">Confirm Password <span class="text-danger">*</span></label>
+          {{ render_confirm_password_field() }}
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="customCheck1"
+              name="accepted_terms"
+              value="1"
+              required="required"
+              oninvalid="this.setCustomValidity('You must agree to our Terms of Use to sign up')"
+              onchange="this.setCustomValidity('')"
+            >
+            <label
+              class="form-check-label"
+              for="customCheck1"
+            >
+              I have read and agree to the
+              <a
+                href="javascript:;"
+                data-bs-toggle="modal"
+                data-bs-target="#myModal"
+                data-bs-url="/termsofuse"
+              >Terms of Use</a>.
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="customCheck2"
+              name="marketing_subscribed"
+              value="1"
+            >
+            <label
+              class="form-check-label"
+              for="customCheck2"
+            >Keep me informed of news and features.</label>
+          </div>
+        </div>
+
+        <div id="response-card" class="slide-it"></div>
+
+        <div class="mb-3">
+          <button
+            type="submit"
+            class="btn btn-outline-theme btn-lg d-block w-100 hx-disable"
+            id="signup-submit-button"
+          >
+            <span class="default-button-text">Sign Up</span>
+            <span id="loading-indicator" class="htmx-indicator">
+              Submitting ... <i class="fa fa-spinner fa-spin"></i>
+            </span>
+          </button>
+        </div>
+
+        <div class="text-inverse text-opacity-50 text-center">
+          Already signed up? <a href="/login">Sign In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

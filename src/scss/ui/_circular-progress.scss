@@ -1,0 +1,103 @@
+.progress-pie {
+  text-align: center;
+  padding: 4em;
+}
+
+.pie {
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+  background: #666;
+  background-image: linear-gradient(to right, transparent 50%, #ff9f0c 0);
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+}
+
+.pie::before {
+  content: '';
+  display: block;
+  margin-left: 50%;
+  height: 100%;
+  border-radius: 0 100% 100% 0 / 50%;
+  background-color: inherit;
+  transform-origin: left;
+}
+
+.pie::after {
+  content: attr(data-value);
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  margin: auto;
+  border-radius: 50%;
+  background-color: rgba(29, 40, 53, 0.95);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #eee;
+  padding-top: 5px;
+}
+
+@for $i from 0 through 50 {
+  .pie[data-value="#{$i}"]:before {
+    transform: rotate(#{ calc($i/100) }turn);
+  }
+}
+
+@for $i from 51 through 100 {
+  .pie[data-value="#{$i}"]:before {
+    background-color: #ff9f0c;
+    transform: rotate(#{ calc($i/100 - .5) }turn);
+  }
+}
+
+// hourglass spinning animation
+.fa-stack.hourglass-spin {
+  height: 1em;
+  line-height: 1em;
+}
+.hourglass-spin > [class*="fa-hourglass"] {
+  animation: showhide 4s steps(1) infinite;
+  opacity: 0;
+}
+.hourglass-spin > .fa-hourglass-end {
+  animation-delay: 2s;
+}
+.hourglass-spin > .fa-hourglass-half {
+  animation-delay: 1s;
+}
+.hourglass-spin > .fa-hourglass-start {
+  animation-delay: 0s;
+}
+.hourglass-spin > .fa-hourglass-end.spin {
+  animation: showhidespin 4s linear infinite;
+}
+@keyframes showhide {
+  0% {
+      opacity: 1;
+  }
+  25% {
+      opacity: 0;
+  }
+}
+@keyframes showhidespin {
+  0% {
+      opacity: 0;
+  }
+  75% {
+      opacity: 0;
+  }
+  75% {
+      opacity: 1;
+      transform: rotate(0deg);
+  }
+  100% {
+      opacity: 1;
+      transform: rotate(180deg);
+  }
+}

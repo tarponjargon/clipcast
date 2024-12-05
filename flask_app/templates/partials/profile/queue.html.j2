@@ -1,0 +1,53 @@
+
+
+<!-- BEGIN table -->
+<form name="queue-form" id="queue-form" action="/app/delete-episodes" method="post">
+
+  <div id="top-delete-all-btn" class="mb-3" style="display: none;">
+    <div class="d-flex align-items-center">
+      <button
+        type="submit"
+        class="btn btn-outline-warning btn-sm"
+        data-js="delete-queue-items"
+        >Delete Selected</button>
+    </div>
+  </div>
+
+  <div class="table-responsive" id="queue-table">
+    <table class="table table-hover text-nowrap">
+      <thead>
+        <tr>
+          <th class="pt-0 pb-2 text-center">
+            <div class="form-check">
+              <input class="form-check" type="checkbox" id="check-all">
+            </div>
+          </th>
+          <th class="pt-0 pb-2 text-center">Audio</th>
+          <th class="pt-0 pb-2">Title</th>
+          <th class="pt-0 pb-2">Source</th>
+          <th class="pt-0 pb-2">Duration</th>
+          <th class="pt-0 pb-2">Date</th>
+          <th class="pt-0 pb-2 text-center">Delete</th>
+        </tr>
+      </thead>
+      {% include 'partials/profile/queue_list.html.j2' %}
+    </table>
+  </div>
+</form>
+{# <!--
+<div class="d-md-flex align-items-center">
+  <div class="me-md-auto text-md-left text-center mb-2 mb-md-0">
+    Showing 1 to 10 of 57 entries
+  </div>
+  <ul class="pagination mb-0 justify-content-center">
+    <li class="page-item disabled"><a class="page-link">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">4</a></li>
+    <li class="page-item"><a class="page-link" href="#">5</a></li>
+    <li class="page-item"><a class="page-link" href="#">6</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</div>
+--> #}

@@ -1,0 +1,12 @@
+{% macro render_errors(errors) -%}
+<div class="card text-white bg-danger my-2 p-3 error-card">
+	<div class="card-body p-1">
+		<p class="card-text">
+			{% for error in errors %}
+				{{ error }}
+				{{ '<br />' if loop.index > 1 else ''}}
+			{% endfor %}
+		</p>
+	</div>
+</div>
+{%- endmacro %}
