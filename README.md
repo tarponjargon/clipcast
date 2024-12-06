@@ -4,7 +4,7 @@ This is a web application that accepts content in the form of links (or plain te
 
 It uses python/flask on the back end and Bootstrap and HTMX on the front end.
 
-Currently the project is not publicly accessible.
+Currently the project is not in production.
 
 ![screenshot 1](https://www.thewhiteroom.com/images/clipcast-screenshot1.png)
 
