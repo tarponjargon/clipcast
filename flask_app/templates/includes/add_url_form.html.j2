@@ -1,0 +1,34 @@
+{% set rand_id = "add-url-input-" + get_random_string() %}
+<form
+  hx-post="/partials/app/add-podcast-url"
+  hx-trigger="submit"
+  hx-target="#dead-end"
+  hx-on::after-request="
+    window.showToast(event.detail.xhr.response, !event.detail.successful);
+    if (event.detail.successful) {
+        setTimeout(function() {
+        window.location = '/app';
+      }, 1300);
+    }
+  "
+  class="w-100"
+  >
+  <div class="input-group w-auto">
+    <input
+      id="{{ rand_id }}"
+      type="url"
+      class="form-control"
+      placeholder="Add a URL to your podcast feed"
+      required="required"
+      name="url"
+    >
+    <button type="submit" class="btn btn-theme btn hx-disable">
+      <span class="default-button-text">
+        <i class="fa fa-plus-circle fa-fw me-1"></i> Add URL
+      </span>
+      <span id="loading-indicator" class="htmx-indicator">
+        Adding ... <i class="fa fa-spinner fa-spin"></i>
+      </span>
+    </button>
+  </div>
+</form>

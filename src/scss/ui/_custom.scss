@@ -14,24 +14,13 @@
   .default-button-text {
     display: none;
   }
-  // #response-card {
-  //   display: none;
-  // }
 }
 
 // styles for the hover-text component
 .hover-text {
   position: relative;
-  display: flex;
-  font-size: 1.5em;
+  font-size: 1em;
   text-decoration: none;
   cursor: pointer;
 }
 
-.hover-text .hover-div {
-  visibility: hidden;
-}
-
-.hover-text:hover .hover-div {
-  visibility: visible;
-}

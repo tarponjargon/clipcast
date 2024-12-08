@@ -33,6 +33,7 @@ class Config(object):
     PAGE_SIZE = 10
     TTS_SENTENCE_CHUNK_SIZE = 4  # how many sentences to chunk together for TTS
     TRANSITION_VOICE = "echo"  # voice to use for intros/outros
+    TEST_EMAILS = [os.environ.get("TEST_EMAIL1"), os.environ.get("TEST_EMAIL2")]
     COMMENTS_SELECTORS = [
         ".comment",
         ".comments",

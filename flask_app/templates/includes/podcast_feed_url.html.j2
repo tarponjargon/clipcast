@@ -6,21 +6,17 @@
 </div>
 
 <div class="col-12 col-sm-8 col-md-6 col-xl-5 d-flex align-items-center justify-content-start feed-url">
-  <div class="pe-2">
-    <a href="{{ session_safe_get('feed_url') }}">
-      <img src="/assets/img/rss.png" width="22" alt="RSS">
+  <div class="border rounded p-2 d-flex align-items-center gap-2">
+    <a class="hover-text d-flex align-items-center" href="javascript:;" onClick="copyToClipboard('podcast-feed-field')">
+      <img src="/assets/img/rss.png" width="18" alt="RSS" class="me-2">
+      <div
+        id="podcast-feed-field"
+        class="text-truncate"
+        style="max-width: 375px;"
+      >
+        {{ session_safe_get('feed_url') }}
+      </div>
+      <i class="fa fa-copy ms-2"></i>
     </a>
   </div>
-
-  <a class="hover-text" href="javascript:;" onClick="copyToClipboard('podcast-feed-field')">
-    <div
-      id="podcast-feed-field"
-      value="{{ session_safe_get('feed_url') }}"
-      class="text-truncate"
-      style="max-width: 375px;"
-    >
-      {{ session_safe_get('feed_url') }}
-    </div>
-    <div class="hover-div"><i class="fa fa-copy"></i></div>
-  </a>
 </div>

@@ -836,7 +836,7 @@ window.copyToClipboard = function (id) {
   // Copy the text to the clipboard
   navigator.clipboard
     .writeText(text.trim())
-    .then(() => showToast("Feed copied to clipboard.  Paste this into your podcast app."))
+    .then(() => showToast("Text copied to your clipboard."))
     .catch((error) => console.error("Copy failed:", error));
 };
 

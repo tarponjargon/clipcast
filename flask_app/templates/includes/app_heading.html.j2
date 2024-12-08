@@ -22,39 +22,7 @@
   <!-- END brand -->
 
   <div class="d-none d-sm-flex justify-content-start align-items-center col-8 col-md-6">
-    <form
-      hx-post="/partials/app/add-podcast-url"
-      hx-trigger="submit"
-      hx-target="#dead-end"
-      hx-on::after-request="
-        window.showToast(event.detail.xhr.response, !event.detail.successful);
-        if (event.detail.successful) {
-            setTimeout(function() {
-            window.location = '/app';
-          }, 1300);
-        }
-      "
-      class="w-100"
-    >
-      <div class="input-group w-auto">
-        <input
-          id="add-url-input"
-          type="url"
-          class="form-control"
-          placeholder="Add a URL to your podcast feed"
-          required="required"
-          name="url"
-        >
-        <button type="submit" class="btn btn-theme btn hx-disable">
-          <span class="default-button-text">
-            <i class="fa fa-plus-circle fa-fw me-1"></i> Add URL
-          </span>
-          <span id="loading-indicator" class="htmx-indicator">
-            Adding ... <i class="fa fa-spinner fa-spin"></i>
-          </span>
-        </button>
-      </div>
-    </form>
+    {% include 'includes/add_url_form.html.j2' %}
   </div>
 
   <!-- BEGIN menu -->
