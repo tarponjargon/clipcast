@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Submit URL</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 10px;
+        margin: 0;
+        width: 300px;
+      }
+      #error {
+        color: red;
+        display: none;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="urlForm">
+      <label for="url">URL:</label>
+      <input type="text" id="url" name="url" style="width: 100%" />
+      <button type="submit" style="margin-top: 10px">Submit</button>
+    </form>
+    <div id="error">
+      Error: Access forbidden. Please visit
+      <a href="https://www.clipcast.it/app" target="_blank">ClipCast</a>.
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

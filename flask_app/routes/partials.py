@@ -16,7 +16,7 @@ from flask_app.modules.user.forgotpassword import handle_forgotpassword_request
 from flask_app.modules.user.updatepassword import handle_updatepassword_request
 from flask_app.modules.user.updateemail import handle_updateemail_request
 from flask_app.modules.user.add_podcast_content import (
-    handle_add_url_request,
+    handle_add_url_post_request,
     handle_add_content_request,
 )
 from flask_app.modules.user.queue import get_queue, get_queue_item
@@ -130,7 +130,7 @@ def do_notifications_request():
 @partials.route("/app/add-podcast-url", methods=["POST"])
 @is_authenticated
 def do_addurl_request():
-    return handle_add_url_request(session.get("user_id"))
+    return handle_add_url_post_request(session.get("user_id"))
 
 
 @partials.route("/app/add-podcast-content", methods=["POST"])

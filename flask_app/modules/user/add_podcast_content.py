@@ -22,8 +22,8 @@ from flask_app.modules.extensions import DB
 from flask_app.commands.process_content import process_episode
 
 
-def handle_add_url_request(user_id):
-    """Handle the request to add a podcast URL"""
+def handle_add_url_post_request(user_id):
+    """Handle the request to add a podcast URL.  POST requests are handled with AJAX"""
 
     url = request.form.get("url")
     if not url or not validators.url(url):
@@ -32,7 +32,11 @@ def handle_add_url_request(user_id):
             400,
         )
 
-    return add_podcast_url(request.form.get("url"), user_id)
+    resp = add_podcast_url(request.form.get("url"), user_id)
+    if not resp.get("response_code") == 200:
+        return render_template_string(resp.get("message")), resp.get("response_code")
+
+    return render_template_string(resp.get("message"))
 
 
 def handle_add_content_request(user_id):
@@ -40,12 +44,13 @@ def handle_add_content_request(user_id):
 
     content = request.form.get("content")
     if not content:
-        return (
-            render_template_string("Please enter some content"),
-            400,
-        )
+        return render_template_string("Please enter some content"), 400
 
-    return add_podcast_content(content, user_id)
+    resp = add_podcast_content(content, user_id)
+    if not resp.get("response_code") == 200:
+        return render_template_string(resp.get("message")), resp.get("response_code")
+
+    return render_template_string(resp.get("message"))
 
 
 def extract_content_from_html(html):
@@ -66,11 +71,50 @@ def extract_content_from_html(html):
     return content
 
 
+def process_episode_content(id):
+    """Process the episode content in a separate thread"""
+
+    # retrieve the content and process it
+    episode = DB.fetch_one(
+        """
+          SELECT
+            content_id
+          FROM `podcast_content`
+          WHERE id = %s
+        """,
+        (id),
+    )
+    if not episode:
+        current_app.logger.error(f"Error fetching content from db: {ins}")
+        return {
+            "response_code": 500,
+            "message": "There was an error processing the content",
+        }
+
+    current_app.logger.info(f"Processing episode: {episode} {type(episode)}")
+    task_thread = threading.Thread(
+        target=process_episode,
+        args=(
+            current_app._get_current_object(),
+            episode.get("content_id"),
+        ),
+    )
+    task_thread.start()
+
+    return {
+        "response_code": 200,
+        "message": "The content has been added to your queue",
+    }
+
+
 def add_podcast_url(url, user_id):
     """Add a podcast URL to the user's account"""
 
     if not user_id:
-        return render_template_string("Authentication error"), 401
+        return {
+            "response_code": 401,
+            "message": "Authentication error",
+        }
 
     # check if the url is already in the database for this user
     q = DB.fetch_one(
@@ -80,18 +124,27 @@ def add_podcast_url(url, user_id):
         (user_id, url),
     )
     if q and q.get("id"):
-        return render_template_string("This URL is already in your queue"), 400
+        return {
+            "response_code": 401,
+            "message": "The URL is already in your queue",
+        }
 
     downloaded = None
     try:
         downloaded = fetch_url(url)
     except Exception as e:
         current_app.logger.error(f"Error extracting metadata: {url} " + str(e))
-        return render_template_string("There was an error downloading the URL"), 400
+        return {
+            "response_code": 400,
+            "message": "There was an error downloading the URL",
+        }
 
     if not downloaded:
         current_app.logger.error(f"No content could be found failed for: {url}")
-        return render_template_string("No content could be extracted from URL"), 400
+        return {
+            "response_code": 400,
+            "message": "No content could be extracted from URL",
+        }
 
     # parse metadata
     metadata = {}
@@ -112,7 +165,10 @@ def add_podcast_url(url, user_id):
     content = extract_content_from_html(downloaded)
 
     if not content:
-        return render_template_string("No content could be extracted from the URL"), 400
+        return {
+            "response_code": 400,
+            "message": "No content could be extracted from URL",
+        }
 
     title = metadata.get("title")
     author = metadata.get("author")
@@ -139,7 +195,7 @@ def add_podcast_url(url, user_id):
     char_count = len(content)
 
     # save to the database
-    ins = DB.insert_query(
+    ins_id = DB.insert_query(
         """
         INSERT INTO podcast_content
         (user_id, content_id, url, title, author, description, image, hostname, article_date, metadata, content, content_character_count)
@@ -160,48 +216,33 @@ def add_podcast_url(url, user_id):
             char_count,
         ),
     )
-    if not ins:
+    if not ins_id:
         current_app.logger.error(f"Error saving url content to db: {url}")
-        return render_template_string("There was an error saving the content")
+        return {
+            "response_code": 500,
+            "message": "There was an error saving the content",
+        }
 
-    # retrieve the content and process it
-    episode = DB.fetch_one(
-        """
-          SELECT
-            content_id
-          FROM `podcast_content`
-          WHERE id = %s
-        """,
-        (ins),
-    )
-    if not episode:
-        current_app.logger.error(f"Error fetching content from db: {ins}")
-        return render_template_string("There was an error processing the content"), 500
-
-    current_app.logger.info(f"Processing episode: {episode} {type(episode)}")
-    task_thread = threading.Thread(
-        target=process_episode,
-        args=(
-            current_app._get_current_object(),
-            episode.get("content_id"),
-        ),
-    )
-    task_thread.start()
-
-    return render_template_string("The URL content has been added to your queue")
+    return process_episode_content(ins_id)
 
 
 def add_podcast_content(content, user_id):
     """Add a podcast Content to the user's account"""
 
     if not user_id:
-        return render_template_string("Authentication error"), 401
+        return {
+            "response_code": 401,
+            "message": "Authentication error",
+        }
 
     # extract content
     content = strip_html(content)
 
     if not content:
-        return render_template_string("No content provided"), 400
+        return {
+            "response_code": 400,
+            "message": "No content provided",
+        }
 
     title = get_first_n_words(content, 9)
     author = "Not available"
@@ -213,7 +254,7 @@ def add_podcast_content(content, user_id):
     char_count = len(content)
 
     # save to the database
-    ins = DB.insert_query(
+    ins_id = DB.insert_query(
         """
         INSERT INTO podcast_content
         (user_id, content_id, title, author, description, image, hostname, article_date, metadata, content, content_character_count)
@@ -233,8 +274,11 @@ def add_podcast_content(content, user_id):
             char_count,
         ),
     )
-    if not ins:
+    if not ins_id:
         current_app.logger.error(f"Error saving text content to db: {title}")
-        return render_template_string("There was an error saving the content"), 500
+        return {
+            "response_code": 500,
+            "message": "There was an error saving the content",
+        }
 
-    return render_template_string("The content has been added to your queue")
+    return process_episode_content(ins_id)

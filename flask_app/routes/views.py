@@ -1,3 +1,5 @@
+import validators
+from urllib.parse import unquote
 from flask import Blueprint, render_template, redirect, session, make_response
 from flask_app.modules.extensions import DB
 from flask_app.modules.http import login_required, check_if_logged_in_already
@@ -115,3 +117,16 @@ def do_delete_episodes():
 @views.route(f"/profile/rss-feed/<string:userid>")
 def do_serve_rss(userid):
     return serve_rss_feed(userid)
+
+
+@views.route("/app/add-url")
+@login_required
+def do_app_add_url():
+    encoded_url = request.values.get("url")
+    if not encoded_url:
+        return {"error": "Please enter a valid URL"}, 400
+    url = unquote(encoded_url)
+    if not validators.url(url):
+        return {"error": "Please enter a valid URL"}, 400
+
+    return add_podcast_url(url, session.get("user_id"))
