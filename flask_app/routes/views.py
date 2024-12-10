@@ -135,10 +135,10 @@ def do_app_add_url():
     encoded_url = request.values.get("url")
     current_app.logger.debug(f"Adding URL: {encoded_url}")
     if not encoded_url:
-        return {"error": "Please enter a valid URL"}, 400
+        return render_template("error.html.j2", error="No URL was passed"), 400
     url = unquote(encoded_url)
     if not validators.url(url):
-        return {"error": "Please enter a valid URL"}, 400
+        return render_template("error.html.j2", error="Please enter a valid URL"), 400
 
     # check that the user is logged in
     if not session.get("user_id"):
@@ -150,7 +150,9 @@ def do_app_add_url():
     resp = add_podcast_url(url, session.get("user_id"))
 
     if not resp.get("response_code") == 200:
-        return {"error": resp.get("message")}, resp.get("response_code")
+        return render_template("error.html.j2", error=resp.get("message")), resp.get(
+            "response_code"
+        )
 
     # redirect to the app page
     response = make_response(redirect("/app"))
