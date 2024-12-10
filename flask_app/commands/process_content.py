@@ -355,8 +355,6 @@ def process_episode(app, content_id):
         row_id = episode.get("content_id")
         start_time = time.time()
 
-        current_app.logger.info("Processing content", row_id)
-
         DB.update_query(
             """
           UPDATE podcast_content
