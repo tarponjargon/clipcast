@@ -1,6 +1,14 @@
 import validators
 from urllib.parse import unquote
-from flask import Blueprint, render_template, redirect, session, make_response
+from flask import (
+    Blueprint,
+    request,
+    render_template,
+    redirect,
+    session,
+    make_response,
+    current_app,
+)
 from flask_app.modules.extensions import DB
 from flask_app.modules.http import login_required, check_if_logged_in_already
 from flask_app.modules.user.resetpassword import handle_resetpassword_view
@@ -9,6 +17,7 @@ from flask_app.modules.user.delete_episodes import delete_episodes
 from flask_app.modules.user.voices import get_base_voices, get_premium_voices
 from flask_app.modules.user.rss import serve_rss_feed
 from flask_app.modules.user.queue import get_queue
+from flask_app.modules.user.add_podcast_content import add_podcast_url
 
 views = Blueprint("views", __name__)
 
@@ -120,13 +129,29 @@ def do_serve_rss(userid):
 
 
 @views.route("/app/add-url")
-@login_required
 def do_app_add_url():
+
+    # check that a valid URL is provided
     encoded_url = request.values.get("url")
+    current_app.logger.debug(f"Adding URL: {encoded_url}")
     if not encoded_url:
         return {"error": "Please enter a valid URL"}, 400
     url = unquote(encoded_url)
     if not validators.url(url):
         return {"error": "Please enter a valid URL"}, 400
 
-    return add_podcast_url(url, session.get("user_id"))
+    # check that the user is logged in
+    if not session.get("user_id"):
+        # this might end up being a landmine, but I'm going to set the url to the session to be processed after login/signup
+        session["addurl"] = url
+        return redirect("/login")
+
+    # add the URL to the database
+    resp = add_podcast_url(url, session.get("user_id"))
+
+    if not resp.get("response_code") == 200:
+        return {"error": resp.get("message")}, resp.get("response_code")
+
+    # redirect to the app page
+    response = make_response(redirect("/app"))
+    return response

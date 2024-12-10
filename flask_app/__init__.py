@@ -80,6 +80,8 @@ def create_app():
         @app.before_request
         def do_before():
             """Procedures to do before normal Flask request processing.  The order is immportant"""
+
+            # login the user
             user_id_cookie = request.cookies.get("user")
             if (
                 user_id_cookie
@@ -90,6 +92,13 @@ def create_app():
                 if user:
                     app.logger.debug(f"logging in user from cookie: {user.get_id()}")
                     login_user(user)
+
+            # process urls that are requested to be added but got diverted to login/signup
+            if session.get("user_id") and session.get("addurl"):
+                from .modules.user.add_podcast_content import add_podcast_url
+
+                add_podcast_url(session.get("addurl"), session.get("user_id"))
+                session.pop("addurl")
 
         @app.after_request
         def do_after(response):

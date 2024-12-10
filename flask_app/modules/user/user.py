@@ -68,7 +68,7 @@ def hash_password(password, salt=None, iterations=260000):
     )
     b64_hash = base64.b64encode(pw_hash).decode("ascii").strip()
     return "{}${}${}${}".format(
-        current_app.config["HASHING_ALGORITHM"], iterations, salt, b64_hash
+        current_app.config.get("HASHING_ALGORITHM"), iterations, salt, b64_hash
     )
 
 
@@ -77,7 +77,7 @@ def verify_password(password, password_hash):
         return False
     algorithm, iterations, salt, b64_hash = password_hash.split("$", 3)
     iterations = int(iterations)
-    assert algorithm == current_app.config["HASHING_ALGORITHM"]
+    assert algorithm == current_app.config.get("HASHING_ALGORITHM")
     compare_hash = hash_password(password, salt, iterations)
     return secrets.compare_digest(password_hash, compare_hash)
 
