@@ -20,21 +20,21 @@
           <div class="col-xl-9" hx-ext="response-targets">
 
             <h1><i class="bi bi-text-paragraph text-theme"></i> Add Content</h1>
+            <p>There are several easy ways to get content into your clipCast podcast feed:</p>
             <ol>
-              <li><a href="#enter-url">Enter a URL</a></li>
-              <li><a href="#email">E-Mail Links or Text</a></li>
-              <li><a href="#enter-text">Enter Text</a></li>
-              <li><a href="#upload">Chrome Extension</a></li>
+              <li><a href="#enter-url" data-toggle="scroll-to">Enter a URL</a></li>
+              <li><a href="#email" data-toggle="scroll-to">E-Mail Links or Text</a></li>
+              <li><a href="#enter-text" data-toggle="scroll-to">Enter Text</a></li>
+              <li><a href="#extension" data-toggle="scroll-to">Chrome Extension</a></li>
             </ol>
 
-            <div class="w-100 mt-4 mb-5">
+            <div id="enter-url" class="w-100 mt-4 mb-5">
               <a name="enter-url"></a>
               <h2>1. Enter a URL</h2>
               {% include 'includes/add_url_form.html.j2' %}
             </div>
 
-            <div class="w-100 mb-5">
-              <a name="email"></a>
+            <div id="email" class="w-100 mb-5">
               <h2>2. E-Mail Links or Text</h2>
               <p>
                 Send an email to with the links or text you want to add to your feed.
@@ -53,7 +53,7 @@
               </div>
             </div>
 
-            <div class="w-100 mb-5">
+            <div id="enter-text" class="w-100 mb-5">
               <h2>3. Add Content Directly</h2>
               <form
                 hx-post="/partials/app/add-podcast-content"
@@ -61,9 +61,9 @@
                 hx-target="#dead-end"
                 hx-on::after-request="
                   window.showToast(event.detail.xhr.response, !event.detail.successful);
-                  setTimeout(function() {
+                  if (event.detail.successful) {setTimeout(function() {
                     window.location.href = '/app';
-                  }, 2000);
+                  }, 2000);}
                 "
               >
                 <div class="form-group mb-3">
@@ -87,11 +87,45 @@
               </form>
             </div>
 
+            <div id="extension" class="w-100 mb-5">
+              <h2>4. Chrome Extension</h2>
+              <p>
+                Install the clipCast <a href="#">Chrome Extension</a> to easily add content right from pages you visit.  Here's what it looks like installed:
+              </p>
+              <p>
+                <img
+                  class="d-block shadow-lg"
+                  src="https://www.thewhiteroom.com/images/clipcast-extension.jpg"
+                  alt="clipCast Chrome Extension"
+                  width="730"
+                  class="img-fluid"
+                />
+              </p>
+
 
           </div>
           <!-- END col-9-->
+
+
+
         </div>
         <!-- END row -->
+
+        <!-- BEGIN col-3 -->
+        <div class="col-xl-3">
+          <!-- BEGIN #sidebar-bootstrap -->
+          <nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
+            <nav class="nav">
+              <a class="nav-link" href="#enter-url" data-toggle="scroll-to">Enter a URL</a>
+              <a class="nav-link" href="#email" data-toggle="scroll-to">E-Mail Links or Text</a>
+              <a class="nav-link" href="#enter-text" data-toggle="scroll-to">Enter Text</a>
+              <a class="nav-link" href="#extension" data-toggle="scroll-to">Chrome Extension</a>
+            </nav>
+          </nav>
+          <!-- END #sidebar-bootstrap -->
+        </div>
+        <!-- END col-3 -->
+
       </div>
       <!-- END col-10 -->
     </div>
