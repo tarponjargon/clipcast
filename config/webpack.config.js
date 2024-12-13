@@ -63,6 +63,15 @@ module.exports = (env, argv) => {
       client: {
         overlay: false,
         progress: false,
+        webSocketURL: {
+          hostname: "properly-fleet-narwhal.ngrok-free.app", // Your ngrok hostname
+          port: 443, // Secure WebSocket port
+          protocol: "wss", // Use secure WebSocket protocol
+          pathname: "/ws", // Optional: WebSocket path
+        },
+      },
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Allow all origins for testing
       },
       static: false,
       watchFiles: {
