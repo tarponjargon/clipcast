@@ -10,6 +10,25 @@ Currently the project is not in production.
 
 ![screenshot 2](https://www.thewhiteroom.com/images/clipcast-screenshot2.png)
 
+## PREREQUISITES
+
+1.  [Docker](https://www.docker.com/) (dev environment)
+2.  [ngrok](https://www.ngrok.com/) (dev environment)
+3.  [direnv](https://direnv.net/)
+4.  [S3 Storage](https://www.cloudflare.com/developer-platform/solutions/s3-compatible-object-storage/)
+5.  [OpenAI API access](https://platform.openai.com/docs/overview)
+6.  [Amazon Polly API Access](https://docs.aws.amazon.com/polly/latest/dg/what-is.html) (if more voices are desired)
+7.  [Google TTS API Access](https://cloud.google.com/text-to-speech?hl=en) (if more voices are desired)
+
+## INSTALLATION
+
+1.  `cp .envrc.sample .envrc` and update all lines denoted with 'update' comment
+2.  `direnv allow`
+3.  Create a virtual environment `virtualenv -p $(which python3) virtualenv_python`
+4.  Install python packages `pip3 install -r requirements.txt`
+5.  Install all NPM modules `npm install`
+6.  Start everything `./start.sh`
+
 ## CONNECTING TO CONTAINERS
 
 Use following command to ssh to containers:

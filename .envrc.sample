@@ -1,0 +1,60 @@
+type deactivate &>/dev/null
+source virtualenv_python/bin/activate
+export ENV="development"
+export REMOTE_HOST=""
+export STORE_CODE="clipcast"
+export STORE_NAME="clipCast.it"
+export TEST_EMAIL1="YOUREMAIL@gmail.com" # update
+export TEST_EMAIL2="YOUREMAIL@gmail.com" # update
+export WEB_HOST=localhost
+export DEVSERVER_HOST=YOUR.NGROK.DOMAIN # update
+export DEVSERVER_PORT=3000
+export APP_HOST=clipcast-local
+export APP_PORT=4051
+export FLASK_APP=manage.py
+export MYSQL_ROOT_PASSWORD=rootpass
+export MYSQL_DATABASE=clipcast
+export MYSQL_USER=root
+export MYSQL_PASSWORD=rootpass
+export MYSQL_HOST=clipcast-local-database
+export RUN_HOST=0.0.0.0
+export SECRET_KEY=MAKE_A_SECRET_KEY # update
+export REDIS_HOST=redis_server
+export REDIS_PORT=6379
+export REDIS_CACHE_DB=1
+export REDIS_SESSION_DB=2
+export REDIS_CART_DB=3
+export GUNICORN_WORKERS=1
+export GUNICORN_THREADS=3
+export GUNICORN_LOGLEVEL="debug"
+export OPENAI_API_KEY="YOUR_OPENAI_API_KEY" # update
+export S3_BUCKET="YOUR_S3_BUCKET_NAME" # update
+export S3_URL="YOUR_S3_URL" # update
+export S3_ACCESS_KEY="YOUR_S3_ACCESS_KEY" # update
+export S3_SECRET_ACCESS_KEY="YOUR_S3_SECRET"  # update
+export S3_PUBLIC_URL="YOUR_S3_PUBLIC_URL" # update
+export GOOGLE_APPLICATION_CREDENTIALS="YOUR_GOOGLE_CREDENTAILS.json"  # update
+export GOOGLE_LOGIN_APP_CLIENT_ID="YOUR_GOOGLE_SIGN_IN_CLIENT_ID.apps.googleusercontent.com" # update
+export GOOGLE_LOGIN_APP_CLIENT_SECRET="YOUR_GOOGLE_SIGN_IN_CLIENT_SECRET" # update
+export AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY" # update
+export AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET"  # update
+export STORE_EMAIL="YOU@YOUREMAIL.com" # update
+export ERROR_NOTIFY_URL="https://YOUR_ERROR_MONITOR_URL.com" # update
+export ERROR_NOTIFY_AUTH="YOUR_ERROR_MONITOR_KEY" # update
+export MAIL_USERNAME="YORU_GMAIL_BOX@gmail.com"   # update
+export MAIL_PASSWORD="YOUR_GMAIL_APP_PASSWORD"  # update
+export OBSCURE_SALT="YOUR_OBSCURE_SALT" # update see: https://github.com/jidn/obscure/
+export RANDOM_STRING="G09tNcdoBFPJeZGknJFa9I6uLt1gkLyy"
+export DEFAULT_IMAGE="PATH_TO_DEFAULT_IMAGE" # update
+export STAGING_URL="https://STAGING_URL" # update
+export TESTING_URL="https://TESTING_URL" # update
+export PRODUCTION_URL="https://PRODUCTION_URL" # update
+export HASHING_ALGORITHM="pbkdf2_sha256"
+
+export DEV_URL="https://${DEVSERVER_HOST}"
+export NODE_ENV=$ENV
+export CYPRESS_BASE_URL=$DEV_URL
+export NODE_VERSION_PREFIX=v
+export NODE_VERSIONS=~/.nvm/versions/node
+use node 20
+unset PS1
