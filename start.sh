@@ -10,22 +10,22 @@ LOG="./devserver-startup.log"
 rm ${LOG};
 touch ${LOG};
 
+# trap ctrl-c and call cleanup
+trap cleanup SIGINT
+function cleanup() {
+  echo "Stopping server..."
+  docker compose down;
+  kill ${WEBPACK_PID} 2>/dev/null;
+  kill ${NGROK_PID} 2>/dev/null;
+  exit 0;
+}
+
 # trap errors
 trap 'error ${LINENO}' ERR
 error() {
   msg="Error on or near line $1 - check ${LOG} for more";
   echo ${msg};
-  echo "Stopping server..."
-  docker compose down;
-  exit 1;
-}
-
-# trap ctrl-c and call ctrl_c()
-trap ctrl_c INT
-function ctrl_c() {
-  echo "Stopping server..."
-  docker compose down;
-  exit 0;
+  cleanup;
 }
 
 # accept user input for conditional steps
@@ -63,5 +63,12 @@ echo "installing any new npm packages..."
 npm install --legacy-peer-deps >> ${LOG} 2>&1
 
 # run webpack-dev-server
-echo "Starting webpack-dev-server on ${DEVSERVER_HOST}, please wait..."
-NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js
+echo "Starting webpack-dev-server on port ${DEVSERVER_PORT}, please wait..."
+NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js | tee -a ${LOG} &
+WEBPACK_PID=$!
+
+echo "Starting ngrok on ${DEVSERVER_HOST}, please wait..."
+ngrok http --url=${DEVSERVER_HOST} ${DEVSERVER_PORT} >> ${LOG} 2>&1
+NGROK_PID=$!
+
+wait $WEBPACK_PID $NGROK_PID
