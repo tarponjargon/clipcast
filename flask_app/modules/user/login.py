@@ -1,9 +1,10 @@
 from flask import request, session, current_app, render_template
 from flask_app.modules.extensions import DB
-from flask_app.modules.helpers import validate_email
+from flask_app.modules.helpers import validate_email, get_random_string
 from flask_app.modules.user.user import (
     User,
     get_user_id_by_email,
+    create_user,
     verify_password,
     load_user,
     login_user,
@@ -65,4 +66,52 @@ def handle_login_request():
         "partials/notifications/success_card.html.j2",
         message="""You are now logged in.  Redirecting the the app...
       <script>window.location.href = '/app';</script>""",
+    )
+
+
+def handle_google_login_callback(google):
+    """Handle the callback from Google login"""
+
+    token = None
+    user_info = {}
+    try:
+        token = google.authorize_access_token()
+        user_info = google.get("userinfo").json()
+    except Exception as e:
+        current_app.logger.error(
+            "Problem getting user info from google login.  Error: {}".format(e)
+        )
+
+    current_app.logger.debug(user_info)
+
+    if not user_info.get("email"):
+        current_app.logger.error(
+            "Google did not return an E-mail address. User info {}".format(user_info)
+        )
+        return render_template(
+            "error.html.j2",
+            error="Google did not return an E-mail address",
+        )
+
+    # # Check if user exists
+    user_id = get_user_id_by_email(user_info.get("email"))
+    if not user_id:
+        # # Create user
+        user_id = create_user(user_info.get("email"), get_random_string(32))
+
+    user = User.from_id(user_id)
+    if not user:
+        current_app.logger.error(
+            "Problem loading user from google login.  user_id: {}".format(user_id)
+        )
+        return render_template(
+            "error.html.j2",
+            error="Problem loading user",
+        )
+    login_user(user)
+
+    return render_template(
+        "partials/notifications/success_card.html.j2",
+        message="""You are now logged in.  Redirecting the the app...
+    <script>window.location.href = '/app';</script>""",
     )

@@ -19,7 +19,6 @@
         hx-swap="innerHTML transition:true"
       >
         <h1 class="text-center">Sign In</h1>
-        <a href="/google/login">Log in with google</a>
         <div class="mb-3">
           <label class="form-label" for="email-entry-field">Your E-Mail <span class="text-danger">*</span></label>
           {{ render_email() }}
@@ -51,6 +50,17 @@
         </div>
 
       </form>
+
+      <div class="w-100">
+        <hr class="my-4" />
+        <a
+          href="/google/start-login"
+          class="login-with-google-btn"
+          role="button"
+        >
+          Sign in with Google
+        </a>
+      </div>
     </div>
   </div>
 </div>

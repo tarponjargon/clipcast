@@ -9,18 +9,20 @@
   <div class="menu-icon"><i class="bi bi-bell nav-icon"></i></div>
 
   {# "NEW" badge, clunky but I can't get selectattr() to work #}
-  {% for x in notifications if not x.viewed_at %}
-    {% if loop.index == 1 %}
-      <div class="menu-badge bg-theme" id="notifications-badge"></div>
-    {% endif %}
-  {% endfor %}
+  {% if notifications and notifications | length %}
+    {% for x in notifications if not x.viewed_at %}
+      {% if loop.index == 1 %}
+        <div class="menu-badge bg-theme" id="notifications-badge"></div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 
 </a>
 <div class="dropdown-menu dropdown-menu-end mt-1 w-300px fs-11px pt-1">
   <h6 class="dropdown-header fs-10px mb-1">NOTIFICATIONS</h6>
   <div class="dropdown-divider mt-1"></div>
   <div>
-    {% if notifications | length %}
+    {% if notifications and notifications | length %}
     {% for notification in notifications %}
       {% if loop.index > 1 %}
         <div class="dropdown-divider mt-1"></div>

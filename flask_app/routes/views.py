@@ -18,6 +18,7 @@ from flask_app.modules.user.delete_episodes import delete_episodes
 from flask_app.modules.user.voices import get_base_voices, get_premium_voices
 from flask_app.modules.user.rss import serve_rss_feed
 from flask_app.modules.user.queue import get_queue
+from flask_app.modules.user.login import handle_google_login_callback
 from flask_app.modules.user.add_podcast_content import add_podcast_url
 
 views = Blueprint("views", __name__)
@@ -141,25 +142,15 @@ def do_serve_rss(userid):
     return serve_rss_feed(userid)
 
 
-@views.route("/google/login")
+@views.route("/google/start-login")
 def do_google_login():
-    redirect_uri = url_for("views.do_google_login_callback", _external=True)
+    redirect_uri = current_app.config.get("STORE_URL") + "/google/callback"
     return google.authorize_redirect(redirect_uri)
 
 
 @views.route("/google/callback")
 def do_google_login_callback():
-    token = google.authorize_access_token()
-    user_info = google.get("userinfo").json()
-
-    current_app.logger.debug(user_info)
-
-    # Create or load user
-    user = User(id=user_info["id"], name=user_info["name"], email=user_info["email"])
-    users[user.id] = user
-    login_user(user)
-
-    return redirect("/login")
+    return handle_google_login_callback(google)
 
 
 @views.route("/app/add-url")
