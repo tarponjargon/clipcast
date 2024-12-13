@@ -1,0 +1,16 @@
+{% set page = 'termsofuse' %}
+{% set title %}{{ config.STORE_NAME }} Terms of Use{% endset %}
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+{% include 'includes/heading.html.j2' %}
+
+
+<div id="app">
+  <div class="container my-4">
+    {% include 'partials/info/termsofuse.html.j2' %}
+  </div>
+</div>
+
+{% endblock %}

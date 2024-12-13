@@ -16,7 +16,7 @@ Currently the project is not in production.
 2.  [ngrok](https://www.ngrok.com/) (dev environment)
 3.  [direnv](https://direnv.net/)
 4.  [S3 Storage](https://www.cloudflare.com/developer-platform/solutions/s3-compatible-object-storage/)
-5.  [OpenAI API access](https://platform.openai.com/docs/overview)
+5.  [OpenAI API access](https://platform.openai.com/docs/overview) (Text-to-speech voice models)
 6.  [Amazon Polly API Access](https://docs.aws.amazon.com/polly/latest/dg/what-is.html) (if more voices are desired)
 7.  [Google TTS API Access](https://cloud.google.com/text-to-speech?hl=en) (if more voices are desired)
 

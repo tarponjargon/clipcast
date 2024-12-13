@@ -31,6 +31,16 @@ from flask_app.modules.contact import (
 partials = Blueprint("partials", __name__, url_prefix="/partials")
 
 
+@partials.route("/privacy")
+def do_privacy_partial():
+    return render_template("/partials/info/privacy.html.j2")
+
+
+@partials.route("/termsofuse")
+def do_termsofuse_partial():
+    return render_template("/partials/info/termsofuse.html.j2")
+
+
 @partials.route("/contact-form", methods=["POST"])
 def do_contactform_request():
     return handle_contactform_request()

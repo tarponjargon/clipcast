@@ -91,12 +91,17 @@ def do_forgotpassword():
 
 @views.route("/privacy")
 def do_privacy():
-    return render_template("/partials/info/privacy.html.j2")
+    return render_template("privacy.html.j2")
 
 
 @views.route("/termsofuse")
 def do_termsofuse():
-    return render_template("/partials/info/termsofuse.html.j2")
+    return render_template("termsofuse.html.j2")
+
+
+@views.route("/digital-accessibility")
+def do_digital_accessibility():
+    return render_template("digital_accessibility.html.j2")
 
 
 @views.route("/rss-feed-info")

@@ -1,15 +1,15 @@
 .error-page {
-	min-height: 100vh;
+	min-height: 90vh;
 	padding: $spacer * 4 0;
 	display: flex;
 	align-items: center;
-	
+
 	& .error-page-content {
 		margin: 0 auto;
 		position: relative;
 		padding: 0 $spacer;
 		text-align: center;
-		
+
 		& .error-code {
 			color: var(--#{$prefix}inverse);
 			left: 0;
@@ -20,7 +20,7 @@
 			line-height: 1.25;
 			letter-spacing: 5px;
 			text-shadow: 10px 10px rgba(var(--#{$prefix}inverse-rgb), .15);
-			
+
 			@include media-breakpoint-down(sm) {
 				font-size: rem(102px);
 			}
@@ -32,7 +32,7 @@
 		& h1 {
 			font-size: rem(48px);
 			font-weight: $font-weight-bold;
-			
+
 			@include media-breakpoint-down(sm) {
 				font-size: rem(52px);
 			}
@@ -40,7 +40,7 @@
 		& h3 {
 			font-size: rem(18px);
 			font-weight: 400;
-			
+
 			@include media-breakpoint-down(sm) {
 				font-size: rem(16px);
 			}

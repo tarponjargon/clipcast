@@ -1,0 +1,16 @@
+{% set page = 'privacy' %}
+{% set title %}{{ config.STORE_NAME }} Privacy Policy{% endset %}
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+{% include 'includes/heading.html.j2' %}
+
+
+<div id="app">
+  <div class="container my-4">
+    {% include 'partials/info/privacy.html.j2' %}
+  </div>
+</div>
+
+{% endblock %}

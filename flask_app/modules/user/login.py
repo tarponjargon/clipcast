@@ -82,8 +82,6 @@ def handle_google_login_callback(google):
             "Problem getting user info from google login.  Error: {}".format(e)
         )
 
-    current_app.logger.debug(user_info)
-
     if not user_info.get("email"):
         current_app.logger.error(
             "Google did not return an E-mail address. User info {}".format(user_info)
