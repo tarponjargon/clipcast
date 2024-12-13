@@ -72,7 +72,7 @@ module.exports = (env, argv) => {
       host: process.env.RUN_HOST,
       allowedHosts: "all",
       hot: true,
-      port: 443,
+      port: process.env.DEVSERVER_PORT,
       proxy: [
         {
           context: ["**", "!/assets/**"],
@@ -81,13 +81,13 @@ module.exports = (env, argv) => {
           changeOrigin: true,
         },
       ],
-      server: {
-        type: "https",
-        options: {
-          key: path.resolve(root, "dev-ssl/dev.clipcast.local.key"),
-          cert: path.resolve(root, "dev-ssl/dev.clipcast.local.crt"),
-        },
-      },
+      // server: {
+      //   type: "https",
+      //   options: {
+      //     key: path.resolve(root, "dev-ssl/dev.clipcast.local.key"),
+      //     cert: path.resolve(root, "dev-ssl/dev.clipcast.local.crt"),
+      //   },
+      // },
     },
     module: {
       // "loaders" process entry file and dependencies

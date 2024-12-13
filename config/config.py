@@ -113,6 +113,10 @@ class Config(object):
     S3_BUCKET = os.environ.get("S3_BUCKET")
     S3_PUBLIC_URL = os.environ.get("S3_PUBLIC_URL")
 
+    # Google sign-in app
+    GOOGLE_LOGIN_APP_CLIENT_ID = os.environ.get("GOOGLE_LOGIN_APP_CLIENT_ID")
+    GOOGLE_LOGIN_APP_CLIENT_SECRET = os.environ.get("GOOGLE_LOGIN_APP_CLIENT_SECRET")
+
 
 class development(Config):
     STORE_EMAIL = os.environ.get("STORE_EMAIL")

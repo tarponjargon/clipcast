@@ -15,13 +15,14 @@ def register_extensions(app):
     Args:
       app (app): The Flask application
     """
-    from .modules.extensions import db, compress, cache, mail, sess
+    from .modules.extensions import db, compress, cache, mail, sess, oauth
 
     compress.init_app(app)
     db.init_app(app)
     cache.init_app(app)
     sess.init_app(app)
     mail.init_app(app)
+    oauth.init_app(app)
 
 
 def create_app():

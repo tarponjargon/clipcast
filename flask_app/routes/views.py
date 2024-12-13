@@ -8,8 +8,9 @@ from flask import (
     session,
     make_response,
     current_app,
+    url_for,
 )
-from flask_app.modules.extensions import DB
+from flask_app.modules.extensions import DB, oauth
 from flask_app.modules.http import login_required, check_if_logged_in_already
 from flask_app.modules.user.resetpassword import handle_resetpassword_view
 from flask_app.modules.user.notifications import get_notifications
@@ -20,6 +21,18 @@ from flask_app.modules.user.queue import get_queue
 from flask_app.modules.user.add_podcast_content import add_podcast_url
 
 views = Blueprint("views", __name__)
+
+google = oauth.register(
+    name="google",
+    client_id=current_app.config.get("GOOGLE_LOGIN_APP_CLIENT_ID"),
+    client_secret=current_app.config.get("GOOGLE_LOGIN_APP_CLIENT_SECRET"),
+    access_token_url="https://accounts.google.com/o/oauth2/token",
+    access_token_params=None,
+    authorize_url="https://accounts.google.com/o/oauth2/auth",
+    authorize_params=None,
+    api_base_url="https://www.googleapis.com/oauth2/v1/",
+    client_kwargs={"scope": "email profile"},
+)
 
 
 @views.route("/")
@@ -126,6 +139,27 @@ def do_delete_episodes():
 @views.route(f"/profile/rss-feed/<string:userid>")
 def do_serve_rss(userid):
     return serve_rss_feed(userid)
+
+
+@views.route("/google/login")
+def do_google_login():
+    redirect_uri = url_for("views.do_google_login_callback", _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@views.route("/google/callback")
+def do_google_login_callback():
+    token = google.authorize_access_token()
+    user_info = google.get("userinfo").json()
+
+    current_app.logger.debug(user_info)
+
+    # Create or load user
+    user = User(id=user_info["id"], name=user_info["name"], email=user_info["email"])
+    users[user.id] = user
+    login_user(user)
+
+    return redirect("/login")
 
 
 @views.route("/app/add-url")

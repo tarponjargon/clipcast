@@ -10,6 +10,7 @@ from flask_caching import Cache
 from flask_session import Session
 from flask_mail import Mail
 from flask_login import LoginManager
+from authlib.integrations.flask_client import OAuth
 from flask_app.modules.database.flask_pymysql import MySQL
 
 from .database.db_manager import DBManager
@@ -21,6 +22,7 @@ cache = Cache()
 mail = Mail()
 login_manager = LoginManager()
 DB = DBManager(db)
+oauth = OAuth()
 redis_cart = redis.Redis(
     host=current_app.config["CART_REDIS_HOST"],
     port=current_app.config["CART_REDIS_PORT"],
