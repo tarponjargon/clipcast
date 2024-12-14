@@ -2,7 +2,7 @@
   "name": "podcast-articles",
   "version": "0.0.1",
   "description": "Turn articles into podcast episodes",
-  "license": "MIT",
+  "license": "GPL",
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development webpack serve --mode development --config config/webpack.config.js",
