@@ -1,19 +1,15 @@
 <div class="d-flex align-items-center mb-3">
   <div>
     <h1 class="page-header mb-0">Your Podcast Feed</h1>
-    <p class="mt-1 mb-0">Copy this url and add it to your podcast player.  [ <a href="/docs">help</a> ]</p>
+    <p class="mt-1 mb-0">Copy this url and add it to your podcast player.  [<a href="/docs">help</a>]</p>
   </div>
 </div>
 
-<div class="col-12 col-sm-8 col-md-6 col-xl-5 d-flex align-items-center justify-content-start feed-url">
+<div class="d-flex align-items-center justify-content-start feed-url">
   <div class="border rounded p-2 d-flex align-items-center gap-2">
     <a class="hover-text d-flex align-items-center" href="javascript:;" onClick="copyToClipboard('podcast-feed-field')">
       <img src="/assets/img/rss.png" width="18" alt="RSS" class="me-2">
-      <div
-        id="podcast-feed-field"
-        class="text-truncate"
-        style="max-width: 375px;"
-      >
+      <div id="podcast-feed-field">
         {{ session_safe_get('feed_url') }}
       </div>
       <i class="fa fa-copy ms-2"></i>
