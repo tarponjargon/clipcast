@@ -1,7 +1,7 @@
 FROM python:3.12
 
 # install base packages
-RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg
+RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg cron redis-tools
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN pip install --upgrade pip

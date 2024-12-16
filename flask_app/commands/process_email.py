@@ -83,7 +83,7 @@ def get_body_urls(body):
     return urls
 
 
-def handle_email(response):
+def handle_email(response, email_id):
     # Parse a byte email into a message object
     msg = email.message_from_bytes(response[1])
 
@@ -136,12 +136,12 @@ def handle_email(response):
             resp = add_podcast_url(url, user.get_id())
             print(f"result: {resp}")
 
-    # try:
-    #     # Mark the email for deletion
-    #     mail.store(email_id, "+FLAGS", "\\Deleted")
-    #     print(f"Marked email {email_id.decode()} for deletion")
-    # except Exception as e:
-    #     print(f"Error deleting email {email_id.decode()}: {e}")
+    try:
+        # Mark the email for deletion
+        mail.store(email_id, "+FLAGS", "\\Deleted")
+        print(f"Marked email {email_id.decode()} for deletion")
+    except Exception as e:
+        print(f"Error deleting email {email_id.decode()}: {e}")
 
 
 def check_inbox():
@@ -169,7 +169,7 @@ def check_inbox():
 
         for response in msg:
             if isinstance(response, tuple):
-                handle_email(response)
+                handle_email(response, email_id)
 
     # Permanently delete the marked emails
     mail.expunge()

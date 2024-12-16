@@ -91,12 +91,9 @@ class Config(object):
         f"redis://{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT')}/{os.environ.get('REDIS_SESSION_DB')}"
     )
 
-    # carts (redis thru redis-py) uses redis db5
-    CART_COOKIE_NAME = "cart_id"
-    CART_REDIS_HOST = os.environ.get("REDIS_HOST")
-    CART_REDIS_PORT = os.environ.get("REDIS_PORT")
-    CART_REDIS_DB = os.environ.get("REDIS_CART_DB")
-    CART_MAX_AGE = 180  # days
+    # rq task manager
+    RQ_TASK_QUEUE = "clipcast-tasks"
+    RQ_REDIS_URL = f"redis://{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT')}/{os.environ.get('REDIS_RQ_DB')}"
 
     # 2-way encryption/decryption algorithm for obscuring IDs
     OBSCURE_SALT = os.environ.get("OBSCURE_SALT")

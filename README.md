@@ -15,7 +15,7 @@ Currently the project is not in production.
 1.  [Docker](https://www.docker.com/) (dev environment)
 2.  [ngrok](https://www.ngrok.com/) (dev environment)
 3.  [direnv](https://direnv.net/)
-4.  [S3 Storage](https://www.cloudflare.com/developer-platform/solutions/s3-compatible-object-storage/)
+4.  [S3](https://www.cloudflare.com/developer-platform/solutions/s3-compatible-object-storage/)
 5.  [OpenAI API access](https://platform.openai.com/docs/overview) (Text-to-speech voice models)
 6.  [Amazon Polly API Access](https://docs.aws.amazon.com/polly/latest/dg/what-is.html) (if more voices are desired)
 7.  [Google TTS API Access](https://cloud.google.com/text-to-speech?hl=en) (if more voices are desired)
@@ -58,7 +58,7 @@ containers are running, in another terminal do this from project dir (replace [P
 
 `pip3 install [PACKAGE]; pip3 freeze > requirements.txt; docker exec -it clipcast-local pip3 install -r requirements.txt`
 
-unfortunately you have to re-create the container if you want the package there next time you start
+unfortunately you have to re-create the image if you want the package there next time you start
 
 ## FLASK INTERACTIVE SHELL
 
@@ -76,3 +76,17 @@ Then do imports:
 and call functions:
 
 `OpenAITTS("/project/tmp/tests.mp3", "Thank you for using clipcast", “fable”).synthesize_speech()`
+
+## RQ (redis task queue)
+
+Start task queue
+
+`rq worker ${RQ_TASK_QUEUE} --url redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_RQ_DB} --verbose`
+
+This doesn't start it in the flask context though. This script does:
+
+`python rq_worker.py`
+
+Connect to redis task db via cli (for debug)
+
+`redis-cli -u redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_RQ_DB}`

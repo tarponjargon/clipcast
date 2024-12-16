@@ -53,7 +53,7 @@ def openai_speech(file_path, text, voice="alloy"):
     try:
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
-        print(f"Error with OpenAI TTS: {e}")
+        current_app.logger.error(f"Error with OpenAI TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -65,7 +65,7 @@ def google_translate_speech(file_path, text, voice="us"):
     try:
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
-        print(f"Error with Google Translate TTS: {e}")
+        current_app.logger.error(f"Error with Google Translate TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -77,7 +77,7 @@ def google_tts(file_path, text, voice="en-IN-Neural2-C", language_code="en-US"):
     try:
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
-        print(f"Error with Google TTS: {e}")
+        current_app.logger.error(f"Error with Google TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -89,7 +89,7 @@ def polly_tts(file_path, text, voice="Matthew", language_code="en-US"):
     try:
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
-        print(f"Error with Polly TTS: {e}")
+        current_app.logger.error(f"Error with Polly TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -135,7 +135,7 @@ def create_intro_mp3(row):
     if not intro.get("speech_file_path"):
         return None
 
-    print(f"INTRO: {intro}")
+    current_app.logger.debug(f"INTRO: {intro}")
     intro_audio = AudioSegment.from_mp3(intro.get("speech_file_path"))
 
     # os.remove(intro.get("speech_file_path"))
@@ -163,8 +163,8 @@ def create_chunk_mp3s(text_chunks, row, start_time):
     errors = []
     voice = get_user_selected_voice(row.get("user_id"), row.get("voice_code"))
 
-    print(f"VOICE: {voice}")
-    print(f"TOTAL CHUNKS: {len(text_chunks)}")
+    current_app.logger.debug(f"VOICE: {voice}")
+    current_app.logger.debug(f"TOTAL CHUNKS: {len(text_chunks)}")
 
     # create an intro mp3 file
     intro_file_path = create_intro_mp3(row)
@@ -182,8 +182,8 @@ def create_chunk_mp3s(text_chunks, row, start_time):
     )
 
     for count, chunk in enumerate(text_chunks, 1):
-        print(f"Chunk {count} (size {len(chunk)}):")
-        print(f"CHUNK: {chunk}\n")
+        current_app.logger.debug(f"Chunk {count} (size {len(chunk)}):")
+        current_app.logger.debug(f"CHUNK: {chunk}\n")
 
         # generate tts for each chunk
         speech_file_path = (
@@ -243,7 +243,7 @@ def delete_mp3s(files):
 def concatenate_mp3s(files, output):
     """Concatenate multiple MP3 files into a single file"""
 
-    print(f"Concatenating files: {files} to {output}")
+    current_app.logger.debug(f"Concatenating files: {files} to {output}")
     # Start with an empty AudioSegment
     combined = AudioSegment.empty()
 
@@ -317,143 +317,143 @@ def upload_to_s3(file_path):
     object_name = os.path.basename(file_path)
     bucket_name = current_app.config.get("S3_BUCKET")
 
-    print(f"Uploading {file_path} to {bucket_name} as {object_name}")
+    current_app.logger.debug(f"Uploading {file_path} to {bucket_name} as {object_name}")
 
     try:
         s3_client.upload_file(file_path, bucket_name, object_name)
     except Exception as e:
-        print(f"Error uploading to S3: {e}")
+        current_app.logger.debug(f"Error uploading to S3: {e}")
         raise e
         return None
 
     return current_app.config.get("S3_PUBLIC_URL") + object_name
 
 
-def process_episode(app, content_id):
+def process_episode(content_id):
     """Process a single episode"""
-    with app.app_context():
-        episode = DB.fetch_one(
-            """
-            SELECT
-              content_id,
-              user_id,
-              title,
-              author,
-              hostname,
-              article_date,
-              content
-            FROM podcast_content
-            WHERE content_id = %s
-          """,
-            (content_id),
-        )
 
-        if not episode:
-            return ["Episode not found"]
-
-        errors = []
-        row_id = episode.get("content_id")
-        start_time = time.time()
-
-        DB.update_query(
-            """
-          UPDATE podcast_content
-          SET current_status = 'processing',
-          processing_start_time = NOW()
-          WHERE content_id = %s
+    episode = DB.fetch_one(
+        """
+        SELECT
+          content_id,
+          user_id,
+          title,
+          author,
+          hostname,
+          article_date,
+          content
+        FROM podcast_content
+        WHERE content_id = %s
       """,
-            (row_id,),
-        )
+        (content_id),
+    )
 
-        title = get_title(episode.get("title"), episode.get("content"))
-        hostname = episode.get("hostname", "")
-        author = episode.get("author", hostname)
-        article_date = episode.get("article_date", "")
-        text_chunks = split_text_to_chunks(episode.get("content", ""), row_id)
-        mp3_files, voice_code, tts_errors = create_chunk_mp3s(
-            text_chunks, episode, start_time
-        )
+    if not episode:
+        return ["Episode not found"]
 
-        # if there are errors, skip to the next row
-        if tts_errors:
-            errors.extend(tts_errors)
-            # mark as complete
-            upd = DB.update_query(
-                """
-              UPDATE podcast_content SET
-              current_status = 'error',
-              error_message = %s,
-              processing_end_time = NOW()
-              WHERE content_id = %s
-          """,
-                (", ".join(tts_errors), row_id),
-            )
-            return errors
+    errors = []
+    row_id = episode.get("content_id")
+    start_time = time.time()
 
-        episode_filename = create_episode_filename(title)
-        final_mp3 = current_app.config.get("TMP_DIR") + f"/{episode_filename}"
+    DB.update_query(
+        """
+      UPDATE podcast_content
+      SET current_status = 'processing',
+      processing_start_time = NOW()
+      WHERE content_id = %s
+  """,
+        (row_id,),
+    )
 
-        # Concatenate the audio files
-        concatenate_mp3s(mp3_files, final_mp3)
+    title = get_title(episode.get("title"), episode.get("content"))
+    hostname = episode.get("hostname", "")
+    author = episode.get("author", hostname)
+    article_date = episode.get("article_date", "")
+    text_chunks = split_text_to_chunks(episode.get("content", ""), row_id)
+    mp3_files, voice_code, tts_errors = create_chunk_mp3s(
+        text_chunks, episode, start_time
+    )
 
-        # Add ID3 tags
-        tag_mp3(final_mp3, title, author, hostname, article_date)
-
-        # Upload to S3
-        episode_url = upload_to_s3(final_mp3)
-
-        current_app.logger.info(f"Uploaded to S3: {episode_url}")
-
-        # get byte size of file
-        file_size = os.path.getsize(final_mp3)
-
-        # get duration of audio file
-        duration = get_mp3_duration(final_mp3)
-
-        # delete the chunk audio files and final file
-        mp3_files.append(final_mp3)
-        delete_mp3s(mp3_files)
-
-        # record the processing time for progress bar
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-
-        # record estimated cost in cents.  best guess at this time is 0.01 oer 600 characters
-        estimated_cost_cents = round(len(episode.get("content")) / 600, 2)
-
-        # # mark as complete
+    # if there are errors, skip to the next row
+    if tts_errors:
+        errors.extend(tts_errors)
+        # mark as complete
         upd = DB.update_query(
             """
           UPDATE podcast_content SET
-          current_status = 'complete',
-          mp3_url = %s,
-          mp3_file_size = %s,
-          mp3_duration = %s,
-          processing_time_seconds = %s,
-          estimated_cost_cents = %s,
-          processing_end_time = NOW(),
-          voice_code = %s
+          current_status = 'error',
+          error_message = %s,
+          processing_end_time = NOW()
           WHERE content_id = %s
       """,
-            (
-                episode_url,
-                file_size,
-                duration,
-                elapsed_time,
-                estimated_cost_cents,
-                voice_code,
-                row_id,
-            ),
+            (", ".join(tts_errors), row_id),
         )
+        return errors
 
-        # add notification
-        DB.insert_query(
-            """
-          INSERT INTO notification (user_id, message)
-          VALUES (%s, %s)
-      """,
-            (episode.get("user_id"), f"Your podcast episode '{title}' is ready!"),
-        )
+    episode_filename = create_episode_filename(title)
+    final_mp3 = current_app.config.get("TMP_DIR") + f"/{episode_filename}"
+
+    # Concatenate the audio files
+    concatenate_mp3s(mp3_files, final_mp3)
+
+    # Add ID3 tags
+    tag_mp3(final_mp3, title, author, hostname, article_date)
+
+    # Upload to S3
+    episode_url = upload_to_s3(final_mp3)
+
+    current_app.logger.info(f"Uploaded to S3: {episode_url}")
+
+    # get byte size of file
+    file_size = os.path.getsize(final_mp3)
+
+    # get duration of audio file
+    duration = get_mp3_duration(final_mp3)
+
+    # delete the chunk audio files and final file
+    mp3_files.append(final_mp3)
+    delete_mp3s(mp3_files)
+
+    # record the processing time for progress bar
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
+    # record estimated cost in cents.  best guess at this time is 0.01 oer 600 characters
+    estimated_cost_cents = round(len(episode.get("content")) / 600, 2)
+
+    # # mark as complete
+    upd = DB.update_query(
+        """
+      UPDATE podcast_content SET
+      current_status = 'complete',
+      mp3_url = %s,
+      mp3_file_size = %s,
+      mp3_duration = %s,
+      processing_time_seconds = %s,
+      estimated_cost_cents = %s,
+      processing_end_time = NOW(),
+      voice_code = %s
+      WHERE content_id = %s
+  """,
+        (
+            episode_url,
+            file_size,
+            duration,
+            elapsed_time,
+            estimated_cost_cents,
+            voice_code,
+            row_id,
+        ),
+    )
+
+    # add notification
+    DB.insert_query(
+        """
+      INSERT INTO notification (user_id, message)
+      VALUES (%s, %s)
+  """,
+        (episode.get("user_id"), f"Your podcast episode '{title}' is ready!"),
+    )
 
 
 @current_app.cli.command("process_content")
@@ -468,5 +468,5 @@ def process_content():
     for row in q.get("results", []):
         errors = process_episode(row.get("content_id"))
     if errors:
-        print(f"Errors occurred: {errors}")
+        current_app.logger.error(f"Errors occurred: {errors}")
         sys.exit(1)

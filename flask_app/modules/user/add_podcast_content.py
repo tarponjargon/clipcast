@@ -1,6 +1,5 @@
 import validators
 import json
-import threading
 from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urlparse
@@ -18,7 +17,7 @@ from flask import (
     render_template_string,
     render_template,
 )
-from flask_app.modules.extensions import DB
+from flask_app.modules.extensions import DB, task_queue
 from flask_app.commands.process_content import process_episode
 
 
@@ -72,39 +71,44 @@ def extract_content_from_html(html):
 
 
 def process_episode_content(id):
-    """Process the episode content in a separate thread"""
+    """Process the episode content in a task queue"""
+    with current_app.app_context():
+        # retrieve the content and process it
+        episode = DB.fetch_one(
+            """
+            SELECT
+              content_id
+            FROM `podcast_content`
+            WHERE id = %s
+          """,
+            (id),
+        )
+        if not episode:
+            current_app.logger.error(f"Error fetching content from db: {ins}")
+            return {
+                "response_code": 500,
+                "message": "There was an error processing the content",
+            }
 
-    # retrieve the content and process it
-    episode = DB.fetch_one(
-        """
-          SELECT
-            content_id
-          FROM `podcast_content`
-          WHERE id = %s
-        """,
-        (id),
-    )
-    if not episode:
-        current_app.logger.error(f"Error fetching content from db: {ins}")
-        return {
-            "response_code": 500,
-            "message": "There was an error processing the content",
-        }
+        current_app.logger.info(f"Processing episode: {episode} {type(episode)}")
+        # task_thread = threading.Thread(
+        #     target=process_episode,
+        #     args=(
+        #         current_app._get_current_object(),
+        #         episode.get("content_id"),
+        #     ),
+        # )
+        # task_thread.start()
 
-    current_app.logger.info(f"Processing episode: {episode} {type(episode)}")
-    task_thread = threading.Thread(
-        target=process_episode,
-        args=(
-            current_app._get_current_object(),
+        task_queue.enqueue(
+            process_episode,
             episode.get("content_id"),
-        ),
-    )
-    task_thread.start()
+        )
 
-    return {
-        "response_code": 200,
-        "message": "The content has been added to your queue",
-    }
+        return {
+            "response_code": 200,
+            "message": "The content has been added to your queue",
+        }
 
 
 def add_podcast_url(url, user_id):
