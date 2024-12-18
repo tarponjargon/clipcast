@@ -23,7 +23,6 @@ export REDIS_HOST=redis_server
 export REDIS_PORT=6379
 export REDIS_CACHE_DB=1
 export REDIS_SESSION_DB=2
-export REDIS_RQ_DB=3
 export GUNICORN_WORKERS=1
 export GUNICORN_THREADS=3
 export GUNICORN_LOGLEVEL="debug"

@@ -1,7 +1,7 @@
 FROM python:3.12
 
 # install base packages
-RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg cron redis-tools
+RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg cron redis-tools task-spooler
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN pip install --upgrade pip
@@ -10,3 +10,5 @@ WORKDIR /project
 COPY manage.py /project/manage.py
 COPY requirements.txt /project/requirements.txt
 RUN pip3 install -r /project/requirements.txt
+# set number of simultaneous jobs allowed by task-spooler
+RUN tsp -S 5

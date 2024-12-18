@@ -36,3 +36,4 @@ header_assets.inc
 clipcast.sql
 push*.sh
 config/clipcast*.json
+*.log

@@ -19,7 +19,7 @@ from flask_app.modules.user.voices import get_base_voices, get_premium_voices
 from flask_app.modules.user.rss import serve_rss_feed
 from flask_app.modules.user.queue import get_queue
 from flask_app.modules.user.login import handle_google_login_callback
-from flask_app.modules.user.add_podcast_content import add_podcast_url
+from flask_app.modules.content.add_podcast_content import add_podcast_url
 
 views = Blueprint("views", __name__)
 

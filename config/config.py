@@ -91,10 +91,6 @@ class Config(object):
         f"redis://{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT')}/{os.environ.get('REDIS_SESSION_DB')}"
     )
 
-    # rq task manager
-    RQ_TASK_QUEUE = "clipcast-tasks"
-    RQ_REDIS_URL = f"redis://{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT')}/{os.environ.get('REDIS_RQ_DB')}"
-
     # 2-way encryption/decryption algorithm for obscuring IDs
     OBSCURE_SALT = os.environ.get("OBSCURE_SALT")
 

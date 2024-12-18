@@ -15,7 +15,7 @@ from flask_app.modules.user.signup import handle_signup_request
 from flask_app.modules.user.forgotpassword import handle_forgotpassword_request
 from flask_app.modules.user.updatepassword import handle_updatepassword_request
 from flask_app.modules.user.updateemail import handle_updateemail_request
-from flask_app.modules.user.add_podcast_content import (
+from flask_app.modules.content.add_podcast_content import (
     handle_add_url_post_request,
     handle_add_content_request,
 )

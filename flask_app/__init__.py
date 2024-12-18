@@ -96,7 +96,7 @@ def create_app():
 
             # process urls that are requested to be added but got diverted to login/signup
             if session.get("user_id") and session.get("addurl"):
-                from .modules.user.add_podcast_content import add_podcast_url
+                from .modules.content.add_podcast_content import add_podcast_url
 
                 add_podcast_url(session.get("addurl"), session.get("user_id"))
                 session.pop("addurl")
@@ -127,7 +127,8 @@ def create_app():
             )
 
         from .commands.test import test1
-        from .commands.process_content import process_content
+
+        from .commands.process_content import process_content, process_podcast_episode
         from .commands.process_email import process_email
 
     return app

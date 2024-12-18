@@ -75,8 +75,6 @@ services:
       REDIS_CACHE_DB: "${REDIS_CACHE_DB}"
       REDIS_SESSION_DB: "${REDIS_SESSION_DB}"
       SESSION_COOKIE_NAME: "${STORE_CODE}"
-      REDIS_RQ_DB: "${REDIS_RQ_DB}"
-      RQ_TASK_QUEUE: "${RQ_TASK_QUEUE}"
       GUNICORN_WORKERS: "${GUNICORN_WORKERS}"
       GUNICORN_THREADS: "${GUNICORN_THREADS}"
       GUNICORN_LOGLEVEL: "${GUNICORN_LOGLEVEL}"
@@ -112,12 +110,13 @@ services:
       - ./flask_app:/project/flask_app
       - ./public_html:/project/public_html
       - ./tmp:/project/tmp
+      - ./logs:/project/logs
       - ./bin:/project/bin
       - ./tests:/project/tests
       - ./dev-sql:/project/dev-sql
       - ./migrations:/project/migrations
       - ./requirements.txt:/project/requirements.txt
-      - ./rq_worker.py:/project/rq_worker.py
+      - ./episode_job.py:/project/episode_job.py
     restart: unless-stopped
     networks:
       my_network:

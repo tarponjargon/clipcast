@@ -29,6 +29,11 @@ Currently the project is not in production.
 5.  Install all NPM modules `npm install`
 6.  Start everything `./start.sh`
 
+Since the ngrok static url is public, there's a password challenge:
+
+user: misc
+pass: misc
+
 ## CONNECTING TO CONTAINERS
 
 Use following command to ssh to containers:
@@ -76,17 +81,3 @@ Then do imports:
 and call functions:
 
 `OpenAITTS("/project/tmp/tests.mp3", "Thank you for using clipcast", “fable”).synthesize_speech()`
-
-## RQ (redis task queue)
-
-Start task queue
-
-`rq worker ${RQ_TASK_QUEUE} --url redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_RQ_DB} --verbose`
-
-This doesn't start it in the flask context though. This script does:
-
-`python rq_worker.py`
-
-Connect to redis task db via cli (for debug)
-
-`redis-cli -u redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_RQ_DB}`

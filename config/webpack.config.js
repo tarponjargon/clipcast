@@ -32,8 +32,8 @@ const footerAssetsFile = `${includes}/footer_assets.inc`;
 del.sync([path.resolve(assets, "*.(js|br|css|gif|gz|svg|json|LICENSE|txt|map)")]);
 
 module.exports = (env, argv) => {
-  console.log("ENVIRONMENT: " + process.env.ENV);
-  console.log(config);
+  // console.log("ENVIRONMENT: " + process.env.ENV);
+  // console.log(config);
 
   const devMode = argv.mode !== "production";
   const environment = argv.mode;

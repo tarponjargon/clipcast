@@ -1,5 +1,6 @@
 import validators
 import json
+import subprocess
 from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urlparse
@@ -17,8 +18,8 @@ from flask import (
     render_template_string,
     render_template,
 )
-from flask_app.modules.extensions import DB, task_queue
-from flask_app.commands.process_content import process_episode
+from flask_app.modules.extensions import DB
+from flask_app.modules.content.process_content import process_episode
 
 
 def handle_add_url_post_request(user_id):
@@ -83,27 +84,34 @@ def process_episode_content(id):
           """,
             (id),
         )
+
+        default_error = {
+            "response_code": 500,
+            "message": "There was an error processing the content",
+        }
         if not episode:
             current_app.logger.error(f"Error fetching content from db: {ins}")
-            return {
-                "response_code": 500,
-                "message": "There was an error processing the content",
-            }
+            return default_error
 
-        current_app.logger.info(f"Processing episode: {episode} {type(episode)}")
-        # task_thread = threading.Thread(
-        #     target=process_episode,
-        #     args=(
-        #         current_app._get_current_object(),
-        #         episode.get("content_id"),
-        #     ),
+        current_app.logger.debug(f"Processing episode: {episode} {type(episode)}")
+
+        # Send the job to Task Spooler
+        command = 'python -m episode_job "{}"'.format(episode.get("content_id"))
+        result = subprocess.run(["tsp", "bash", "-c", command], check=True)
+        current_app.logger.debug(f"Result: {result}")
+        if not result.returncode == 0:
+            current_app.logger.error(f"Error processing content: {result}")
+            return default_error
+        # job_id = result.stdout.decode().strip()
+        # current_app.logger.debug(f"Job ID: {job_id}")
+        # upd = DB.update_query(
+        #     """
+        #     UPDATE podcast_content SET
+        #     job_id = %s
+        #     WHERE content_id = %s
+        #   """,
+        #     (job_id, id),
         # )
-        # task_thread.start()
-
-        task_queue.enqueue(
-            process_episode,
-            episode.get("content_id"),
-        )
 
         return {
             "response_code": 200,

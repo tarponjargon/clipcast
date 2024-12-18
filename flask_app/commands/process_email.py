@@ -4,7 +4,7 @@ import email
 from email.header import decode_header
 from flask import current_app
 from flask_app.modules.user.user import User
-from flask_app.modules.user.add_podcast_content import (
+from flask_app.modules.content.add_podcast_content import (
     add_podcast_content,
     add_podcast_url,
 )
