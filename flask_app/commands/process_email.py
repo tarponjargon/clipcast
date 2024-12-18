@@ -136,13 +136,6 @@ def handle_email(response, email_id):
             resp = add_podcast_url(url, user.get_id())
             print(f"result: {resp}")
 
-    try:
-        # Mark the email for deletion
-        mail.store(email_id, "+FLAGS", "\\Deleted")
-        print(f"Marked email {email_id.decode()} for deletion")
-    except Exception as e:
-        print(f"Error deleting email {email_id.decode()}: {e}")
-
 
 def check_inbox():
     # Connect to the Gmail IMAP server
@@ -162,7 +155,6 @@ def check_inbox():
 
     print(f"Total Emails: {len(email_ids)}")
 
-    # Fetch the latest 10 emails (or fewer if you have fewer emails)
     for email_id in email_ids:
         # Fetch the email by ID
         res, msg = mail.fetch(email_id, "(RFC822)")
@@ -170,6 +162,12 @@ def check_inbox():
         for response in msg:
             if isinstance(response, tuple):
                 handle_email(response, email_id)
+                try:
+                    # Mark the email for deletion
+                    mail.store(email_id, "+FLAGS", "\\Deleted")
+                    print(f"Marked email {email_id.decode()} for deletion")
+                except Exception as e:
+                    print(f"Error deleting email {email_id.decode()}: {e}")
 
     # Permanently delete the marked emails
     mail.expunge()

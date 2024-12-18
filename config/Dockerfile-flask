@@ -10,5 +10,9 @@ WORKDIR /project
 COPY manage.py /project/manage.py
 COPY requirements.txt /project/requirements.txt
 RUN pip3 install -r /project/requirements.txt
-# set number of simultaneous jobs allowed by task-spooler
-RUN tsp -S 5
+
+COPY bin/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
