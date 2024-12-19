@@ -44,16 +44,10 @@ services:
     build:
       context: ./
       dockerfile: ./config/Dockerfile-flask
-    command:
-      [
-        "./bin/wait-for-it.sh",
-        "${MYSQL_HOST}:3306",
-        "--",
-        "gunicorn",
-        "--config",
-        "./config/gunicorn.py",
-        "manage:app",
-      ]
+    command: >
+      sh -c "
+      ./bin/wait-for-it.sh ${MYSQL_HOST}:3306 -- gunicorn --config ./config/gunicorn.py manage:app
+      "
     environment:
       ENV: "${ENV}"
       STORE_CODE: "${STORE_CODE}"

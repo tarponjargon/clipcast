@@ -1,15 +1,17 @@
 FROM python:3.12
 
 # install base packages
-RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg cron redis-tools task-spooler
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg cron redis-tools task-spooler direnv
 RUN pip install --upgrade pip
 RUN mkdir /project
 WORKDIR /project
 COPY manage.py /project/manage.py
 COPY requirements.txt /project/requirements.txt
 RUN pip3 install -r /project/requirements.txt
+COPY clipcast_crontab /etc/cron.d/clipcast_crontab
+COPY .envrc /project/.envrc
+RUN chmod 0644 /etc/cron.d/clipcast_crontab
+RUN crontab /etc/cron.d/clipcast_crontab
 
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh

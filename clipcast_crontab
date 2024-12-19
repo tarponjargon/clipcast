@@ -1,0 +1,9 @@
+
+# check clipcast emailbox for content submitted by email, log output to logs dir
+# environment must be loaded with direnv
+*/3 * * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . /usr/local/bin/flask process_email >> /project/logs/email-check-$(date +"\%Y-\%m-\%d").log 2>&1
+
+# keep logs dir clean, remove files older than 7 days
+0 0 * * * /usr/bin/find /project/logs -type f -mtime +7 -exec rm {} \;
+
+

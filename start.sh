@@ -52,7 +52,6 @@ WEBPACK_PID=$!
 
 # run ngrok
 echo "Starting ngrok on ${DEVSERVER_HOST}, please wait..."
-#ngrok http --url=${DEVSERVER_HOST} ${DEVSERVER_PORT} --basic-auth 'misc:misc' >> ${LOG} 2>&1
 ngrok http --url=${DEVSERVER_HOST} ${DEVSERVER_PORT} >> ${LOG} 2>&1
 NGROK_PID=$!
 
