@@ -21,8 +21,8 @@ trap cleanup SIGINT
 function cleanup() {
   echo "Stopping server..."
   docker compose down;
-  kill ${WEBPACK_PID} 2>/dev/null;
-  kill ${NGROK_PID} 2>/dev/null;
+  # kill ${WEBPACK_PID} 2>/dev/null;
+  # kill ${NGROK_PID} 2>/dev/null;
 }
 
 function exit_with_error() {
@@ -45,15 +45,19 @@ docker compose up --wait -d 2>&1 | tee -a ${LOG}
 echo "installing any new npm packages..."
 npm install --legacy-peer-deps >> ${LOG} 2>&1
 
-# run webpack-dev-server
-echo "Starting webpack-dev-server on port ${DEVSERVER_PORT}, please wait..."
-NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js | tee -a ${LOG} &
-WEBPACK_PID=$!
+echo "Starting webpack-dev-server on ${DEVSERVER_HOST}, please wait..."
+NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js
 
-# run ngrok
-echo "Starting ngrok on ${DEVSERVER_HOST}, please wait..."
-ngrok http --url=${DEVSERVER_HOST} ${DEVSERVER_PORT} >> ${LOG} 2>&1
-NGROK_PID=$!
 
-# keeps the script running until the webpack-dev-server is killed
-wait $WEBPACK_PID $NGROK_PID
+# # run webpack-dev-server
+# echo "Starting webpack-dev-server on port ${DEVSERVER_PORT}, please wait..."
+# NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js | tee -a ${LOG} &
+# WEBPACK_PID=$!
+
+# # run ngrok
+# # echo "Starting ngrok on ${DEVSERVER_HOST}, please wait..."
+# # ngrok http --url=${DEVSERVER_HOST} ${DEVSERVER_PORT} >> ${LOG} 2>&1
+# # NGROK_PID=$!
+
+# # keeps the script running until the webpack-dev-server is killed
+# wait $WEBPACK_PID $NGROK_PID

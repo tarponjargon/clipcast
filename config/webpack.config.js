@@ -14,6 +14,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { getIfUtils, removeEmpty } = require("webpack-config-utils");
 const { ifProduction, ifNotProduction } = getIfUtils(process.argv[3]);
+const basicAuth = require("express-basic-auth");
 
 // path variables
 const root = path.resolve(__dirname, "../");
@@ -60,11 +61,21 @@ module.exports = (env, argv) => {
         publicPath: "/assets/",
         writeToDisk: true, // apparently HtmlWebpackPlugin doesn't actually write the assets html file if false
       },
+      setupMiddlewares: (middlewares, devServer) => {
+        devServer.app.use(
+          basicAuth({
+            users: { misc: "misc" }, // Replace with your username/password
+            challenge: true,
+          })
+        );
+
+        return middlewares;
+      },
       client: {
         overlay: false,
         progress: false,
         webSocketURL: {
-          hostname: "properly-fleet-narwhal.ngrok-free.app", // Your ngrok hostname
+          hostname: process.env.DEVSERVER_HOST,
           port: 443, // Secure WebSocket port
           protocol: "wss", // Use secure WebSocket protocol
           pathname: "/ws", // Optional: WebSocket path
@@ -90,13 +101,13 @@ module.exports = (env, argv) => {
           changeOrigin: true,
         },
       ],
-      // server: {
-      //   type: "https",
-      //   options: {
-      //     key: path.resolve(root, "dev-ssl/dev.clipcast.local.key"),
-      //     cert: path.resolve(root, "dev-ssl/dev.clipcast.local.crt"),
-      //   },
-      // },
+      server: {
+        type: "https",
+        options: {
+          key: path.resolve(root, "dev-ssl/clipcast.duckdns.org.key"),
+          cert: path.resolve(root, "dev-ssl/clipcast.duckdns.org.crt"),
+        },
+      },
     },
     module: {
       // "loaders" process entry file and dependencies
