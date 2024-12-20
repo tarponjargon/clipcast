@@ -71,6 +71,27 @@ def extract_content_from_html(html):
     return content
 
 
+def send_to_task_to_queue(content_id):
+    """Send the content to Task queue for processing"""
+    command = 'python -m episode_job "{}"'.format(content_id)
+    result = subprocess.run(
+        ["tsp", "bash", "-c", command], check=True, capture_output=True
+    )
+    if not result.returncode == 0:
+        current_app.logger.error(f"Error processing content: {result}")
+        return None
+    job_id = result.stdout.decode().strip()
+    if not job_id:
+        current_app.logger.error(f"No job ID returned: {result}")
+        return None
+    job_result = subprocess.run(["tsp", "-o", job_id], check=True, capture_output=True)
+    if not job_result.returncode == 0:
+        current_app.logger.error(f"Error fetching job result: {job_result}")
+        return None
+    job_output_file = job_result.stdout.decode().strip()
+    return job_id, job_output_file
+
+
 def process_episode_content(id):
     """Process the episode content in a task queue"""
     with current_app.app_context():
@@ -84,7 +105,6 @@ def process_episode_content(id):
           """,
             (id),
         )
-
         default_error = {
             "response_code": 500,
             "message": "There was an error processing the content",
@@ -93,26 +113,20 @@ def process_episode_content(id):
             current_app.logger.error(f"Error fetching content from db: {ins}")
             return default_error
 
-        current_app.logger.debug(f"Processing episode: {episode} {type(episode)}")
-
-        # Send the job to Task Spooler
-        command = 'python -m episode_job "{}"'.format(episode.get("content_id"))
-        result = subprocess.run(["tsp", "bash", "-c", command], check=True)
-        current_app.logger.debug(f"Result: {result}")
-        if not result.returncode == 0:
-            current_app.logger.error(f"Error processing content: {result}")
+        # send the content to the task queue
+        job_id, job_output_file = send_to_task_to_queue(episode.get("content_id"))
+        if not job_id or not job_output_file:
             return default_error
-        # job_id = result.stdout.decode().strip()
-        # current_app.logger.debug(f"Job ID: {job_id}")
-        # upd = DB.update_query(
-        #     """
-        #     UPDATE podcast_content SET
-        #     job_id = %s
-        #     WHERE content_id = %s
-        #   """,
-        #     (job_id, id),
-        # )
 
+        upd = DB.update_query(
+            """
+            UPDATE podcast_content SET
+            job_id = %s,
+            job_output_file = %s
+            WHERE id = %s
+          """,
+            (job_id, job_output_file, id),
+        )
         return {
             "response_code": 200,
             "message": "The content has been added to your queue",

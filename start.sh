@@ -48,16 +48,3 @@ npm install --legacy-peer-deps >> ${LOG} 2>&1
 echo "Starting webpack-dev-server on ${DEVSERVER_HOST}, please wait..."
 NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js
 
-
-# # run webpack-dev-server
-# echo "Starting webpack-dev-server on port ${DEVSERVER_PORT}, please wait..."
-# NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js | tee -a ${LOG} &
-# WEBPACK_PID=$!
-
-# # run ngrok
-# # echo "Starting ngrok on ${DEVSERVER_HOST}, please wait..."
-# # ngrok http --url=${DEVSERVER_HOST} ${DEVSERVER_PORT} >> ${LOG} 2>&1
-# # NGROK_PID=$!
-
-# # keeps the script running until the webpack-dev-server is killed
-# wait $WEBPACK_PID $NGROK_PID

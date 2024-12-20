@@ -117,9 +117,9 @@ def estimate_progress(row_id):
         percent_done = 99
 
     current_app.logger.debug("")
-    current_app.logger.debug("total_chunks: %s", total_chunks)
-    current_app.logger.debug("chunks_processed: %s", chunks_processed)
-    current_app.logger.debug("percent_done: %s", percent_done)
+    current_app.logger.debug("%s total_chunks: %s", row_id, total_chunks)
+    current_app.logger.debug("%s chunks_processed: %s", row_id, chunks_processed)
+    current_app.logger.debug("%s percent_done: %s", row_id, percent_done)
     current_app.logger.debug("")
 
     return percent_done

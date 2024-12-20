@@ -13,6 +13,7 @@ from mutagen.mp3 import MP3
 from flask import current_app
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import get_first_n_words, match_uuid
+from flask_app.modules.user.user import load_user
 from flask_app.modules.tts.google_tts import GoogleTTS
 from flask_app.modules.tts.openai_tts import OpenAITTS
 from flask_app.modules.tts.google_translate_tts import GoogleTranslateTTS
@@ -102,8 +103,12 @@ def get_user_selected_voice(user_id, voice_code):
 
     res = None
     if voice_code == "random":
+        user = load_user(user_id)
+        plan = user.get("plan") if user and user.get("plan") else "base"
+
         res = DB.fetch_one(
-            "SELECT * FROM voices WHERE visible = 1 ORDER BY RAND() LIMIT 1"
+            "SELECT * FROM voices WHERE visible = 1 AND plan = %s ORDER BY RAND() LIMIT 1",
+            (plan),
         )
     else:
         res = DB.fetch_one(

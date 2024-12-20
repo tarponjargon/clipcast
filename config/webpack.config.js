@@ -104,8 +104,8 @@ module.exports = (env, argv) => {
       server: {
         type: "https",
         options: {
-          key: path.resolve(root, "dev-ssl/clipcast.duckdns.org.key"),
-          cert: path.resolve(root, "dev-ssl/clipcast.duckdns.org.crt"),
+          key: path.resolve(root, "dev-ssl/properly-fleet-narwhal.duckdns.org.key"),
+          cert: path.resolve(root, "dev-ssl/properly-fleet-narwhal.duckdns.org.crt"),
         },
       },
     },

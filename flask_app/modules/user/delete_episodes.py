@@ -6,7 +6,7 @@ def delete_episodes():
     """Delete podcast episodes from the user's account"""
 
     user_id = session.get("user_id")
-    current_app.logger.debug("request values: " + str(request.values))
+    # current_app.logger.debug("request values: " + str(request.values))
     episode_ids = request.values.getlist("episodes[]")
 
     # check if the episodes belong to the user
