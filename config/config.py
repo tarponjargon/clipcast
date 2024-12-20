@@ -71,7 +71,7 @@ class Config(object):
     MYSQL_USER = os.environ.get("MYSQL_USER")
     MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD")
     MYSQL_AUTOCOMMIT = True
-    MYSQL_LOG_QUERY = True
+    MYSQL_LOG_QUERY = False
 
     # view/function cache (redis thru flask_caching) uses redis db3
     CACHE_TYPE = "null"

@@ -1,7 +1,7 @@
 """ API routes """
 
 from flask import Blueprint, request, session, current_app
-from flask_app.modules.http import login_required
+from flask_app.modules.http import is_authenticated
 from flask_app.modules.extensions import DB
 
 api = Blueprint("account_api", __name__, url_prefix="/api")
@@ -13,12 +13,9 @@ def do_rest_route():
 
 
 @api.route("/notifications-viewed", methods=["POST"])
-@login_required
+@is_authenticated
 def do_notifications_viwewed():
     user_id = session.get("user_id")
-    if not user_id:
-        return {"message": "User not logged in"}, 401
-
     upd = DB.update_query(
         """
       UPDATE notification
@@ -28,3 +25,18 @@ def do_notifications_viwewed():
         {"user_id": user_id},
     )
     return {"success": True, "message": str(upd) + "notifications viewed"}
+
+
+@api.route("/total-episodes")
+@is_authenticated
+def do_get_total_episodes():
+    user_id = session.get("user_id")
+    q = DB.fetch_one(
+        """
+          SELECT COUNT(*) as total_episodes
+          FROM podcast_content
+          WHERE user_id = %(user_id)s
+        """,
+        {"user_id": user_id},
+    )
+    return {"totalEpisodes": q.get("total_episodes")}

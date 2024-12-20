@@ -61,6 +61,7 @@ def get_queue(user_id, page=1):
         "results": q.get("results", []),
         "next_page": next_page,
         "previous_page": previous_page,
+        "total_episodes": total_results,
     }
 
 

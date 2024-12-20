@@ -17,7 +17,22 @@ export default class ClipCast {
       this.checkAllListener();
       this.playPodcastListener();
       this.closePodcastListener();
+      setInterval(() => {
+        this.checkForNewPodcasts();
+      }, 30000);
     });
+  };
+
+  checkForNewPodcasts = async () => {
+    const totalEl = document.querySelector("[data-total-episodes]");
+    if (!totalEl) return;
+    const viewableEpisodes = parseInt(totalEl.getAttribute("data-total-episodes"));
+    const res = await fetch("/api/total-episodes");
+    const data = await res.json();
+    const totalEpisodes = data.totalEpisodes;
+    if (viewableEpisodes < totalEpisodes) {
+      window.location.reload();
+    }
   };
 
   checkAllListener = () => {

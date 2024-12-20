@@ -51,6 +51,7 @@ def do_app():
         queue=data.get("results"),
         next_page=data.get("next_page"),
         notifications=notifications,
+        total_episodes=data.get("total_episodes"),
     )
 
 

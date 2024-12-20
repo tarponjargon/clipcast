@@ -72,7 +72,8 @@ def extract_content_from_html(html):
 
 
 def send_to_task_to_queue(content_id):
-    """Send the content to Task queue for processing"""
+    """Send the content to task queue for processing"""
+
     command = 'python -m episode_job "{}"'.format(content_id)
     result = subprocess.run(
         ["tsp", "bash", "-c", command], check=True, capture_output=True
