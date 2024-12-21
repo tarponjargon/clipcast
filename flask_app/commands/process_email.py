@@ -103,10 +103,12 @@ def handle_email(response, email_id):
     else:
         return
 
-    print(f"UUID: {uuid}")
+    print(f"user id extracted from email: {uuid}")
 
     user = User.from_id(uuid)
-    if not user:
+
+    if not user or not user.get_id():
+        print("No user found for {}".format(uuid))
         return
 
     # get body
@@ -116,25 +118,26 @@ def handle_email(response, email_id):
     subject = msg.get("Subject", "")
     print(f"Subject: {subject}")
 
-    # if the subject contains the word "text"
-    # input the content directly into the database
-    if "text" in subject.lower():
-        print(f"{body}")
-        resp = add_podcast_content(body, user.get_id())
-        print(f"result: {resp}")
+    if not body or not isinstance(body, str) or not len(body) > 0:
+        print("No body found in email")
+        return
 
-    else:
-        # Extract URLs from the email body
-        urls = get_body_urls(body)
+    # Extract URLs from the email body
+    urls = get_body_urls(body)
 
-        if not urls:
-            return
-
+    if urls and len(urls) > 0:
         # Output the extracted URLs
         for url in urls:
             print(f"adding url {url}")
-            resp = add_podcast_url(url, user.get_id())
+            resp = add_podcast_url(url, uuid)
             print(f"result: {resp}")
+
+    else:
+        # if no urls are in the body, then
+        # input the content directly into the database
+        print(f"{body}")
+        resp = add_podcast_content(body, uuid)
+        print(f"result: {resp}")
 
 
 def check_inbox():

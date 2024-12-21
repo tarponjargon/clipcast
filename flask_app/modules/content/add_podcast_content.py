@@ -19,6 +19,7 @@ from flask import (
     render_template,
 )
 from flask_app.modules.extensions import DB
+from flask_app.modules.user.user import load_user
 from flask_app.modules.content.process_content import process_episode
 
 
@@ -74,10 +75,16 @@ def extract_content_from_html(html):
 def send_to_task_to_queue(content_id):
     """Send the content to task queue for processing"""
 
-    command = 'python -m episode_job "{}"'.format(content_id)
-    result = subprocess.run(
-        ["tsp", "bash", "-c", command], check=True, capture_output=True
+    # gotta set up the environment to run the command
+    command = 'cd /project && /usr/bin/direnv allow && \
+      /usr/bin/direnv exec . /usr/local/bin/python -m episode_job "{}"'.format(
+        content_id
     )
+
+    result = subprocess.run(
+        ["/usr/bin/tsp", "bash", "-c", command], check=True, capture_output=True
+    )
+    print(f"Processing content: {content_id} result {result}")
     if not result.returncode == 0:
         current_app.logger.error(f"Error processing content: {result}")
         return None
@@ -85,7 +92,9 @@ def send_to_task_to_queue(content_id):
     if not job_id:
         current_app.logger.error(f"No job ID returned: {result}")
         return None
-    job_result = subprocess.run(["tsp", "-o", job_id], check=True, capture_output=True)
+    job_result = subprocess.run(
+        ["/usr/bin/tsp", "-o", job_id], check=True, capture_output=True
+    )
     if not job_result.returncode == 0:
         current_app.logger.error(f"Error fetching job result: {job_result}")
         return None
@@ -114,6 +123,8 @@ def process_episode_content(id):
             current_app.logger.error(f"Error fetching content from db: {ins}")
             return default_error
 
+        print(f"Processing content: {episode.get('content_id')}")
+
         # send the content to the task queue
         job_id, job_output_file = send_to_task_to_queue(episode.get("content_id"))
         if not job_id or not job_output_file:
@@ -138,6 +149,13 @@ def add_podcast_url(url, user_id):
     """Add a podcast URL to the user's account"""
 
     if not user_id:
+        return {
+            "response_code": 401,
+            "message": "Authentication error",
+        }
+
+    user = load_user(user_id)
+    if not user_id or not user.get_id():
         return {
             "response_code": 401,
             "message": "Authentication error",
@@ -196,6 +214,12 @@ def add_podcast_url(url, user_id):
             "response_code": 400,
             "message": "No content could be extracted from URL",
         }
+
+    # check content length
+    maxlength = current_app.config.get("MAX_CHARACTERS")
+    if len(content) > maxlength[user.get_plan()]:
+        content = content[: maxlength[user.get_plan()]]
+        content += "...The content of the article has been truncated to fit your plan's character limit."
 
     title = metadata.get("title")
     author = metadata.get("author")

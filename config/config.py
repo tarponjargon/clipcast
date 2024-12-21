@@ -22,7 +22,7 @@ class Config(object):
     STORE_CS_HOUR_OPEN = 9
     STORE_CS_HOUR_CLOSE = 19
     STORE_TAGLINE = "Turn Web Content into Podcast Episodes"
-    STORE_META_DESCRIPTION = "Convert news articles, blog posts (and more) into audio podcast episodes.  Send clipCast links via a Chrome extension, email, or a form.  Each link will be converted to audio with natual language AI, and delivered to your private podcast feed.  You can then listen with your favorite podcast app!"
+    STORE_META_DESCRIPTION = "Convert news articles, blog posts and more into audio podcast episodes.  clipCast cuts out just the content, no headers, footers, comments, etc.  Send links or text via a form, chrome extension or email.  Content be converted to audio with natual language AI, and delivered to your private podcast feed.  You can then listen with your favorite podcast app!"
     STORE_LOGO = "/assets/images/logo.svg"
     STORE_FAVICON = "/favicon.ico"
     STORE_ACCESSIBILITY_CONTACT = os.environ.get("STORE_EMAIL")
@@ -30,6 +30,10 @@ class Config(object):
     ERROR_NOTIFY_URL = os.environ.get("STORE_EMAIL")
     ERROR_NOTIFY_AUTH = os.environ.get("ERROR_NOTIFY_AUTH")
     MAX_CONTENT_LENGTH = 2097152  # 2MB
+    MAX_CHARACTERS = {
+        "base": 30000,
+        "premium": 70000,
+    }
     PAGE_SIZE = 10
     TTS_SENTENCE_CHUNK_SIZE = 4  # how many sentences to chunk together for TTS
     TRANSITION_VOICE = "echo"  # voice to use for intros/outros

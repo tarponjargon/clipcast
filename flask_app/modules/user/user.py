@@ -158,6 +158,14 @@ class User(object):
         """
         return self.data.get("user_id")
 
+    def get_id(self):
+        """Gets user plan
+
+        Returns:
+          str: the plan name
+        """
+        return self.data.get("plan", "base")
+
     def update_voice(self, plan, voice_code):
         """Updates the user's selected voice"""
         if plan not in ["base", "premium"]:

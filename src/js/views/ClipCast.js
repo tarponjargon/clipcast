@@ -19,7 +19,7 @@ export default class ClipCast {
       this.closePodcastListener();
       setInterval(() => {
         this.checkForNewPodcasts();
-      }, 30000);
+      }, 10000);
     });
   };
 

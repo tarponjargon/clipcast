@@ -22,7 +22,7 @@
           </h1>
 
           <div class="d-block d-lg-none my-4">
-            <img class="w-100 d-block shadow-lg" style="border-radius: 20px;" alt="ClipCast Hero depicting an article in a web borwser being converted to a podcast" src="assets/img/clipcast-hero.jpg">
+            <img class="w-100 d-block shadow-lg" style="border-radius: 20px;" alt="ClipCast Hero depicting an article in a web borwser being converted to a podcast" src="assets/img/clipcast-hero2.jpg">
           </div>
 
           <div class="fs-18px text-body text-opacity-75 mb-4">
@@ -44,7 +44,7 @@
 
           <div class="mb-2">
             {% if session.get('user_id') %}
-            <a href="/app" class="btn btn-lg btn-outline-white px-3">Open App <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
+            <a href="/app" class="btn btn-lg btn-outline-white px-3">OPEN APP <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
             {% else %}
             <a href="/signup" class="btn btn-lg btn-outline-white px-3">Get Started <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
             {% endif %}
@@ -58,7 +58,7 @@
     <!-- END div-hero-content -->
 
     <div class="position-absolute top-0 bottom-0 end-0 w-50 p-5 z-1 overflow-hidden d-none d-lg-flex align-items-center">
-      <img class="w-100 d-block shadow-lg" style="border-radius: 20px;" alt="ClipCast Hero depicting an article in a web borwser being converted to a podcast" src="assets/img/clipcast-hero.jpg">
+      <img class="d-block shadow-lg" style="border-radius: 20px;" alt="ClipCast image depicting an article in a web borwser being converted to a podcast" src="assets/img/clipcast-hero2.jpg">
     </div>
   </div>
   <!-- END container -->
@@ -170,35 +170,33 @@
     <h1 class="mb-3 text-center">Pricing</h1>
 
     <div class="row g-3 py-3 gx-lg-5 pt-lg-5">
-      <div class="col-sm-6 py-xl-5">
+
+      <div class="col-sm-6 py-3 py-xl-5">
         <div class="card h-100">
           <div class="card-body p-4 d-flex flex-column">
+            <h5><span class="badge rounded-pill bg-danger">FREE DURING BETA</span></h5>
             <div class="d-flex align-items-center">
               <div class="flex-1">
-                <div class="h6 font-monospace">Starter Plan</div>
-                <div class="h1 fw-semibold mb-0">FREE! <small class="h6 fw-semibold text-body text-opacity-50">(ad supported)</small></div>
+                <div class="h6 font-monospace">Premium Plan</div>
+                <div class="h1 fw-semibold mb-0">$12 <small class="h6 fw-semibold text-body text-opacity-50">/month*</small></div>
               </div>
               <div>
-                <iconify-icon icon="solar:usb-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
+                <iconify-icon icon="solar:map-arrow-up-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
               </div>
             </div>
             <hr class="my-20px">
             <div class="mb-5 text-body text-opacity-75 flex-1">
               <div class="d-flex align-items-center mb-1">
                 <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 5 episodes per month</div>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 30 episodes per month</div>
               </div>
               <div class="d-flex align-items-center mb-1">
                 <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 1000 words per link</div>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 70,000 characters (10,800 words, or over an hour) per episode </div>
               </div>
               <div class="d-flex align-items-center mb-1">
                 <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Select male or female voice</div>
-              </div>
-              <div class="d-flex align-items-center mb-1">
-                <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Submit links via form on your account page</div>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Select between male, female and accented Natual Language AI voices</div>
               </div>
             </div>
             <div class="mx-n2">
@@ -213,44 +211,36 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 py-3 py-xl-5">
+
+      <div class="col-sm-6 py-xl-5">
         <div class="card h-100">
           <div class="card-body p-4 d-flex flex-column">
-            <h5><span class="badge rounded-pill bg-danger">Coming Soon</span></h5>
             <div class="d-flex align-items-center">
               <div class="flex-1">
-                <div class="h6 font-monospace">Premium Plan</div>
-                <div class="h1 fw-semibold mb-0">$12 <small class="h6 fw-semibold text-body text-opacity-50">/month*</small></div>
+                <div class="h6 font-monospace">Starter Plan</div>
+                <div class="h1 fw-semibold mb-0">FREE! <small class="h6 fw-semibold text-body text-opacity-50">(may be ad supported)</small></div>
               </div>
               <div>
-                <iconify-icon icon="solar:map-arrow-up-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
+                <iconify-icon icon="solar:usb-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
               </div>
             </div>
             <hr class="my-20px">
             <div class="mb-5 text-body text-opacity-75 flex-1">
               <div class="d-flex align-items-center mb-1">
                 <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">No ads</div>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 10 episodes per month - 3 Pro voice and 7 base voice</div>
               </div>
               <div class="d-flex align-items-center mb-1">
                 <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 10 episodes per month</div>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 30,000 characters (4,600 words or 40 minutes) per episode</div>
               </div>
               <div class="d-flex align-items-center mb-1">
                 <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Up to 2500 words per link</div>
-              </div>
-              <div class="d-flex align-items-center mb-1">
-                <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Select between male, female and accented voices</div>
-              </div>
-              <div class="d-flex align-items-center mb-1">
-                <i class="fa fa-check fa-lg text-theme"></i>
-                <div class="flex-1 ps-3"><span class="font-monospace small">Submit links via form on your account page or Chrome extension</div>
+                <div class="flex-1 ps-3"><span class="font-monospace small">Select male or female basic voices</div>
               </div>
             </div>
             <div class="mx-n2">
-              <span class="btn btn-outline-default btn-lg w-100 font-monospace disabled">Coming Soon!</span>
+              <a href="/signup" class="btn btn-outline-default btn-lg w-100 font-monospace">Get Started <i class="fa fa-arrow-right"></i></a>
             </div>
           </div>
           <div class="card-arrow">
