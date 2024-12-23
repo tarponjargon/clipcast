@@ -34,6 +34,10 @@ class Config(object):
         "base": 30000,
         "premium": 70000,
     }
+    MAX_EPISODES = {
+        "base": 10,
+        "premium": 30,
+    }
     PAGE_SIZE = 10
     TTS_SENTENCE_CHUNK_SIZE = 4  # how many sentences to chunk together for TTS
     TRANSITION_VOICE = "echo"  # voice to use for intros/outros

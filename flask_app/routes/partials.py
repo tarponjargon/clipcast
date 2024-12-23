@@ -41,6 +41,16 @@ def do_termsofuse_partial():
     return render_template("/partials/info/termsofuse.html.j2")
 
 
+@partials.route("/base-plan-info")
+def do_base_plan_partial():
+    return render_template("/partials/info/base_plan_info.html.j2")
+
+
+@partials.route("/premium-plan-info")
+def do_premium_plan_partial():
+    return render_template("/partials/info/premium_plan_info.html.j2")
+
+
 @partials.route("/contact-form", methods=["POST"])
 def do_contactform_request():
     return handle_contactform_request()
@@ -128,6 +138,16 @@ def do_profilesubscription_request():
 @is_authenticated
 def do_updatesubscription_request():
     return toggle_subscription()
+
+
+@partials.route("/app/update-plan")
+@is_authenticated
+def do_updateplan_request():
+    user = User.from_id(session.get("user_id"))
+    if user.update_plan(request.args.get("plan")):
+        return render_template_string("Plan updated")
+    else:
+        return render_template_string("Error updating plan"), 400
 
 
 @partials.route("/app/notifications")

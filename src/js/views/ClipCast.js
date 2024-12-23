@@ -1,6 +1,6 @@
 import "shikwasa/dist/style.css";
 import { Player } from "shikwasa";
-import { waitForSelector, slideToggle } from "../modules/Utils";
+import { waitForSelector, slideDown, slideUp, isElementVisible } from "../modules/Utils";
 
 export default class ClipCast {
   constructor() {
@@ -15,11 +15,12 @@ export default class ClipCast {
   init = () => {
     return new Promise((resolve, reject) => {
       this.checkAllListener();
+      this.checkboxListener();
       this.playPodcastListener();
       this.closePodcastListener();
       setInterval(() => {
         this.checkForNewPodcasts();
-      }, 10000);
+      }, 30000);
     });
   };
 
@@ -42,9 +43,30 @@ export default class ClipCast {
       const itemCheckboxes = document.querySelectorAll('[type="checkbox"]');
       itemCheckboxes.forEach((checkbox) => {
         checkbox.checked = selectAllCheckbox.checked;
-        slideToggle(this.topDeleteAllButton);
       });
     });
+  };
+
+  checkboxListener = () => {
+    const allCheckBoxes = document.querySelectorAll('[type="checkbox"]');
+    if (!allCheckBoxes.length) return;
+    allCheckBoxes.forEach((box) => {
+      box.addEventListener("change", () => {
+        this.deleteButtonVisibility();
+      });
+    });
+  };
+
+  deleteButtonVisibility = () => {
+    const allCheckBoxes = document.querySelectorAll('[type="checkbox"]');
+    const checkedBoxes = Array.from(allCheckBoxes).filter((box) => box.checked);
+    if (checkedBoxes.length) {
+      if (isElementVisible(this.topDeleteAllButton)) return;
+      slideDown(this.topDeleteAllButton);
+    } else {
+      if (!isElementVisible(this.topDeleteAllButton)) return;
+      slideUp(this.topDeleteAllButton);
+    }
   };
 
   stopPodcast = () => {

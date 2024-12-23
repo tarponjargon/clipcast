@@ -50,6 +50,57 @@
             </div>
             <!-- END #general -->
 
+            <div id="plan" class="mb-5">
+              <h4><i class="fa fa-headphones fa-fw text-theme"></i> Your Plan</h4>
+              <div class="row">
+                <div class="col-12 col-md-6 custom-radio">
+                  <div class="radiobtn">
+                    <input
+                      type="radio"
+                      id="plan-basic"
+                      name="plan" value="{{ session_safe_get('plan') }}"
+                      {% if session_safe_get('plan') == 'base' %}checked{% endif %}
+                      hx-get="/partials/app/update-plan?plan=base"
+                      hx-trigger="click"
+                      hx-target="#dead-end"
+                      hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
+                    />
+                    <label class="d-flex align-items-center" for="plan-basic">
+                      <span class="ps-2">Starter - FREE [<a
+                        href="javascript:;"
+                        class="text-white"
+                        data-bs-toggle="modal"
+                        data-bs-target="#myModal"
+                        data-bs-url="/partials/base-plan-info">details</a>]
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 custom-radio">
+                  <div class="radiobtn">
+                    <input
+                      type="radio"
+                      id="plan-premium"
+                      name="plan" value="{{ session_safe_get('plan') }}"
+                      {% if session_safe_get('plan') == 'premium' %}checked{% endif %}
+                      hx-get="/partials/app/update-plan?plan=base"
+                      hx-trigger="click"
+                      hx-target="#dead-end"
+                      hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
+                    />
+                    <label class="d-flex align-items-center" for="plan-premium">
+                      <span class="ps-2">Pro - $12/mo [<a
+                        href="javascript:;"
+                        class="text-white"
+                        data-bs-toggle="modal"
+                        data-bs-target="#myModal"
+                        data-bs-url="/partials/premium-plan-info">details</a>]</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- BEGIN #notifications -->
             <div id="notifications" class="mb-5">
               <h4 class="mb-3"><i class="far fa-bell fa-fw text-theme"></i> Notifications</h4>
@@ -81,6 +132,7 @@
               </div>
             </div>
             <!-- END #notifications -->
+
 
 
             <!-- BEGIN #payment -->

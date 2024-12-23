@@ -155,7 +155,7 @@ def add_podcast_url(url, user_id):
         }
 
     user = load_user(user_id)
-    if not user_id or not user.get_id():
+    if not user_id or not user.get("user_id"):
         return {
             "response_code": 401,
             "message": "Authentication error",
@@ -216,10 +216,12 @@ def add_podcast_url(url, user_id):
         }
 
     # check content length
-    maxlength = current_app.config.get("MAX_CHARACTERS")
-    if len(content) > maxlength[user.get_plan()]:
-        content = content[: maxlength[user.get_plan()]]
-        content += "...The content of the article has been truncated to fit your plan's character limit."
+    maxlength_obj = current_app.config.get("MAX_CHARACTERS")
+    plan = user.get("plan")
+    maxlength = maxlength_obj.get(plan)
+    if len(content) > maxlength:
+        content = content[:maxlength]
+        content += "...The content of this article has been truncated to fit your plan's character limit."
 
     title = metadata.get("title")
     author = metadata.get("author")

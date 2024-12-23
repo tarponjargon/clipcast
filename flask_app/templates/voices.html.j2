@@ -59,6 +59,25 @@
               <form>
                 <div class="row custom-radio">
                   {{ render_voices(base_voices, session_safe_get('base_voice'), "base") }}
+                  <div class="col-md-6">
+                    <div class="radiobtn">
+                      <input
+                        type="radio"
+                        id="base-voice-random"
+                        name="voice"
+                        value="random"
+                        {% if session_safe_get('base_voice') == 'random' %}checked{% endif %}
+                        hx-get="/partials/app/update-voice?voice=random&plan={{ session_safe_get('plan', 'base') }}"
+                        hx-trigger="click"
+                        hx-target="#dead-end"
+                        hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
+                      />
+                      <label class="d-flex align-items-center" for="base-voice-random">
+                        &nbsp;<i class="bi bi-shuffle"></i>
+                        &nbsp;<span class="ps-2">Random Voice per Episode</span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>

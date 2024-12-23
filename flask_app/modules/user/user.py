@@ -158,7 +158,7 @@ class User(object):
         """
         return self.data.get("user_id")
 
-    def get_id(self):
+    def get_plan(self):
         """Gets user plan
 
         Returns:
@@ -183,6 +183,21 @@ class User(object):
         DB.update_query(sql, params)
         self.data[f"{plan}_voice"] = voice_code
         session[f"{plan}_voice"] = voice_code
+        return True
+
+    def update_plan(self, plan):
+        """Updates the user's selected plan"""
+        if plan not in ["base", "premium"]:
+            return False
+        sql = f"""
+            UPDATE user
+            SET plan = %(plan)s
+            WHERE user_id = %(user_id)s
+        """
+        params = {"plan": plan, "user_id": self.get_id()}
+        DB.update_query(sql, params)
+        self.data["plan"] = plan
+        session["plan"] = plan
         return True
 
     def get_feed_url(self):
