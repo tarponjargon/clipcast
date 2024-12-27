@@ -22,7 +22,7 @@ class Config(object):
     STORE_CS_HOUR_OPEN = 9
     STORE_CS_HOUR_CLOSE = 19
     STORE_TAGLINE = "Turn Web Content into Podcast Episodes"
-    STORE_META_DESCRIPTION = "Convert news articles, blog posts and more into audio podcast episodes.  clipCast cuts out just the content, no headers, footers, comments, etc.  Send links or text via a form, chrome extension or email.  Content be converted to audio with natual language AI, and delivered to your private podcast feed.  You can then listen with your favorite podcast app!"
+    STORE_META_DESCRIPTION = "clipCast clips out just the content from links you provide - excluding ads, menus, and comments. The content is then converted to audio using natural language AI Text-to-Speech, and made available in your podcast feed."
     STORE_LOGO = "/assets/images/logo.svg"
     STORE_FAVICON = "/favicon.ico"
     STORE_ACCESSIBILITY_CONTACT = os.environ.get("STORE_EMAIL")

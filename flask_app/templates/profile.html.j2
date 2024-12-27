@@ -58,9 +58,9 @@
                     <input
                       type="radio"
                       id="plan-basic"
-                      name="plan" value="{{ session_safe_get('plan') }}"
+                      name="plan" value="base"
                       {% if session_safe_get('plan') == 'base' %}checked{% endif %}
-                      hx-get="/partials/app/update-plan?plan=base"
+                      hx-get="/partials/app/update-plan"
                       hx-trigger="click"
                       hx-target="#dead-end"
                       hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
@@ -81,9 +81,9 @@
                     <input
                       type="radio"
                       id="plan-premium"
-                      name="plan" value="{{ session_safe_get('plan') }}"
+                      name="plan" value="premium"
                       {% if session_safe_get('plan') == 'premium' %}checked{% endif %}
-                      hx-get="/partials/app/update-plan?plan=base"
+                      hx-get="/partials/app/update-plan"
                       hx-trigger="click"
                       hx-target="#dead-end"
                       hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"

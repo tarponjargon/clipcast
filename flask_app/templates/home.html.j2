@@ -26,7 +26,7 @@
           </div>
 
           <div class="fs-18px text-body text-opacity-75 mb-4">
-            {{ config.STORE_META_DESCRIPTION }}
+            Do you prefer to listen rather than read?  clipCast converts web content like articles, blog posts and more into podcast episodes.
           </div>
 
           <div class="text-body mb-4">
@@ -34,12 +34,12 @@
           </div>
 
           <div class="mb-4">
-            <a href="https://www.spotify.com"><img class="m-2" src="/assets/img/spotify-icon.svg" width="48" title="Spotify" alt="Spotify" /></a>
-            <a href="https://www.apple.com/apple-podcasts/"><img class="m-2" src="/assets/img/apple-podcasts-logo.svg" width="48" title="Apple Podcasts" alt="Apple Podcasts" /></a>
-            <a href="https://overcast.fm/"><img class="m-2" src="/assets/img/overcast-logo.svg" width="48" title="Overcast" alt="Overcast" /></a>
-            <a href="https://podcasts.google.com"><img class="m-2" src="/assets/img/google-podcasts-logo.svg" width="48" title="Google Podcasts" alt="Google Podcasts" /></a>
-            <a href="https://pocketcasts.com/"><img class="m-2" src="/assets/img/pocketcasts-logo.svg" width="48" title="Pocket Casts" alt="Pocket Casts" /></a>
-            <a href="https://downcastapp.com"><img class="m-2" src="/assets/img/downcast-site-logo.svg" width="48" title="Downcast" alt="Downcast" /></a>
+            <a href="https://www.spotify.com"><img class="m-2" src="/assets/img/spotify-icon.svg" width="38" title="Spotify" alt="Spotify" /></a>
+            <a href="https://www.apple.com/apple-podcasts/"><img class="m-2" src="/assets/img/apple-podcasts-logo.svg" width="38" title="Apple Podcasts" alt="Apple Podcasts" /></a>
+            <a href="https://overcast.fm/"><img class="m-2" src="/assets/img/overcast-logo.svg" width="38" title="Overcast" alt="Overcast" /></a>
+            <a href="https://podcasts.google.com"><img class="m-2" src="/assets/img/google-podcasts-logo.svg" width="38" title="Google Podcasts" alt="Google Podcasts" /></a>
+            <a href="https://pocketcasts.com/"><img class="m-2" src="/assets/img/pocketcasts-logo.svg" width="38" title="Pocket Casts" alt="Pocket Casts" /></a>
+            <a href="https://downcastapp.com"><img class="m-2" src="/assets/img/downcast-site-logo.svg" width="38" title="Downcast" alt="Downcast" /></a>
           </div>
 
           <div class="mb-2">
@@ -67,6 +67,85 @@
   <div class="position-absolute top-0 start-0 d-none2 w-100 h-100 opacity-95" style="background-size: var(--bs-body-bg-image-size);"></div>
 </div>
 <!-- END #home -->
+
+<div class="container text-center">
+  <div class="row">
+    <div class="col-12">
+      <div class="p-3 text-center">
+        <h1 class="mb-3">How Does it Work?</h1>
+        <p class="fs-4 text-body text-opacity-50 mb-5">
+          {{ config.STORE_META_DESCRIPTION }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+  /* Base styles */
+  .diagram-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Horizontal layout for larger screens */
+  .diagram-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Vertical layout for mobile devices */
+  @media (max-width: 1200px) {
+    .diagram-container {
+      flex-direction: column;
+    }
+  }
+  </style>
+  <div class="diagram-container">
+    <div class="diagram-item">
+      <img
+        class="img-fluid"
+        style="border-radius: 15px;"
+        width="350"
+        alt="Image depicting a browser with an article, the content is highlighted"
+        src="assets/img/browser-news.jpg"
+      >
+    </div>
+
+    <div class="diagram-item">
+      <i class="fa fa-right-long fa-3x text-body text-opacity-50 d-none d-xl-block"></i>
+      <i class="fa fa-down-long fa-3x text-body text-opacity-50 d-block d-xl-none"></i>
+    </div>
+
+    <div class="diagram-item">
+      <div class="d-block">
+        <div class="w-100"><i class="fa fa-share-nodes fa-6x text-body text-opacity-50"></i></div>
+        <div class="w-100 fs-22px text-body text-opacity-50">AI Text-to-Speech</div>
+      </div>
+    </div>
+
+    <div class="diagram-item">
+      <i class="fa fa-right-long fa-3x text-body text-opacity-50 d-none d-xl-block"></i>
+      <i class="fa fa-down-long fa-3x text-body text-opacity-50 d-block d-xl-none"></i>
+    </div>
+
+    <div class="diagram-item">
+      <img
+        class="img-fluid"
+        style="border-radius: 15px;"
+        width="350"
+        alt="Image depicting a phone playing a podcast"
+        src="assets/img/phone.jpg"
+      >
+    </div>
+  </div>
+
+</div>
+
+
 
 <!-- BEGIN #about -->
 <div id="features" class="py-5 bg-component">
