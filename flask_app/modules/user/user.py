@@ -1,9 +1,10 @@
 import base64
 import hashlib
 import secrets
-from flask import current_app, session
+from flask import request, current_app, session
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid
+from flask_app.modules.http import get_env_vars
 
 
 def create_user(email, password):
@@ -119,6 +120,37 @@ def login_user(user):
     # add feed url to the session so you don't have to piece it together
     session["feed_url"] = user.get_feed_url()
 
+    # record login
+    envs = get_env_vars()
+    DB.insert_query(
+        """
+        INSERT INTO login (
+          user_id,
+          email,
+          user_agent,
+          ip_address,
+          device_code,
+          path
+        )
+        VALUES (
+          %(user_id)s,
+          %(email)s,
+          %(user_agent)s,
+          %(ip_address)s,
+          %(device_code)s,
+          %(path)s
+        )
+      """,
+        {
+            "user_id": user.get_id(),
+            "email": user.get_email(),
+            "user_agent": envs.get("user_agent"),
+            "ip_address": envs.get("ip_address"),
+            "device_code": envs.get("device_code"),
+            "path": request.path,
+        },
+    )
+
 
 def load_user(user_id):
     """Load user data from the DB
@@ -157,6 +189,14 @@ class User(object):
           str: The user ID
         """
         return self.data.get("user_id")
+
+    def get_email(self):
+        """Gets user email
+
+        Returns:
+          str: The user email
+        """
+        return self.data.get("email")
 
     def get_plan(self):
         """Gets user plan

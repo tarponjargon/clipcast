@@ -7,7 +7,12 @@
 
 <div class="d-flex align-items-center justify-content-start feed-url">
   <div class="border rounded p-2 d-flex align-items-center gap-2">
-    <a class="hover-text d-flex align-items-center" href="javascript:;" onClick="copyToClipboard('podcast-feed-field')">
+    <a
+      class="hover-text d-flex align-items-center"
+      href="javascript:;"
+      onClick="copyToClipboard('podcast-feed-field')"
+      title="Click to copy feed URL"
+    >
       <img src="/assets/img/rss.png" width="18" alt="RSS" class="me-2">
       <div id="podcast-feed-field">
         {{ session_safe_get('feed_url') }}

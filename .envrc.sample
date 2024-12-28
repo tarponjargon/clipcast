@@ -3,7 +3,7 @@ source virtualenv_python/bin/activate
 export ENV="development"
 export REMOTE_HOST=""
 export STORE_CODE="clipcast"
-export STORE_NAME="clipCast.it"
+export STORE_NAME="ClipCast.it"
 export TEST_EMAIL1="YOUREMAIL@gmail.com" # update
 export TEST_EMAIL2="YOUREMAIL@gmail.com" # update
 export WEB_HOST=localhost
