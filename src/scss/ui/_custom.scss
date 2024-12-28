@@ -73,3 +73,25 @@
     margin: 0 .25em 0 .25em;
   }
 }
+
+.diagram-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Horizontal layout for larger screens */
+.diagram-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Vertical layout for mobile devices */
+@media (max-width: 1200px) {
+  .diagram-container {
+    flex-direction: column;
+  }
+}
