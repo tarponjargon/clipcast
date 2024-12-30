@@ -4,6 +4,28 @@ from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid
 
 
+def get_plan_episode_count(user_id):
+    """Gets the number of episodes in a user's queue
+
+    Returns:
+      int: The number of episodes
+    """
+    if not user_id:
+        return 0
+
+    q = DB.fetch_one(
+        """
+          SELECT COUNT(*) AS episode_count
+          FROM plan_episodes
+          WHERE user_id = %s
+          AND `timestamp` >= DATE_FORMAT(NOW(), '%%Y-%%m-01 00:00:00');
+        """,
+        (user_id),
+    )
+
+    return q.get("episode_count", 0)
+
+
 def get_queue(user_id, page=1):
     """Gets a user's queue
 
@@ -53,15 +75,22 @@ def get_queue(user_id, page=1):
     has_more_results = total_results > (page * current_app.config["PAGE_SIZE"])
     next_page = page + 1 if has_more_results else None
     previous_page = page - 1 if page > 1 else None
+    plan_count = get_plan_episode_count(user_id)
+    plan = session.get("plan", "free")
 
-    # current_app.logger.debug(
-    #     "total_results %s has_more_results %s", total_results, has_more_results
-    # )
+    current_app.logger.debug(
+        "total_results %s has_more_results %s plan_count %s",
+        total_results,
+        has_more_results,
+        plan_count,
+    )
     return {
         "results": q.get("results", []),
         "next_page": next_page,
         "previous_page": previous_page,
         "total_episodes": total_results,
+        "plan_count": plan_count,
+        "over_limit": plan_count >= current_app.config["MAX_EPISODES"].get(plan),
     }
 
 

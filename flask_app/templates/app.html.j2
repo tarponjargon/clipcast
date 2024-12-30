@@ -1,6 +1,7 @@
 {% set page = 'app' %}
 {% extends "base.html.j2" %}
 {% set title %}Application Dashboard - {{ config.STORE_NAME }}{% endset %}
+{% from 'macros/errors.html.j2' import render_errors %}
 
 
 <div id="app" class="app">
@@ -10,6 +11,12 @@
   {% include 'includes/app_sidebar.html.j2' %}
 
   <div id="content" class="app-content" data-total-episodes="{{ total_episodes }}">
+
+    {% if over_limit %}
+      <div class="d-block w-100 mb-4">
+        {{ render_errors(["You have reached your plan limit for episodes this month"]) }}
+      </div>
+    {% endif %}
 
     {% include 'includes/podcast_feed_url.html.j2' %}
 

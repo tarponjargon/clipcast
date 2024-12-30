@@ -52,6 +52,8 @@ def do_app():
         next_page=data.get("next_page"),
         notifications=notifications,
         total_episodes=data.get("total_episodes"),
+        plan_count=data.get("plan_count"),
+        over_limit=data.get("over_limit"),
     )
 
 

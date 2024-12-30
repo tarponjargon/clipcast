@@ -26,8 +26,8 @@ class Config(object):
     STORE_LOGO = "/assets/images/logo.svg"
     STORE_FAVICON = "/favicon.ico"
     STORE_ACCESSIBILITY_CONTACT = os.environ.get("STORE_EMAIL")
-    STORE_ADMIN = os.environ.get("ERROR_NOTIFY_URL")
-    ERROR_NOTIFY_URL = os.environ.get("STORE_EMAIL")
+    STORE_ADMIN = os.environ.get("STORE_EMAIL")
+    ERROR_NOTIFY_URL = os.environ.get("ERROR_NOTIFY_URL")
     ERROR_NOTIFY_AUTH = os.environ.get("ERROR_NOTIFY_AUTH")
     MAX_CONTENT_LENGTH = 2097152  # 2MB
     MAX_CHARACTERS = {

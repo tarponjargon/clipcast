@@ -20,6 +20,7 @@ from flask import (
 )
 from flask_app.modules.extensions import DB
 from flask_app.modules.user.user import load_user
+from flask_app.modules.user.queue import get_plan_episode_count
 from flask_app.modules.content.process_content import process_episode
 
 
@@ -109,6 +110,7 @@ def process_episode_content(id):
         episode = DB.fetch_one(
             """
             SELECT
+              user_id,
               content_id
             FROM `podcast_content`
             WHERE id = %s
@@ -139,6 +141,25 @@ def process_episode_content(id):
           """,
             (job_id, job_output_file, id),
         )
+
+        if upd:
+            # update plan_episodes to keep track of how many episodes the user has created
+            # and to keep track of the user's plan
+            user = load_user(episode.get("user_id"))
+            ins = DB.insert_query(
+                """
+              INSERT INTO plan_episodes
+              (user_id, content_id, job_id, plan)
+              VALUES (%s, %s, %s, %s)
+          """,
+                (
+                    episode.get("user_id"),
+                    episode.get("content_id"),
+                    job_id,
+                    user.get("plan"),
+                ),
+            )
+
         return {
             "response_code": 200,
             "message": "The content has been added to your queue",
@@ -159,6 +180,14 @@ def add_podcast_url(url, user_id):
         return {
             "response_code": 401,
             "message": "Authentication error",
+        }
+
+    plan_count = get_plan_episode_count(user_id)
+    plan = user.get("plan")
+    if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
+        return {
+            "response_code": 401,
+            "message": "You have reached the limit of episodes for your plan",
         }
 
     # check if the url is already in the database for this user
@@ -286,6 +315,21 @@ def add_podcast_content(content, user_id):
         return {
             "response_code": 401,
             "message": "Authentication error",
+        }
+
+    user = load_user(user_id)
+    if not user_id or not user.get("user_id"):
+        return {
+            "response_code": 401,
+            "message": "Authentication error",
+        }
+
+    plan_count = get_plan_episode_count(user_id)
+    plan = user.get("plan")
+    if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
+        return {
+            "response_code": 401,
+            "message": "You have reached the limit of episodes for your plan",
         }
 
     # extract content

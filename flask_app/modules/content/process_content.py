@@ -12,6 +12,7 @@ from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from flask import current_app
 from flask_app.modules.extensions import DB
+from flask_app.modules.http import report_error_http
 from flask_app.modules.helpers import get_first_n_words, match_uuid
 from flask_app.modules.user.user import load_user
 from flask_app.modules.tts.google_tts import GoogleTTS
@@ -55,6 +56,7 @@ def openai_speech(file_path, text, voice="alloy"):
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
         print(f"Error with OpenAI TTS: {e}")
+        report_error_http(f"Error with OpenAI TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -67,6 +69,7 @@ def google_translate_speech(file_path, text, voice="us"):
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
         print(f"Error with Google Translate TTS: {e}")
+        report_error_http(f"Error with Google Translate TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -79,6 +82,7 @@ def google_tts(file_path, text, voice="en-IN-Neural2-C", language_code="en-US"):
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
         print(f"Error with Google TTS: {e}")
+        report_error_http(f"Error with Google TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -91,6 +95,7 @@ def polly_tts(file_path, text, voice="Matthew", language_code="en-US"):
         speech_file_path = tts.synthesize_speech()
     except Exception as e:
         print(f"Error with Polly TTS: {e}")
+        report_error_http(f"Error with Polly TTS: {e}")
         return {"error": e, "speech_file_path": None}
     return {"error": None, "speech_file_path": speech_file_path}
 
@@ -146,6 +151,7 @@ def create_intro_mp3(row):
         intro_audio = AudioSegment.from_mp3(intro.get("speech_file_path"))
     except Exception as e:
         print(f"Error with intro audio: {e}")
+        report_error_http(f"Error with intro audio: {e}")
         return
 
     print(f"INTRO AUDIO: {intro_audio}")
@@ -338,6 +344,7 @@ def upload_to_s3(file_path):
         s3_client.upload_file(file_path, bucket_name, object_name)
     except Exception as e:
         print(f"Error uploading to S3: {e}")
+        report_error_http(f"Error uploading to S3: {e}")
         raise e
         return None
 
@@ -372,11 +379,11 @@ def process_episode(content_id):
 
         DB.update_query(
             """
-        UPDATE podcast_content
-        SET current_status = 'processing',
-        processing_start_time = NOW()
-        WHERE content_id = %s
-    """,
+          UPDATE podcast_content
+          SET current_status = 'processing',
+          processing_start_time = NOW()
+          WHERE content_id = %s
+        """,
             (row_id,),
         )
 
@@ -417,8 +424,6 @@ def process_episode(content_id):
         # Upload to S3
         episode_url = upload_to_s3(final_mp3)
 
-        current_app.logger.info(f"Uploaded to S3: {episode_url}")
-
         # get byte size of file
         file_size = os.path.getsize(final_mp3)
 
@@ -433,7 +438,7 @@ def process_episode(content_id):
         end_time = time.time()
         elapsed_time = end_time - start_time
 
-        # record estimated cost in cents.  best guess at this time is 0.01 oer 600 characters
+        # record estimated cost in cents.  best guess at this time is 0.01 per 600 characters
         estimated_cost_cents = round(len(episode.get("content")) / 600, 2)
 
         # # mark as complete

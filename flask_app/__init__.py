@@ -43,12 +43,12 @@ def create_app():
         app.logger.setLevel(gunicorn_logger.level)
 
         # post critical errors to notification service
-        if app.config.get("PRODUCTION"):
-            from .modules.http import CustomHTTPErrorHandler
+        # if app.config.get("PRODUCTION"):
+        from .modules.http import CustomHTTPErrorHandler
 
-            error_notify_handler = CustomHTTPErrorHandler()
-            error_notify_handler.setLevel(logging.ERROR)
-            app.logger.addHandler(error_notify_handler)
+        error_notify_handler = CustomHTTPErrorHandler()
+        error_notify_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(error_notify_handler)
 
         # template routes
         from flask_app.routes.views import views

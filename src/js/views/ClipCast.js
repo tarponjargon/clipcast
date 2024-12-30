@@ -9,22 +9,24 @@ export default class ClipCast {
     this.playIconHTML = '<i class="fa fa-play-circle fa-3x"></i>';
     this.stopIconHTML = '<i class="fa fa-pause-circle fa-3x"></i>';
     this.currentlyPlayingEl = undefined;
+    this.isPlaying = false;
     this.topDeleteAllButton = document.getElementById("top-delete-all-btn");
   }
 
   init = () => {
     return new Promise((resolve, reject) => {
       this.checkAllListener();
-      this.checkboxListener();
       this.playPodcastListener();
       this.closePodcastListener();
+      this.globalClickListeners();
       setInterval(() => {
         this.checkForNewPodcasts();
-      }, 30000);
+      }, 10000);
     });
   };
 
   checkForNewPodcasts = async () => {
+    if (this.isPlaying) return;
     const totalEl = document.querySelector("[data-total-episodes]");
     if (!totalEl) return;
     const viewableEpisodes = parseInt(totalEl.getAttribute("data-total-episodes"));
@@ -43,16 +45,6 @@ export default class ClipCast {
       const itemCheckboxes = document.querySelectorAll('[type="checkbox"]');
       itemCheckboxes.forEach((checkbox) => {
         checkbox.checked = selectAllCheckbox.checked;
-      });
-    });
-  };
-
-  checkboxListener = () => {
-    const allCheckBoxes = document.querySelectorAll('[type="checkbox"]');
-    if (!allCheckBoxes.length) return;
-    allCheckBoxes.forEach((box) => {
-      box.addEventListener("change", () => {
-        this.deleteButtonVisibility();
       });
     });
   };
@@ -112,16 +104,19 @@ export default class ClipCast {
       // console.log("The podcast is now playing");
       this.podcastCloseBtn.style.display = "block";
       this.currentlyPlayingEl.innerHTML = this.stopIconHTML;
+      this.isPlaying = true;
     });
 
     this.player.audio.addEventListener("pause", () => {
       // console.log("The podcast is now paused");
       this.currentlyPlayingEl.innerHTML = this.playIconHTML;
+      this.isPlaying = false;
     });
 
     this.player.audio.addEventListener("ended", () => {
       // console.log("The podcast is now ended");
       this.currentlyPlayingEl.innerHTML = this.playIconHTML;
+      this.isPlaying = false;
     });
 
     document.addEventListener("keydown", this.playerKeyListener, false);
@@ -189,5 +184,28 @@ export default class ClipCast {
       },
       false
     );
+  };
+
+  globalClickListeners = () => {
+    document.addEventListener("click", (event) => {
+      const paginationButton = event.target.closest('[data-js="pagination-button"]');
+      if (paginationButton) {
+        this.handlePaginationButtonClick(paginationButton);
+      }
+      const checkbox = event.target.closest('[type="checkbox"]');
+      if (checkbox) {
+        this.deleteButtonVisibility();
+      }
+    });
+  };
+
+  handlePaginationButtonClick = (button) => {
+    if (isElementVisible(this.topDeleteAllButton)) {
+      slideUp(this.topDeleteAllButton);
+      const allCheckBoxes = document.querySelectorAll('[type="checkbox"]');
+      allCheckBoxes.forEach((box) => {
+        box.checked = false;
+      });
+    }
   };
 }

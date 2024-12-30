@@ -181,26 +181,30 @@ def report_error_http(error):
     Args:
       error (str): The error message to send
     """
-    url = current_app.config.get("ERROR_NOTIFY_URL")
-    headers = {
-        "Content-type": "application/x-www-form-urlencoded",
-        "X-Auth": current_app.config.get("ERROR_NOTIFY_AUTH"),
-    }
-    store_code = current_app.config.get("STORE_CODE")
-    data = {"error": error, "site": store_code}
-    response = None
-    response_data = {}
-    try:
-        response = requests.post(url, headers=headers, data=urlencode(data), timeout=2)
-        response.raise_for_status()
-    except Exception as err:
-        current_app.logger.info("HTTP error sending log info occurred {}".format(err))
-        pass
-    if response and response.status_code != 200:
-        current_app.logger.info(
-            "HTTP error sending log info occurred {}".format(response.content)
-        )
-        pass
+    with current_app.app_context():
+        url = current_app.config.get("ERROR_NOTIFY_URL")
+        headers = {
+            "Content-type": "application/x-www-form-urlencoded",
+            "X-Auth": current_app.config.get("ERROR_NOTIFY_AUTH"),
+        }
+        store_code = current_app.config.get("STORE_CODE")
+        data = {"error": error, "site": store_code}
+        response = None
+        response_data = {}
+        try:
+            response = requests.post(
+                url, headers=headers, data=urlencode(data), timeout=2
+            )
+            response.raise_for_status()
+        except Exception as err:
+            print("HTTP error sending log info occurred {}".format(err))
+            current_app.logger.info(
+                "HTTP error sending log info occurred {}".format(err)
+            )
+        if response and response.status_code != 200:
+            current_app.logger.info(
+                "HTTP error sending log info occurred {}".format(response.content)
+            )
 
 
 def get_device_code():
