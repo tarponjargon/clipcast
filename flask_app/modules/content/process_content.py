@@ -441,6 +441,9 @@ def process_episode(content_id):
         # record estimated cost in cents.  best guess at this time is 0.01 per 600 characters
         estimated_cost_cents = round(len(episode.get("content")) / 600, 2)
 
+        raise Exception("Test error")
+        report_error_http(f"test error post")
+
         # # mark as complete
         upd = DB.update_query(
             """

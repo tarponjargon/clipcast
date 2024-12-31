@@ -77,9 +77,9 @@ def send_to_task_to_queue(content_id):
     """Send the content to task queue for processing"""
 
     # gotta set up the environment to run the command
-    command = 'cd /project && /usr/bin/direnv allow && \
+    command = 'cd {} && /usr/bin/direnv allow && \
       /usr/bin/direnv exec . /usr/local/bin/python -m episode_job "{}"'.format(
-        content_id
+        current_app.config.get("HOME_DIR"), content_id
     )
 
     result = subprocess.run(

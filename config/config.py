@@ -123,6 +123,7 @@ class development(Config):
     STORE_EMAIL = os.environ.get("STORE_EMAIL")
     APP_ROOT = "/project/flask_app"
     TMP_DIR = "/project/tmp"
+    HOME_DIR = "/project"
     PUBLIC_HTML = "/project/public_html"
     DEVELOPMENT = True
     DEBUG = True
@@ -138,6 +139,7 @@ class staging(Config):
     APP_ROOT = "/home/clipcast/flask_app"
     PUBLIC_HTML = "/home/clipcast/public_html"
     TMP_DIR = "/home/clipcast/tmp"
+    HOME_DIR = "/home/clipcast"
     DEVELOPMENT = True
     DEBUG = True
     CACHE_TYPE = "RedisCache"
@@ -151,6 +153,7 @@ class testing(Config):
     APP_ROOT = "/home/clipcast-testing/flask_app"
     PUBLIC_HTML = "/home/clipcast-testing/public_html"
     TMP_DIR = "/home/clipcast/tmp"
+    HOME_DIR = "/home/clipcast"
     TESTING = True
     DEBUG = True
     CACHE_TYPE = "RedisCache"
@@ -166,6 +169,7 @@ class production(Config):
     APP_ROOT = "/home/clipcast/flask_app"
     PUBLIC_HTML = "/home/clipcast/public_html"
     TMP_DIR = "/home/clipcast/tmp"
+    HOME_DIR = "/home/clipcast"
     DEVELOPMENT = False
     DEBUG = False
     CACHE_TYPE = "RedisCache"

@@ -6,4 +6,5 @@
 # keep logs dir clean, remove files older than 7 days
 0 0 * * * /usr/bin/find /project/logs -type f -mtime +7 -exec rm {} \;
 
-
+# check for failed jobs and alert
+*/30 * * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . bin/check_for_failed_jobs.sh > 2>&1
