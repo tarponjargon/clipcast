@@ -52,6 +52,7 @@ class Config(object):
         ".comment-text",
         "#comments",
     ]
+    EPISODE_RETENTION_DAYS = 90
 
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 465

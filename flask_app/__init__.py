@@ -130,5 +130,6 @@ def create_app():
 
         from .commands.process_content import process_content, process_podcast_episode
         from .commands.process_email import process_email
+        from .commands.cleanup_s3 import delete_old_files
 
     return app
