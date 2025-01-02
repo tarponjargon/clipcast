@@ -12,3 +12,4 @@
 
 # clean up S3 files
 0 1 * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . /usr/local/bin/flask delete_old_files >> /project/logs/cleanup-s3-$(date +"\%Y-\%m-\%d").log 2>&1
+
