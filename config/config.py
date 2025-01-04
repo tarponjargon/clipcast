@@ -29,6 +29,8 @@ class Config(object):
     STORE_ADMIN = os.environ.get("STORE_EMAIL")
     ERROR_NOTIFY_URL = os.environ.get("ERROR_NOTIFY_URL")
     ERROR_NOTIFY_AUTH = os.environ.get("ERROR_NOTIFY_AUTH")
+    TEST_ACCOUNT_EMAIL = os.environ.get("TEST_ACCOUNT_EMAIL")
+    TEST_ACCOUNT_PASSWORD = os.environ.get("TEST_ACCOUNT_PASSWORD")
     MAX_CONTENT_LENGTH = 2097152  # 2MB
     MAX_CHARACTERS = {
         "base": 30000,
