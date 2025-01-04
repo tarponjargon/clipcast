@@ -107,7 +107,6 @@ def get_user_id_by_email(email):
 
 def login_user(user):
     """Logs in a user to the session"""
-
     if not user or not isinstance(user, User):
         current_app.logger.error("login_user: user is not a User object")
         return
@@ -124,23 +123,23 @@ def login_user(user):
     envs = get_env_vars()
     DB.insert_query(
         """
-        INSERT INTO login (
-          user_id,
-          email,
-          user_agent,
-          ip_address,
-          device_code,
-          path
-        )
-        VALUES (
-          %(user_id)s,
-          %(email)s,
-          %(user_agent)s,
-          %(ip_address)s,
-          %(device_code)s,
-          %(path)s
-        )
-      """,
+      INSERT INTO login (
+        user_id,
+        email,
+        user_agent,
+        ip_address,
+        device_code,
+        path
+      )
+      VALUES (
+        %(user_id)s,
+        %(email)s,
+        %(user_agent)s,
+        %(ip_address)s,
+        %(device_code)s,
+        %(path)s
+      )
+    """,
         {
             "user_id": user.get_id(),
             "email": user.get_email(),
@@ -150,6 +149,8 @@ def login_user(user):
             "path": request.path,
         },
     )
+
+    return user.get_id()
 
 
 def load_user(user_id):

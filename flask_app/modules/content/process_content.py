@@ -20,8 +20,8 @@ from flask_app.modules.tts.openai_tts import OpenAITTS
 from flask_app.modules.tts.google_translate_tts import GoogleTranslateTTS
 from flask_app.modules.tts.polly_tts import PollyTTS
 
-nltk.download("punkt")  # Downloads necessary data for tokenization
-nltk.download("punkt_tab")
+nltk.download("punkt", quiet=True)  # Downloads necessary data for tokenization
+nltk.download("punkt_tab", quiet=True)
 
 
 def split_text_to_chunks(text, row_id):

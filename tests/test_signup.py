@@ -1,7 +1,9 @@
+from flask_app.modules.extensions import DB
+
+
 def test_signup(app, client):
     """Test the signup route"""
     with app.test_request_context():
-        from flask_app.modules.extensions import DB
 
         fake_email = "testemail@testemail.com"
 

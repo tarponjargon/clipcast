@@ -1,8 +1,9 @@
+from flask_app.modules.extensions import DB
+
+
 def test_login(app, client):
     """Test the login route"""
     with app.test_request_context():
-        from flask_app.modules.extensions import DB
-
         response = client.post(
             "/partials/login",
             data={
