@@ -78,12 +78,12 @@ def get_queue(user_id, page=1):
     plan_count = get_plan_episode_count(user_id)
     plan = session.get("plan", "free")
 
-    current_app.logger.debug(
-        "total_results %s has_more_results %s plan_count %s",
-        total_results,
-        has_more_results,
-        plan_count,
-    )
+    # current_app.logger.debug(
+    #     "total_results %s has_more_results %s plan_count %s",
+    #     total_results,
+    #     has_more_results,
+    #     plan_count,
+    # )
     return {
         "results": q.get("results", []),
         "next_page": next_page,

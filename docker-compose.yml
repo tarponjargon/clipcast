@@ -92,7 +92,7 @@ services:
       TEST_ACCOUNT_EMAIL: "${TEST_ACCOUNT_EMAIL}"
       TEST_ACCOUNT_PASSWORD: "${TEST_ACCOUNT_PASSWORD}"
 
-      DEV_URL: "${DEV_URL}"
+      BASE_URL: "${BASE_URL}"
       WEB_HOST: "${WEB_HOST}"
       DEVSERVER_HOST: "${DEVSERVER_HOST}"
     depends_on:

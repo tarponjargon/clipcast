@@ -50,9 +50,8 @@ export TESTING_URL="https://TESTING_URL" # update
 export PRODUCTION_URL="https://PRODUCTION_URL" # update
 export HASHING_ALGORITHM="pbkdf2_sha256"
 
-export DEV_URL="https://${DEVSERVER_HOST}"
+export BASE_URL="https://${DEVSERVER_HOST}"
 export NODE_ENV=$ENV
-export CYPRESS_BASE_URL=$DEV_URL
 export NODE_VERSION_PREFIX=v
 export NODE_VERSIONS=~/.nvm/versions/node
 use node 20

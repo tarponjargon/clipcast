@@ -46,7 +46,11 @@
             {% if session.get('user_id') %}
             <a href="/app" class="btn btn-lg btn-outline-white px-3">OPEN APP <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
             {% else %}
-            <a href="/signup" class="btn btn-lg btn-outline-white px-3">Get Started <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
+            <a
+              href="/signup"
+              class="btn btn-lg btn-outline-white px-3"
+              data-testid="heading-signup-button"
+            >Get Started <i class="fa fa-arrow-right ms-2 opacity-5"></i></a>
             {% endif %}
           </div>
 

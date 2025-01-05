@@ -130,8 +130,8 @@ class development(Config):
     PUBLIC_HTML = "/project/public_html"
     DEVELOPMENT = True
     DEBUG = True
-    STORE_URL = os.environ.get("DEV_URL")
-    INTERNAL_IP = os.environ.get("DEV_URL")
+    STORE_URL = os.environ.get("BASE_URL")
+    INTERNAL_IP = os.environ.get("BASE_URL")
     GTM_ID = ""
     GA_MEASUREMENT_ID = ""
     GA_MEASUREMENT_PROTOCOL_SECRET = ""

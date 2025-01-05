@@ -37,3 +37,7 @@ clipcast.sql
 push*.sh
 config/clipcast*.json
 *.log
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
