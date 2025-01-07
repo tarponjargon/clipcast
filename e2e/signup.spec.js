@@ -21,11 +21,11 @@ test("Test Sign Up", async ({ page }) => {
 
   // Fill the email field
   await page.getByLabel("Your E-Mail *").click();
-  await page.getByLabel("Your E-Mail *").fill("testemail@testemail.com");
+  await page.getByLabel("Your E-Mail *").fill(process.env.TEST_ACCOUNT_EMAIL);
 
   // Fill the password field
   await page.getByLabel("Password *", { exact: true }).click();
-  await page.getByLabel("Password *", { exact: true }).fill("testemail1");
+  await page.getByLabel("Password *", { exact: true }).fill(process.env.TEST_ACCOUNT_PASSWORD);
 
   // Fill the confirm password field
   await page.getByLabel("Confirm Password *").click();
@@ -38,7 +38,7 @@ test("Test Sign Up", async ({ page }) => {
   await expect(page).toHaveURL(/signup/);
 
   // Check the terms of use checkbox
-  await page.getByLabel("I agree to the Terms of Use.").check();
+  await page.getByTestId("terms-checkbox").check();
 
   // Click the sign-up button
   await page.getByRole("button", { name: "Sign Up", exact: true }).click();
@@ -57,7 +57,8 @@ test("Test Sign Up", async ({ page }) => {
 
   // Fill the confirm password field
   await page.getByLabel("Confirm Password *").click();
-  await page.getByLabel("Confirm Password *").fill("testemail1");
+  await page.getByLabel("Confirm Password *").fill("");
+  await page.getByLabel("Confirm Password *").fill(process.env.TEST_ACCOUNT_PASSWORD);
 
   await page.getByRole("button", { name: "Sign Up", exact: true }).click();
 

@@ -34,7 +34,7 @@
         </div>
         {% else %}
         <div class="nav-item me-2">
-          <a href="{{ config.STORE_URL }}/login" class="nav-link link-body-emphasis">Log In</a>
+          <a data-testid="login-link" href="{{ config.STORE_URL }}/login" class="nav-link link-body-emphasis">Log In</a>
         </div>
         <div class="nav-item me-2 d-block d-sm-none my-2">
           <a href="{{ config.STORE_URL }}/signup" class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap">Get Started</a>
@@ -51,6 +51,7 @@
         </a>
       {% else %}
         <a
+          data-testid="get-started"
           href="{{ config.STORE_URL }}/signup"
           class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap d-none d-sm-inline-block">
           Get started <i class="fa fa-arrow-right ms-1"></i>

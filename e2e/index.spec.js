@@ -10,28 +10,28 @@ test.use({
 });
 
 test("has title", async ({ page }) => {
-  await page.goto("/");
+  await page.goto(process.env.BASE_URL);
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/ClipCast/);
 });
 
 test("get started link", async ({ page }) => {
-  await page.goto("/");
+  await page.goto(process.env.BASE_URL);
 
   // Click the get started link.
-  await page.getByRole("link", { name: "Get started" }).click();
+  await page.getByTestId("get-started").click();
 
   // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sign Up" })).toBeVisible();
 });
 
-test("signup button", async ({ page }) => {
-  await page.goto("/");
+test("login link", async ({ page }) => {
+  await page.goto(process.env.BASE_URL);
 
   // Click the signup button using data attribute
-  await page.getByRole("button", { name: "Sign up" }).click();
+  await page.getByTestId("login-link").click();
 
   // Expects page to have a heading with the name of Sign up.
-  await expect(page.getByRole("heading", { name: "Sign up" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Log In" })).toBeVisible();
 });
