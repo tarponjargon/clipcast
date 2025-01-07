@@ -32,7 +32,7 @@ services:
       - ./config/mysql-dev.cnf:/etc/mysql/conf.d/mysql.cnf
       - ./.dev_db:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "${MYSQL_HOST_PORT}:3306"
     cap_add:
       - SYS_NICE # trying to prevent mbind: Operation not permitted error
     networks:
