@@ -131,6 +131,7 @@
     "lity": "^2.4.1",
     "masonry-layout": "^4.2.2",
     "moment": "^2.30.1",
+    "mysql2": "^3.12.0",
     "pace-js": "^1.2.4",
     "pdfmake": "^0.2.10",
     "perfect-scrollbar": "^1.5.5",

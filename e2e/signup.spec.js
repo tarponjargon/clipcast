@@ -1,4 +1,7 @@
 import { test, expect } from "@playwright/test";
+const { runQuery } = require("./utils/db");
+
+const deleteQuery = `DELETE FROM user WHERE email = ?`;
 
 test.use({
   // Configure the context to use basic authentication
@@ -6,6 +9,14 @@ test.use({
     username: "misc",
     password: "misc",
   },
+});
+
+test.beforeEach(async () => {
+  await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);
+});
+
+test.afterEach(async () => {
+  await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);
 });
 
 test("Test Sign Up", async ({ page }) => {
