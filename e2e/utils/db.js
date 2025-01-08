@@ -1,6 +1,7 @@
 const mysql = require("mysql2/promise");
 
 async function runQuery(query, params) {
+  console.log("Running query: ", query, params);
   const connection = await mysql.createConnection({
     host: process.env.MYSQL_LOCALHOST,
     port: process.env.MYSQL_HOST_PORT,

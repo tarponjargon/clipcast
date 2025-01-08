@@ -9,14 +9,14 @@ test.use({
   },
 });
 
-test("has title", async ({ page }) => {
+test("Index Page Loads with Title", async ({ page }) => {
   await page.goto(process.env.BASE_URL);
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/ClipCast/);
 });
 
-test("get started link", async ({ page }) => {
+test("Get Started Link Goes to Signup", async ({ page }) => {
   await page.goto(process.env.BASE_URL);
 
   // Click the get started link.
@@ -26,7 +26,7 @@ test("get started link", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Sign Up" })).toBeVisible();
 });
 
-test("login link", async ({ page }) => {
+test("Log In Link Goes to Login", async ({ page }) => {
   await page.goto(process.env.BASE_URL);
 
   // Click the signup button using data attribute
