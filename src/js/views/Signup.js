@@ -14,10 +14,12 @@ export default class Signup {
     this.errorSel = "#error-card";
     this.errorEl = document.querySelector(this.errorSel);
     this.signupButtonId = "signup-submit-button";
+    this.googleButton = document.getElementById("google-start-login-button");
   }
 
   init = () => {
     this.formEl.addEventListener("submit", this.handleSubmit);
+    this.googleButton.addEventListener("click", this.handleGoogeSignup);
   };
 
   showError = (msg) => {
@@ -52,6 +54,19 @@ export default class Signup {
       unSpinButton(this.signupButtonId);
     } else {
       window.location.href = "/app";
+    }
+  };
+
+  handleGoogeSignup = async (e) => {
+    console.log("handleGoogeSignup", e);
+
+    e.preventDefault();
+    const requiredCheckbox = document.getElementById("customCheck1");
+    if (!requiredCheckbox.checked) {
+      this.showError("Please read and agree to the terms and conditions to continue.");
+      return;
+    } else {
+      window.location.href = "/google/start-login";
     }
   };
 }

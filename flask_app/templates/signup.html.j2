@@ -104,6 +104,14 @@
               href="/google/start-login"
               class="google-btn google-btn-ghost text-decoration-none"
               role="button"
+              id="google-start-login-button"
+              hx-on:click="
+                const checkbox = document.querySelector('#customCheck1');
+                if (!checkbox.checked) {
+                  event.preventDefault();
+                  window.showToast('Please read and agree to the Terms of Use to continue', true);
+                }
+              "
             >
               <img src="/assets/img/google.png" alt="Google Logo">
               Sign up with Google

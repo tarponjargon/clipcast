@@ -28,12 +28,12 @@
       </div>
     </div>
 
-    <div class="card p-4">
+    <div class="card p-4" style="min-height: 40vh">
 
       {% if queue and queue | length %}
         {% include 'partials/profile/queue.html.j2' %}
       {% else %}
-        No episodes
+        <div class="card-body p-0">No episodes.  <a href="/app/content">Add some content</a> to your podcast feed!</div>
       {% endif %}
 
       <div class="card-arrow">
