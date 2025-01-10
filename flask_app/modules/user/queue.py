@@ -1,7 +1,9 @@
 import math
+import os
 from flask import current_app, session
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid
+from flask_app.modules.user.user import load_user
 
 
 def get_plan_episode_count(user_id):
@@ -11,6 +13,11 @@ def get_plan_episode_count(user_id):
       int: The number of episodes
     """
     if not user_id:
+        return 0
+
+    # load user data
+    user_data = load_user(user_id)
+    if not user_data or user_data.get("email") == os.environ.get("TEST_ACCOUNT_EMAIL"):
         return 0
 
     q = DB.fetch_one(

@@ -76,7 +76,7 @@ From WITHIN the docker container:
 
 Then do imports:
 
-`from flask_app.modules.openai_tts import OpenAITTS`
+`from flask_app.tts.modules.openai_tts import OpenAITTS`
 
 and call functions:
 

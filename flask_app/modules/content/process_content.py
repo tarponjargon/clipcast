@@ -100,16 +100,24 @@ def polly_tts(file_path, text, voice="Matthew", language_code="en-US"):
     return {"error": None, "speech_file_path": speech_file_path}
 
 
-def get_user_selected_voice(user_id, voice_code):
+def get_user_selected_voice(user_id):
     """Get the user's selected voice from the database"""
 
-    q = DB.fetch_one("SELECT premium_voice FROM user WHERE user_id = %s", (user_id))
-    voice_code = q.get("premium_voice", current_app.config.get("DEFAULT_PREMIUM_VOICE"))
+    user = load_user(user_id)
+    plan = user.get("plan") if user and user.get("plan") else "base"
+    sql = "SELECT base_voice FROM user WHERE user_id = %s"
+    key = "base_voice"
+    if plan == "premium":
+        sql = "SELECT premium_voice FROM user WHERE user_id = %s"
+        key = "premium_voice"
 
+    print(f"GETTING VOICE FOR USER: {user_id} PLAN: {plan}")
+    q = DB.fetch_one(sql, (user_id))
+
+    print(f"VOICE QUERY RES: {q}")
+    voice_code = q.get(key)
     res = None
     if voice_code == "random":
-        user = load_user(user_id)
-        plan = user.get("plan") if user and user.get("plan") else "base"
 
         res = DB.fetch_one(
             "SELECT * FROM voices WHERE visible = 1 AND plan = %s ORDER BY RAND() LIMIT 1",
@@ -117,8 +125,8 @@ def get_user_selected_voice(user_id, voice_code):
         )
     else:
         res = DB.fetch_one(
-            "SELECT * FROM voices WHERE voice_code = %s AND plan = 'premium'",
-            (voice_code),
+            "SELECT * FROM voices WHERE voice_code = %s AND plan = %s",
+            (voice_code, plan),
         )
     return res
 
@@ -129,18 +137,34 @@ def create_intro_mp3(row):
     combined_audio = AudioSegment.empty()
 
     # create an intro mp3 file
-    intro_file_path = (
+    speech_file_path = (
         f"{current_app.config.get("TMP_DIR")}/{row.get('content_id')}-intro.mp3"
     )
-    intro_voice = DB.fetch_one(
-        "SELECT * FROM voices WHERE voice_code = %s",
-        (current_app.config.get("TRANSITION_VOICE")),
-    )
+    voice = get_user_selected_voice(row.get("user_id"))
     title = row.get("title")
-    author = row.get("author")
-    text = f"""Thank you for using ClipCast.  Here is your podcast entitled "{title}" by {author}."""
+    text = f"""Thank you for using ClipCast.  Here is your podcast entitled "{title}"""
+    if row.get("author"):
+        text += f""" by {row.get("author")}"""
 
-    intro = openai_speech(intro_file_path, text, intro_voice.get("voice_code"))
+    intro = {}
+    if voice.get("tts_model") == "openai":
+        intro = openai_speech(speech_file_path, text, voice.get("voice_code"))
+    elif voice.get("tts_model") == "googletts":
+        intro = google_tts(
+            speech_file_path,
+            text,
+            voice.get("voice_code"),
+            voice.get("language_code"),
+        )
+    elif voice.get("tts_model") == "pollytts":
+        intro = polly_tts(
+            speech_file_path,
+            text,
+            voice.get("voice_code"),
+            voice.get("language_code"),
+        )
+    else:
+        intro = google_translate_speech(speech_file_path, text, voice.get("voice_code"))
 
     if not intro.get("speech_file_path"):
         return None
@@ -181,7 +205,7 @@ def create_chunk_mp3s(text_chunks, row, start_time):
     """Create MP3 files for each chunk of text using ChatGPT's TTS API"""
     files = []
     errors = []
-    voice = get_user_selected_voice(row.get("user_id"), row.get("voice_code"))
+    voice = get_user_selected_voice(row.get("user_id"))
 
     print(f"VOICE: {voice}")
     print(f"TOTAL CHUNKS: {len(text_chunks)}")

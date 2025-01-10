@@ -342,7 +342,7 @@ def add_podcast_content(content, user_id):
         }
 
     title = get_first_n_words(content, 9)
-    author = "Not available"
+    author = ""
     hostname = current_app.config.get("STORE_NAME")
     article_date = datetime.now().strftime("%Y-%m-%d")
     description = get_first_n_words(content, 50)
