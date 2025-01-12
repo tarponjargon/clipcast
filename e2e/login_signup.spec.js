@@ -1,12 +1,8 @@
 import { test, expect } from "@playwright/test";
-const { runQuery } = require("./utils/db");
-import login from "./utils/login";
-import signup from "./utils/signup";
+const { deleteTestAccount, createTestAccount } = require("./utils/db");
 
 // Annotate entire file as serial.
 test.describe.configure({ mode: "serial" });
-
-const deleteQuery = `DELETE FROM user WHERE email = ?`;
 
 test.use({
   httpCredentials: {
@@ -16,11 +12,11 @@ test.use({
 });
 
 test.beforeEach(async () => {
-  await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);
+  await deleteTestAccount(process.env.TEST_ACCOUNT_EMAIL);
 });
 
 test.afterEach(async () => {
-  await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);
+  await deleteTestAccount(process.env.TEST_ACCOUNT_EMAIL);
 });
 
 test("User Can Sign Up", async ({ page }) => {
@@ -57,11 +53,14 @@ test("User Can Sign Up", async ({ page }) => {
 });
 
 test("User Can Log In", async ({ page }) => {
-  console.log("Running login test - signup");
-  await signup(page, process.env.TEST_ACCOUNT_EMAIL, process.env.TEST_ACCOUNT_PASSWORD);
-  await page.goto(process.env.BASE_URL + "/logout");
-  console.log("Running login test - login");
-  await login(page, process.env.TEST_ACCOUNT_EMAIL, process.env.TEST_ACCOUNT_PASSWORD);
+  console.log("Running login test");
+  await createTestAccount();
+  await page.goto(process.env.BASE_URL + "/login");
+  await page.locator("#email-entry-field").click();
+  await page.locator("#email-entry-field").fill(process.env.TEST_ACCOUNT_EMAIL);
+  await page.locator("#email-entry-field").press("Tab");
+  await page.locator("#password-field").fill(process.env.TEST_ACCOUNT_PASSWORD);
+  await page.locator("#login-submit-button").click();
   await expect(page).toHaveURL(/app/);
   await expect(page).toHaveTitle(/Dashboard/);
 });

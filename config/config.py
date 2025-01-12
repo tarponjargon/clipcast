@@ -73,8 +73,8 @@ class Config(object):
     # these fields cannot be set to the session by request params, only from the server side
     FORBIDDEN_FIELDS = ["user_id"]
     SESSION_DEFAULTS = {}
-    DEFAULT_BASE_VOICE = "co.uk"
-    DEFAULT_PREMIUM_VOICE = "alloy"
+    DEFAULT_BASE_VOICE = os.environ.get("DEFAULT_BASE_VOICE")
+    DEFAULT_PREMIUM_VOICE = os.environ.get("DEFAULT_PREMIUM_VOICE")
 
     # db conns
     MYSQL_HOST = os.environ.get("MYSQL_HOST")
