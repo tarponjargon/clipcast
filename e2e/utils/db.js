@@ -8,6 +8,13 @@ export async function getTestAccountPlan() {
   return resultArr[0];
 }
 
+export async function updateTestAccountPlan(newPlan) {
+  const updQuery = `UPDATE user SET plan = ? WHERE email = ?`;
+  const result = await runQuery(updQuery, [newPlan, process.env.TEST_ACCOUNT_EMAIL]);
+  console.log("Result of update:", result);
+  return result;
+}
+
 export async function deleteTestAccount() {
   const deleteQuery = `DELETE FROM user WHERE email = ?`;
   await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);

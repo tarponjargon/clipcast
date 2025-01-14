@@ -86,6 +86,9 @@ and call functions:
 
 Testing is with Playwright
 
+`npx playwright test --workers=1 --ui --headed --debug`
+For deveoping tests
+
 `npx playwright test`
 Runs the end-to-end tests.
 

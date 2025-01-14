@@ -74,7 +74,10 @@
   <td class="align-middle">{{ item.mp3_duration if item.mp3_duration else ''}}</td>
   <td class="align-middle">{{ item.article_date }}</td>
   <td class="align-middle text-center">
-    <a href="/app/delete-episodes?episodes[]={{ item.content_id }}" title="Delete this episode">
+    <a
+      data-delete="{{ item.content_id }}"
+      href="/app/delete-episodes?episodes[]={{ item.content_id }}"
+      title="Delete this episode">
       <i class="fa fa-trash"></i>
     </a>
   </td>
