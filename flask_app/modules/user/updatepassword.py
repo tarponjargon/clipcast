@@ -80,8 +80,9 @@ def handle_updatepassword_request():
     # routine cleanup of the table unrelated to this request
     DB.delete_query(
         """
-    DELETE FROM password_replace
-    WHERE timestamp < DATE_SUB(NOW(),INTERVAL 12 HOUR)"""
+          DELETE FROM password_replace
+          WHERE timestamp < DATE_SUB(NOW(),INTERVAL 12 HOUR)
+        """
     )
 
     if request.method == "PUT":

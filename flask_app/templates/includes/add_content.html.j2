@@ -1,84 +1,84 @@
-<div hx-ext="response-targets">
 
-  <h1><i class="bi bi-text-paragraph text-theme"></i> Add Content</h1>
-  <p>There are several easy ways to add content to your podcast feed:</p>
-  <ol>
-    <li><a href="#enter-url" data-toggle="scroll-to">Enter a URL</a></li>
-    <li><a href="#email" data-toggle="scroll-to">E-Mail Links or Text</a></li>
-    <li><a href="#enter-text" data-toggle="scroll-to">Enter Text</a></li>
-    <li><a href="#extension" data-toggle="scroll-to">Chrome Extension</a></li>
-  </ol>
+<h1><i class="bi bi-text-paragraph text-theme"></i> Add Content</h1>
+<p>There are several easy ways to add content to your podcast feed:</p>
+<ol>
+  <li><a href="#enter-url" data-toggle="scroll-to">Enter a URL</a></li>
+  <li><a href="#email" data-toggle="scroll-to">E-Mail Links or Text</a></li>
+  <li><a href="#enter-text" data-toggle="scroll-to">Enter Text</a></li>
+  <li><a href="#extension" data-toggle="scroll-to">Chrome Extension</a></li>
+</ol>
 
-  <div id="enter-url" class="w-100 mt-4 mb-5">
-    <a name="enter-url"></a>
-    <h2>1. Enter a URL</h2>
-    {% include 'includes/add_url_form.html.j2' %}
-  </div>
+<div id="enter-url" class="w-100 mt-4 mb-5">
+  <a name="enter-url"></a>
+  <h2>1. Enter a URL</h2>
+  {% include 'includes/add_url_form.html.j2' %}
+</div>
 
-  <div id="email" class="w-100 mb-5">
-    <h2>2. E-Mail Links or Text</h2>
-    <p>
-      Send an email to with the links or text you want to add to your feed.
-      Include links <i>or</i> text in the body of the email.  Subject not required.
-    </p>
+<div id="email" class="w-100 mb-5">
+  <h2>2. E-Mail Links or Text</h2>
+  <p>
+    Send an email to with the links or text you want to add to your feed.
+    Include links <i>or</i> text in the body of the email.  Subject not required.
+  </p>
 
-    <div class="border rounded p-2 d-flex align-items-center gap-2">
-      <a
-        class="hover-text d-flex align-items-center"
-        href="javascript:;"
-        onClick="copyToClipboard('email-field')"
-        title="Click to copy email address"
-      >
-        <div
-          id="email-field"
-        >
-          clipcast.submit+{{ session_safe_get('user_id') }}@gmail.com
-        </div>
-        <i class="fa fa-copy ms-2"></i>
-      </a>
-    </div>
-  </div>
-
-  <div id="enter-text" class="w-100 mb-5">
-    <h2>3. Add Content Directly</h2>
-    <form
-      hx-post="/partials/app/add-podcast-content"
-      hx-trigger="submit"
-      hx-target="#dead-end"
-      hx-on::after-request="
-        window.showToast(event.detail.xhr.response, !event.detail.successful);
-        if (event.detail.successful) {setTimeout(function() {
-          window.location.href = '/app';
-        }, 2000);}
-      "
+  <div class="border rounded p-2 d-flex align-items-center gap-2">
+    <a
+      class="hover-text d-flex align-items-center"
+      href="javascript:;"
+      onClick="copyToClipboard('email-field')"
+      title="Click to copy email address"
     >
-      <div class="form-group mb-3">
-        <textarea
-          class="form-control"
-          id="add-content-textarea"
-          rows="6"
-          name="content"
-        ></textarea>
-      </div>
-      <button
-        type="submit"
-        class="btn btn-outline-theme btn-lg d-block fw-500 mb-3 hx-disable"
-        id="add-content-submit-button"
+      <div
+        id="email-field"
       >
-        <span class="default-button-text">Submit</span>
-        <span id="loading-indicator" class="htmx-indicator">
-          Submitting ... <i class="fa fa-spinner fa-spin"></i>
-        </span>
-      </button>
-    </form>
+        clipcast.submit+{{ session_safe_get('user_id') }}@gmail.com
+      </div>
+      <i class="fa fa-copy ms-2"></i>
+    </a>
   </div>
+</div>
 
-  <div id="extension" class="w-100 mb-5">
-    <h2>4. Chrome Extension</h2>
-    <p>
-      Install the ClipCast <a href="#">Chrome Extension</a> to easily add content right from pages you visit.  Here's what it looks like installed:
-    </p>
-    <p>
+<div id="enter-text" class="w-100 mb-5">
+  <h2>3. Add Content Directly</h2>
+  <form
+    hx-post="/partials/app/add-podcast-content"
+    hx-trigger="submit"
+    hx-target="#dead-end"
+    hx-on::after-request="
+      window.showToast(event.detail.xhr.response, !event.detail.successful);
+      if (event.detail.successful) {setTimeout(function() {
+        window.location.href = '/app';
+      }, 2000);}
+    "
+  >
+    <div class="form-group mb-3">
+      <textarea
+        class="form-control"
+        id="add-content-textarea"
+        rows="6"
+        name="content"
+      ></textarea>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-outline-theme btn-lg d-block fw-500 mb-3 hx-disable"
+      id="add-content-submit-button"
+    >
+      <span class="default-button-text">Submit</span>
+      <span id="loading-indicator" class="htmx-indicator">
+        Submitting ... <i class="fa fa-spinner fa-spin"></i>
+      </span>
+    </button>
+  </form>
+</div>
+
+<div id="extension" class="w-100 mb-5">
+  <h2>4. Chrome Extension</h2>
+  <p>
+    Install the ClipCast <a href="#">Chrome Extension</a> to easily add content right from pages you visit.  Here's what it looks like installed:
+  </p>
+  <p>
+    <a href="#">
       <img
         class="d-block shadow-lg img-fluid"
         src="https://www.thewhiteroom.com/images/clipcast-extension.jpg"
@@ -86,7 +86,6 @@
         width="730"
         class="img-fluid"
       />
-    </p>
-  </div>
-
+    </a>
+  </p>
 </div>

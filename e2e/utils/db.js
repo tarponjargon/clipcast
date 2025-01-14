@@ -2,6 +2,12 @@ const mysql = require("mysql2/promise");
 
 /* these functions are for test support only */
 
+export async function getTestAccountPlan() {
+  const selectQuery = `SELECT plan FROM user WHERE email = ?`;
+  const resultArr = await runQuery(selectQuery, [process.env.TEST_ACCOUNT_EMAIL]);
+  return resultArr[0];
+}
+
 export async function deleteTestAccount() {
   const deleteQuery = `DELETE FROM user WHERE email = ?`;
   await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);

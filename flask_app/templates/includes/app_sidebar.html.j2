@@ -12,29 +12,29 @@
         </a>
       </div>
 
-      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/voices' else '' }}">
-        <a href="/app/voices" class="menu-link">
-          <span class="menu-icon"><i class="bi bi-gear"></i></span>
-          <span class="menu-text">Voices</span>
-        </a>
-      </div>
-
       <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/content' else '' }}">
-        <a href="/app/content" class="menu-link">
+        <a data-testid="add-content-link" href="/app/content" class="menu-link">
           <span class="menu-icon"><i class="bi bi-text-paragraph"></i></span>
           <span class="menu-text">Add Content</span>
         </a>
       </div>
 
+      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/voices' else '' }}">
+        <a data-testid="voices-link" href="/app/voices" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-gear"></i></span>
+          <span class="menu-text">Voices</span>
+        </a>
+      </div>
+
       <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/profile' else '' }}">
-        <a href="/app/profile" class="menu-link">
+        <a data-testid="account-link" href="/app/profile" class="menu-link">
           <span class="menu-icon"><i class="bi bi-person-circle"></i></span>
           <span class="menu-text">Account</span>
         </a>
       </div>
 
       <div class="menu-item">
-        <a href="/logout" class="menu-link">
+        <a data-testid="logout-link" href="/logout" class="menu-link">
           <span class="menu-icon"><i class="bi bi-toggle-off"></i></span>
           <span class="menu-text">Logout</span>
         </a>

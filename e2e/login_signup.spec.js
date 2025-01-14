@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-const { deleteTestAccount, createTestAccount } = require("./utils/db");
+import { deleteTestAccount, createTestAccount } from "./utils/db";
 
 // Annotate entire file as serial.
 test.describe.configure({ mode: "serial" });
@@ -12,10 +12,6 @@ test.use({
 });
 
 test.beforeEach(async () => {
-  await deleteTestAccount(process.env.TEST_ACCOUNT_EMAIL);
-});
-
-test.afterEach(async () => {
   await deleteTestAccount(process.env.TEST_ACCOUNT_EMAIL);
 });
 

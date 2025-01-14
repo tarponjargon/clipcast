@@ -20,16 +20,18 @@
           <div class="col-xl-9">
 
             <h1><i class="bi bi-broadcast text-theme"></i> Voices</h1>
-            <p>Customize the <a name="#provoices">Pro</a> and <a name="#provoices">Basic</a> voices for your podcast episodes.</p>
+            <p>Customize the voices for your podcast episodes.  Recommended: "Random Voice per Episode" gives you the most variety.</p>
 
             <!-- BEGIN #pro voices -->
             <div id="provoices" class="mb-5">
               <h2>Pro Voices</h2>
               <form>
                 <div class="row custom-radio">
-                  {{ render_voices(premium_voices, session_safe_get('premium_voice'), session_safe_get('plan', 'premium')) }}
                   <div class="col-md-6">
                     <div class="radiobtn">
+                      <span class="badge">
+                        <i class="fa fa-heart" title="Recommended"></i>
+                      </span>
                       <input
                         type="radio"
                         id="voice-random"
@@ -47,6 +49,7 @@
                       </label>
                     </div>
                   </div>
+                  {{ render_voices(premium_voices, session_safe_get('premium_voice'), session_safe_get('plan', 'premium')) }}
                 </div>
               </form>
             </div>
@@ -55,7 +58,7 @@
             <!-- BEGIN #basic voices -->
             <div id="basicvoices" class="mb-5">
               <h2>Basic Voices</h2>
-
+              <p>These voices are for the basic Starter Plan.  They are a little more Siri or Alexa-like.</p>
               <form>
                 <div class="row custom-radio">
                   {{ render_voices(base_voices, session_safe_get('base_voice'), "base") }}
