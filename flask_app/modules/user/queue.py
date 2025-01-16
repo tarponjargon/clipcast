@@ -63,6 +63,7 @@ def get_queue(user_id, page=1):
           mp3_url,
           mp3_file_size,
           mp3_duration,
+          voice_code,
           processing_start_time,
           processing_end_time,
           processing_time_seconds,

@@ -16,7 +16,6 @@ test.beforeEach(async () => {
 });
 
 test("User Can Sign Up", async ({ page }) => {
-  // Intercept and listen to responses
   let statusCode;
   page.on("response", (response) => {
     if (response.url().includes("/partials/signup")) {

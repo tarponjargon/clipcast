@@ -8,10 +8,16 @@ export async function getTestAccountPlan() {
   return resultArr[0];
 }
 
+export async function getPlanByVoiceCode(code) {
+  const selectQuery = `SELECT plan FROM voices WHERE voice_code = ?`;
+  const resultArr = await runQuery(selectQuery, [code]);
+  return resultArr[0];
+}
+
 export async function updateTestAccountPlan(newPlan) {
   const updQuery = `UPDATE user SET plan = ? WHERE email = ?`;
   const result = await runQuery(updQuery, [newPlan, process.env.TEST_ACCOUNT_EMAIL]);
-  console.log("Result of update:", result);
+  // console.log("Result of update:", result);
   return result;
 }
 

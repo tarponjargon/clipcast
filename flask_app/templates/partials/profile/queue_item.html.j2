@@ -23,7 +23,8 @@
         data-title="{{ sanitize(item.title)}}"
         data-author="{{ sanitize(item.author) if item.author else sanitize(item.hostname) }}"
         data-image="{{ sanitize(item.image) }}"
-        data-duration="{{ sanitize(item.duration) }}"
+        data-duration="{{ sanitize(item.mp3_duration) }}"
+        data-voice="{{ sanitize(item.voice_code) }}"
         data-hostname="{{ sanitize(item.hostname) }}"
         title="Play episode"
       >

@@ -247,6 +247,9 @@ class User(object):
         Returns:
           str: The feed url
         """
+
+        if self.get_id() is None:
+            return None
         return (
             current_app.config.get("STORE_URL") + "/profile/rss-feed/" + self.get_id()
         )
