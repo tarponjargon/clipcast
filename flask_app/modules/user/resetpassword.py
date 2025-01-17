@@ -1,5 +1,5 @@
 import re
-from flask import render_template, request
+from flask import render_template, request, current_app
 from flask_app.modules.user.user import User, login_user
 from flask_app.modules.extensions import DB
 
@@ -13,8 +13,7 @@ def handle_resetpassword_view():
 
     token = request.values.get("key")
     if not token or not re.match(r"^[A-Za-z0-9]{32}$", token):
-        errors = [default_error]
-        return render_template("resetpassword.html.j2", errors=errors)
+        return render_template("error.html.j2", error=default_error), 400
 
     res = DB.fetch_one(
         """
@@ -25,12 +24,17 @@ def handle_resetpassword_view():
       """,
         {"token": token},
     )
+    current_app.logger.debug(f"Reset password: {res}")
     if not res or not res.get("user_id"):
-        errors = [default_error]
-        return render_template("resetpassword.html.j2", errors=errors)
+        return render_template("error.html.j2", error=default_error), 400
 
     user = User.from_id(res.get("user_id"))
-    if user:
-        login_user(user)
+    if not user:
+        return (
+            render_template("error.html.j2", error="No account found for this key."),
+            400,
+        )
+
+    login_user(user)
 
     return render_template("resetpassword.html.j2", errors=[])
