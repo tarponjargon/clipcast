@@ -114,13 +114,13 @@ def login_user(user):
     # set user values to session
     session["user_id"] = user.get_id()
     for key, val in user.get_user().items():
-        current_app.logger.debug(f"login_user: setting {key} to session")
+        # current_app.logger.debug(f"login_user: setting {key} to session")
         session[key] = val
 
     # add feed url to the session so you don't have to piece it together
     session["feed_url"] = user.get_feed_url()
 
-    current_app.logger.debug("login_user: {}".format(user.get_id()))
+    # current_app.logger.debug("login_user: {}".format(user.get_id()))
 
     # record login
     envs = get_env_vars()
