@@ -6,6 +6,7 @@ import {
   getPlanByVoiceCode,
 } from "./utils/db";
 import { logInTestAccount } from "./utils/login";
+import c from "config";
 
 let page;
 
@@ -15,9 +16,9 @@ test.use({
     username: "misc",
     password: "misc",
   },
-  // launchOptions: {
-  //   slowMo: 500, // Add slowMo option
-  // },
+  launchOptions: {
+    slowMo: 500, // Add slowMo option
+  },
 });
 
 test.beforeAll(async ({ browser }) => {
@@ -30,6 +31,19 @@ test.beforeAll(async ({ browser }) => {
 test("User Can Add Podcast Episode", async () => {
   // make sure plan is base so I don't get charged
   await updateTestAccountPlan("base");
+
+  // update voice
+  await page.getByTestId("voices-link").click();
+  // set listener for response
+  let statusCode;
+  page.on("response", (response) => {
+    if (response.url().includes("/partials/app/update-voice")) {
+      statusCode = response.status();
+    }
+  });
+  const voiceEl = await page.locator('[for="voice-us"]');
+  await voiceEl.click();
+  expect(statusCode).toBe(200);
 
   // add a podcast episode via form at top
   await page.getByTestId("add-url-input").click();
@@ -59,6 +73,7 @@ test("User Can Add Podcast Episode", async () => {
 
   // make sure the episoide voice is part of base plan
   const voiceCode = await page.locator(dataSel).getAttribute("data-voice");
+  expect(voiceCode).toBe("us");
   const voicePlan = await getPlanByVoiceCode(voiceCode);
   expect(voicePlan.plan).toBe("base");
 

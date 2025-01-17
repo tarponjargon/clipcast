@@ -16,12 +16,15 @@ test.beforeEach(async () => {
 });
 
 test("User Can Sign Up", async ({ page }) => {
+  // response listener setup
   let statusCode;
   page.on("response", (response) => {
     if (response.url().includes("/partials/signup")) {
       statusCode = response.status();
     }
   });
+
+  // fiull out signup form, testing mismatched passwords, and terms not checked
   await page.goto(process.env.BASE_URL + "/signup");
   await page.locator("#email-entry-field").click();
   await page.locator("#email-entry-field").fill(process.env.TEST_ACCOUNT_EMAIL);
