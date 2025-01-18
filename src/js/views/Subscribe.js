@@ -28,6 +28,7 @@ export default class Subscribe {
   };
 
   showSuccess = (msg) => {
+    console.log("showSuccess", msg);
     this.successEl.innerHTML = msg;
     slideDown(this.successEl);
   };

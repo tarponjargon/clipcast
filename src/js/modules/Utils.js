@@ -29,6 +29,9 @@ export function unSpinButton(id, text) {
 
 export const isElementVisible = function (e) {
   // this is borrowed from jquery's .is(":visible")
+  if (!e) {
+    return false;
+  }
   return !!(e.offsetWidth || e.offsetHeight || e.getClientRects().length);
 };
 

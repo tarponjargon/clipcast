@@ -21,6 +21,12 @@ export async function updateTestAccountPlan(newPlan) {
   return result;
 }
 
+export async function getSubscriptionStatus() {
+  const selectQuery = `SELECT subscribed FROM contact WHERE email = ?`;
+  const resultArr = await runQuery(selectQuery, [process.env.TEST_ACCOUNT_EMAIL]);
+  return resultArr[0];
+}
+
 export async function deleteTestAccount() {
   const userIdArr = await runQuery(`SELECT user_id FROM user WHERE email = ?`, [
     process.env.TEST_ACCOUNT_EMAIL,
@@ -33,6 +39,7 @@ export async function deleteTestAccount() {
   await runQuery(`DELETE FROM notification WHERE user_id = ?`, [userId]);
   await runQuery(`DELETE FROM login WHERE user_id = ?`, [userId]);
   await runQuery(`DELETE FROM podcast_content WHERE user_id = ?`, [userId]);
+  await runQuery(`DELETE FROM contact WHERE email = ?`, [process.env.TEST_ACCOUNT_EMAIL]);
 }
 
 export async function createTestAccount() {

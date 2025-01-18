@@ -192,7 +192,7 @@ export default class ClipCast {
       if (paginationButton) {
         this.handlePaginationButtonClick(paginationButton);
       }
-      const checkbox = event.target.closest('[type="checkbox"]');
+      const checkbox = event.target.closest('#queue-form [type="checkbox"]');
       if (checkbox) {
         this.deleteButtonVisibility();
       }
