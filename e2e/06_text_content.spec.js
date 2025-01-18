@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { deleteTestAccount, createTestAccount, updateTestAccountPlan } from "./utils/db";
 import { logInTestAccount } from "./utils/login";
-import { sendEmail } from "./utils/email";
 
 let page;
 
@@ -27,28 +26,17 @@ test.beforeAll(async ({ browser }) => {
 //   await deleteTestAccount();
 // });
 
-test("User Can E-Mail Content", async () => {
+test("User Can Submit Text content", async () => {
   await updateTestAccountPlan("base");
   await page.getByTestId("add-content-link").click();
-  const extractedText = await page.locator("#email-field").textContent();
-  const myEmail = extractedText.trim();
   const content = `
     HTML is for people
     I feel strongly that anyone should be able to make a website with HTML if they want.
     This book will teach you how to do just that. It doesn't require
     any previous experience making websites or coding.
   `;
-  await sendEmail(myEmail, "HTML is for people", content);
-
-  // tell the server to check emails (syncronously)
-  const response = await page.request.get(process.env.BASE_URL + "/api/process-email");
-
-  // Check the status code
-  expect(response.status()).toBe(200);
-
-  // Parse and validate the JSON response
-  const responseBody = await response.json();
-  expect(responseBody).toHaveProperty("success", true);
+  await page.locator("#add-content-textarea").fill(content);
+  await page.locator("#add-content-submit-button").click();
 
   // check that the episode is in the list and play it
   await page.goto(process.env.BASE_URL + "/app");
