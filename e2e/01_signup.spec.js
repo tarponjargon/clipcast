@@ -15,6 +15,10 @@ test.beforeEach(async () => {
   await deleteTestAccount(process.env.TEST_ACCOUNT_EMAIL);
 });
 
+test.afterEach(async () => {
+  await deleteTestAccount();
+});
+
 test("User Can Sign Up", async ({ page }) => {
   // response listener setup
   let statusCode;

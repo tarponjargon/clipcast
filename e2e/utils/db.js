@@ -22,8 +22,17 @@ export async function updateTestAccountPlan(newPlan) {
 }
 
 export async function deleteTestAccount() {
-  const deleteQuery = `DELETE FROM user WHERE email = ?`;
-  await runQuery(deleteQuery, [process.env.TEST_ACCOUNT_EMAIL]);
+  const userIdArr = await runQuery(`SELECT user_id FROM user WHERE email = ?`, [
+    process.env.TEST_ACCOUNT_EMAIL,
+  ]);
+  if (userIdArr.length === 0) {
+    return;
+  }
+  const userId = userIdArr[0].user_id;
+  await runQuery(`DELETE FROM user WHERE user_id = ?`, [userId]);
+  await runQuery(`DELETE FROM notification WHERE user_id = ?`, [userId]);
+  await runQuery(`DELETE FROM login WHERE user_id = ?`, [userId]);
+  await runQuery(`DELETE FROM podcast_content WHERE user_id = ?`, [userId]);
 }
 
 export async function createTestAccount() {
@@ -58,7 +67,7 @@ export async function createTestAccount() {
 }
 
 async function runQuery(query, params) {
-  // console.log("Running query: ", query, params);
+  console.log("Running query: ", query, params);
   const connection = await mysql.createConnection({
     host: process.env.MYSQL_LOCALHOST,
     port: process.env.MYSQL_HOST_PORT,

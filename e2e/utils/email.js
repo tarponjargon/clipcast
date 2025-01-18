@@ -1,21 +1,20 @@
 import imap from "imap-simple";
+import nodemailer from "nodemailer";
+
+const imapConfig = {
+  imap: {
+    user: process.env.TEST_ACCOUNT_EMAIL,
+    password: process.env.TEST_ACCOUNT_GOOGLE_APP_PASSWORD,
+    host: "imap.gmail.com",
+    port: 993,
+    tls: true,
+    authTimeout: 3000,
+    tlsOptions: { rejectUnauthorized: false },
+  },
+};
 
 export async function getForgotPasswordLink() {
-  const config = {
-    imap: {
-      user: process.env.TEST_ACCOUNT_EMAIL,
-      password: process.env.TEST_ACCOUNT_GOOGLE_APP_PASSWORD,
-      host: "imap.gmail.com",
-      port: 993,
-      tls: true,
-      authTimeout: 3000,
-      tlsOptions: { rejectUnauthorized: false },
-    },
-  };
-
-  // console.log("Connecting to email server..." + JSON.stringify(config.imap, null, 2));
-
-  const connection = await imap.connect({ imap: config.imap });
+  const connection = await imap.connect({ imap: imapConfig.imap });
   await connection.openBox("INBOX");
 
   // console.log("Connected to email server " + connection);
@@ -54,4 +53,24 @@ export async function getForgotPasswordLink() {
   connection.end();
 
   return resetLink;
+}
+
+export async function sendEmail(to, subject, text) {
+  console.log("Sending email to", to, "with subject", subject, "and text", text);
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.TEST_ACCOUNT_EMAIL,
+      pass: process.env.TEST_ACCOUNT_GOOGLE_APP_PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.TEST_ACCOUNT_EMAIL,
+    to,
+    subject,
+    text,
+  };
+
+  await transporter.sendMail(mailOptions);
 }

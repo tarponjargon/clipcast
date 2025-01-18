@@ -22,6 +22,10 @@ test.beforeAll(async ({ browser }) => {
   await logInTestAccount(page);
 });
 
+test.afterEach(async () => {
+  await deleteTestAccount();
+});
+
 test("User Can Select Base Plan", async () => {
   // set listener for response
   let statusCode;
