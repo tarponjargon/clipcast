@@ -22,9 +22,9 @@ test.beforeAll(async ({ browser }) => {
   await createTestAccount();
 });
 
-test.afterAll(async () => {
-  await deleteTestAccount();
-});
+// test.afterAll(async () => {
+//   await deleteTestAccount();
+// });
 
 test("User Can Replace Password", async () => {
   // fill out forgotpassword form

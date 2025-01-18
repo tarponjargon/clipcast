@@ -28,9 +28,9 @@ test.beforeAll(async ({ browser }) => {
   await logInTestAccount(page);
 });
 
-test.afterAll(async () => {
-  await deleteTestAccount();
-});
+// test.afterAll(async () => {
+//   await deleteTestAccount();
+// });
 
 test("User Can Add Podcast Episode", async () => {
   // make sure plan is base so I don't get charged

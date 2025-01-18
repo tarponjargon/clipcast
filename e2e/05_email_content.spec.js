@@ -23,9 +23,9 @@ test.beforeAll(async ({ browser }) => {
   await logInTestAccount(page);
 });
 
-test.afterAll(async () => {
-  await deleteTestAccount();
-});
+// test.afterAll(async () => {
+//   await deleteTestAccount();
+// });
 
 test("User Can E-Mail Content", async () => {
   test.setTimeout(240000);

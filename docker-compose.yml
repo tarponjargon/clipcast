@@ -115,6 +115,7 @@ services:
       - ./migrations:/project/migrations
       - ./requirements.txt:/project/requirements.txt
       - ./episode_job.py:/project/episode_job.py
+      - ./.envrc:/project/.envrc
     restart: unless-stopped
     networks:
       my_network:

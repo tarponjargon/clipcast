@@ -77,13 +77,16 @@ def send_to_task_to_queue(content_id):
     """Send the content to task queue for processing"""
 
     # gotta set up the environment to run the command
-    command = 'cd {} && /usr/bin/direnv allow && \
-      /usr/bin/direnv exec . /usr/local/bin/python -m episode_job "{}"'.format(
+    command = 'cd {} && $(which direnv) allow && \
+      $(which direnv) exec . $(which python) -m episode_job "{}"'.format(
         current_app.config.get("HOME_DIR"), content_id
     )
 
+    tsp_path = subprocess.run(
+        ["which", "tsp"], capture_output=True, text=True
+    ).stdout.strip()
     result = subprocess.run(
-        ["/usr/bin/tsp", "bash", "-c", command], check=True, capture_output=True
+        [tsp_path, "bash", "-c", command], check=True, capture_output=True
     )
     print(f"Processing content: {content_id} result {result}")
     if not result.returncode == 0:
@@ -94,7 +97,7 @@ def send_to_task_to_queue(content_id):
         current_app.logger.error(f"No job ID returned: {result}")
         return None
     job_result = subprocess.run(
-        ["/usr/bin/tsp", "-o", job_id], check=True, capture_output=True
+        [tsp_path, "-o", job_id], check=True, capture_output=True
     )
     if not job_result.returncode == 0:
         current_app.logger.error(f"Error fetching job result: {job_result}")

@@ -9,7 +9,6 @@ COPY manage.py /project/manage.py
 COPY requirements.txt /project/requirements.txt
 RUN pip3 install -r /project/requirements.txt
 COPY clipcast_crontab /etc/cron.d/clipcast_crontab
-COPY .envrc /project/.envrc
 RUN chmod 0644 /etc/cron.d/clipcast_crontab
 RUN crontab /etc/cron.d/clipcast_crontab
 
