@@ -11,9 +11,9 @@ test.use({
     username: "misc",
     password: "misc",
   },
-  // launchOptions: {
-  //   slowMo: 500, // Add slowMo option
-  // },
+  launchOptions: {
+    slowMo: 500, // Add slowMo option
+  },
 });
 
 test.beforeAll(async ({ browser }) => {
@@ -28,7 +28,6 @@ test.beforeAll(async ({ browser }) => {
 // });
 
 test("User Can E-Mail Content", async () => {
-  test.setTimeout(240000);
   await updateTestAccountPlan("base");
   await page.getByTestId("add-content-link").click();
   const extractedText = await page.locator("#email-field").textContent();
@@ -41,12 +40,18 @@ test("User Can E-Mail Content", async () => {
   `;
   await sendEmail(myEmail, "HTML is for people", content);
 
-  // wait for email to arrive and be processed
-  await page.waitForTimeout(120000);
+  // tell the server to check emails (syncronously)
+  const response = await page.request.get(process.env.BASE_URL + "/api/process-email");
 
-  await page.goto(process.env.BASE_URL + "/app");
+  // Check the status code
+  expect(response.status()).toBe(200);
+
+  // Parse and validate the JSON response
+  const responseBody = await response.json();
+  expect(responseBody).toHaveProperty("success", true);
 
   // check that the episode is in the list and play it
+  await page.goto(process.env.BASE_URL + "/app");
   const dataSel = "a[data-content-id]";
   const playSel = " .fa-play-circle";
   const pauseSel = " .fa-pause-circle";
