@@ -138,7 +138,7 @@ def create_intro_mp3(row):
 
     # create an intro mp3 file
     speech_file_path = (
-        f"{current_app.config.get("TMP_DIR")}/{row.get('content_id')}-intro.mp3"
+        f"{current_app.config.get('TMP_DIR')}/{row.get('content_id')}-intro.mp3"
     )
     voice = get_user_selected_voice(row.get("user_id"))
     title = row.get("title")
@@ -183,7 +183,7 @@ def create_intro_mp3(row):
 
     # concatenate a transition audio file
     transition_file_path = (
-        f"{current_app.config.get("PUBLIC_HTML")}/assets/audio/transition1.mp3"
+        f"{current_app.config.get('PUBLIC_HTML')}/assets/audio/transition1.mp3"
     )
     transition_audio = AudioSegment.from_mp3(transition_file_path)
 

@@ -19,7 +19,7 @@ def serve_rss_feed(userid):
     fg.id(request.url)
     fg.copyright("All rights reserved")
     fg.image(current_app.config.get("DEFAULT_IMAGE"))
-    fg.title(f"Your {current_app.config.get("STORE_NAME")} Podcast Feed")
+    fg.title(f"Your {current_app.config.get('STORE_NAME')} Podcast Feed")
     fg.link(href=current_app.config.get("STORE_URL"), rel="alternate")
     fg.description(current_app.config.get("STORE_META_DESCRIPTION"))
     fg.podcast.itunes_author(current_app.config.get("STORE_NAME"))
