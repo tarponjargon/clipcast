@@ -4,8 +4,8 @@ const del = require("del");
 const path = require("path");
 const config = require("config");
 const glob = require("glob-all");
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-//const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
@@ -209,16 +209,14 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: removeEmpty([
+      // new BundleAnalyzerPlugin(),
       new VueLoaderPlugin(),
       ifProduction(
         // analyzes the files matching the pattern, and REMOVES any css from the main css chunk that is
         // NOT used in the code.  Have to be careful with this because it can create issues where some styles
         // don't work in production.  i.e. if a style is added via javascript and it's not on the whitelist
         new PurgeCSSPlugin({
-          paths: glob.sync([
-            "./src/**/*.{js,jsx,j2,html,handlebars,hbs,inc,vue}",
-            `${templates}/**/*.{j2,html,inc,vue}`,
-          ]),
+          paths: glob.sync(["./src/**/*", `${templates}/**/*.{j2,html,inc,vue}`], { nodir: true }),
           safelist: {
             standard: [
               /data-v-.*/,
@@ -296,10 +294,26 @@ module.exports = (env, argv) => {
               /select-options-reminder/,
               /product-title/,
               /H2/,
+              /shk*/,
               /img-overlay-wrap/,
+              /progress/,
+              /pie/,
+              /hourglasss/,
+              /shk/,
+              /shikwasa/,
+              /shk-*/,
+              /podcast-*/,
+              /podcast/,
+              /data-value/,
+              /data-theme/,
+              /player/,
+              /data-fixed-type/,
+              /data-bs-popper/,
             ],
-            deep: [],
-            greedy: [],
+            deep: [
+              /^shk/, // Matches all classes starting with "shk"
+            ],
+            verbose: true,
           },
         })
       ),
@@ -354,7 +368,6 @@ module.exports = (env, argv) => {
           { from: "node_modules/@fortawesome/fontawesome-free/webfonts", to: "../assets/webfonts" },
         ],
       }),
-      // new BundleAnalyzerPlugin(),
       // custom "plugin" for preloading assets
       {
         apply(compiler) {

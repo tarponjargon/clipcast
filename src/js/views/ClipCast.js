@@ -2,6 +2,8 @@ import "shikwasa/dist/style.css";
 import { Player } from "shikwasa";
 import { waitForSelector, slideDown, slideUp, isElementVisible } from "../modules/Utils";
 
+/* JS controller code for main ClipCast app dashboard.  yar */
+
 export default class ClipCast {
   constructor() {
     this.player = undefined;
