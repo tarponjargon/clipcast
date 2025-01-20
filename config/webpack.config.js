@@ -75,7 +75,7 @@ module.exports = (env, argv) => {
         overlay: false,
         progress: false,
         webSocketURL: {
-          hostname: process.env.DEVSERVER_HOST,
+          hostname: process.env.SERVER_HOST,
           port: 443, // Secure WebSocket port
           protocol: "wss", // Use secure WebSocket protocol
           pathname: "/ws", // Optional: WebSocket path

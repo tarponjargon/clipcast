@@ -45,6 +45,6 @@ docker compose up --wait -d 2>&1 | tee -a ${LOG}
 echo "installing any new npm packages..."
 npm install --legacy-peer-deps >> ${LOG} 2>&1
 
-echo "Starting webpack-dev-server on ${DEVSERVER_HOST}, please wait..."
+echo "Starting webpack-dev-server on ${SERVER_HOST}, please wait..."
 NODE_ENV=development WEB_HOST=${WEB_HOST} node_modules/.bin/webpack serve --mode development --config config/webpack.config.js
 

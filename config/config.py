@@ -1,4 +1,5 @@
 from datetime import timedelta
+from distutils.util import strtobool
 import redis
 import os
 
@@ -6,25 +7,23 @@ import os
 class Config(object):
     """config vars common to all Flask app environments"""
 
+    PRODUCTION = bool(strtobool(os.environ.get("PRODUCTION", "0")))
+    DEBUG = bool(strtobool(os.environ.get("DEBUG", "0")))
+    DEVELOPMENT = bool(strtobool(os.environ.get("DEVELOPMENT", "0")))
+    APP_ROOT = os.environ.get("APP_ROOT")
+    TMP_DIR = os.environ.get("TMP_DIR")
+    HOME_DIR = os.environ.get("HOME_DIR")
+    PUBLIC_HTML = os.environ.get("PUBLIC_HTML")
     STORE_EMAIL = os.environ.get("STORE_EMAIL")
     STORE_CS_EMAIL = os.environ.get("STORE_EMAIL")
     STORE_CODE = os.environ.get("STORE_CODE")
     STORE_NAME = os.environ.get("STORE_NAME")
-    STORE_ADDRESS1 = ""
-    STORE_CITY = ""
-    STORE_STATE = ""
-    STORE_ZIP = ""
-    STORE_PHONE = ""
-    STORE_PHONE_MOBILE = ""
-    STORE_CUSTOMER_SERVICE = ""
-    STORE_CUSTOMER_SERVICE_PHONE = ""
-    STORE_CUSTOMER_SERVICE_HOURS = ""
-    STORE_CS_HOUR_OPEN = 9
-    STORE_CS_HOUR_CLOSE = 19
+    STORE_URL = os.environ.get("STORE_URL")
     STORE_TAGLINE = "Turn Web Content into Podcast Episodes"
     STORE_META_DESCRIPTION = "ClipCast clips out just the content from links you provide - excluding ads, menus, and comments. The content is then converted to audio using natural language AI Text-to-Speech, and made available in your podcast feed."
     STORE_LOGO = "/assets/images/logo.svg"
     STORE_FAVICON = "/favicon.ico"
+    STORE_EMAIL = os.environ.get("STORE_EMAIL")
     STORE_ACCESSIBILITY_CONTACT = os.environ.get("STORE_EMAIL")
     STORE_ADMIN = os.environ.get("STORE_EMAIL")
     ERROR_NOTIFY_URL = os.environ.get("ERROR_NOTIFY_URL")
@@ -67,11 +66,11 @@ class Config(object):
 
     # store defaults
     DEFAULT_IMAGE = os.environ.get("DEFAULT_IMAGE")
-    GTM_ID = ""
+    GTM_ID = os.environ.get("GTM_ID")
+    GA_MEASUREMENT_ID = os.environ.get("GTM_MEASUREMENT_ID")
+    GA_MEASUREMENT_PROTOCOL_SECRET = os.environ.get("GA_MEASUREMENT_PROTOCOL_SECRET")
     SITE_CODE = "clipcast"
     PRODUCT_IMAGE_PATH = "/assets/images"
-    # these fields cannot be set to the session by request params, only from the server side
-    FORBIDDEN_FIELDS = ["user_id"]
     SESSION_DEFAULTS = {}
     DEFAULT_BASE_VOICE = os.environ.get("DEFAULT_BASE_VOICE")
     DEFAULT_PREMIUM_VOICE = os.environ.get("DEFAULT_PREMIUM_VOICE")
@@ -85,7 +84,7 @@ class Config(object):
     MYSQL_LOG_QUERY = False
 
     # view/function cache (redis thru flask_caching) uses redis db3
-    CACHE_TYPE = "null"
+    CACHE_TYPE = os.environ.get("CACHE_TYPE")
     CACHE_REDIS_HOST = os.environ.get("REDIS_HOST")
     CACHE_REDIS_PORT = os.environ.get("REDIS_PORT")
     CACHE_REDIS_DB = os.environ.get("REDIS_CACHE_DB")
@@ -107,9 +106,6 @@ class Config(object):
 
     RANDOM_STRING = os.environ.get("RANDOM_STRING")
 
-    PRODUCTION = False
-    FAILOVER = False
-
     # S3 config
     S3_URL = os.environ.get("S3_URL")
     S3_ACCESS_KEY = os.environ.get("S3_ACCESS_KEY")
@@ -122,63 +118,18 @@ class Config(object):
     GOOGLE_LOGIN_APP_CLIENT_SECRET = os.environ.get("GOOGLE_LOGIN_APP_CLIENT_SECRET")
 
 
+# these envs are not used in favor of .envrc
 class development(Config):
-    STORE_EMAIL = os.environ.get("STORE_EMAIL")
-    APP_ROOT = "/project/flask_app"
-    TMP_DIR = "/project/tmp"
-    HOME_DIR = "/project"
-    PUBLIC_HTML = "/project/public_html"
-    DEVELOPMENT = True
-    DEBUG = True
-    STORE_URL = os.environ.get("BASE_URL")
-    INTERNAL_IP = os.environ.get("BASE_URL")
-    GTM_ID = ""
-    GA_MEASUREMENT_ID = ""
-    GA_MEASUREMENT_PROTOCOL_SECRET = ""
-    TMP_DIR = "/project/tmp"
+    pass
 
 
 class staging(Config):
-    APP_ROOT = "/home/clipcast/flask_app"
-    PUBLIC_HTML = "/home/clipcast/public_html"
-    TMP_DIR = "/home/clipcast/tmp"
-    HOME_DIR = "/home/clipcast"
-    DEVELOPMENT = True
-    DEBUG = True
-    CACHE_TYPE = "RedisCache"
-    STORE_URL = os.environ.get("STAGING_URL")
-    GTM_ID = ""
-    GA_MEASUREMENT_ID = ""
-    GA_MEASUREMENT_PROTOCOL_SECRET = ""
+    pass
 
 
 class testing(Config):
-    APP_ROOT = "/home/clipcast-testing/flask_app"
-    PUBLIC_HTML = "/home/clipcast-testing/public_html"
-    TMP_DIR = "/home/clipcast/tmp"
-    HOME_DIR = "/home/clipcast"
-    TESTING = True
-    DEBUG = True
-    CACHE_TYPE = "RedisCache"
-    STORE_URL = os.environ.get("TESTING_URL")
-    WTF_CSRF_ENABLED = False
-    DEVELOPMENT = False
-    GTM_ID = ""
-    GA_MEASUREMENT_ID = ""
-    GA_MEASUREMENT_PROTOCOL_SECRET = ""
+    pass
 
 
 class production(Config):
-    APP_ROOT = "/home/clipcast/flask_app"
-    PUBLIC_HTML = "/home/clipcast/public_html"
-    TMP_DIR = "/home/clipcast/tmp"
-    HOME_DIR = "/home/clipcast"
-    DEVELOPMENT = False
-    DEBUG = False
-    CACHE_TYPE = "RedisCache"
-    STORE_URL = os.environ.get("PRODUCTION_URL")
-    MAIL_DEBUG = True
-    GTM_ID = ""
-    GA_MEASUREMENT_ID = ""
-    GA_MEASUREMENT_PROTOCOL_SECRET = ""
-    PRODUCTION = True
+    pass

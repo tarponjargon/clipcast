@@ -7,7 +7,7 @@ export STORE_NAME="ClipCast.it"
 export TEST_EMAIL1="YOUREMAIL@gmail.com" # update
 export TEST_EMAIL2="YOUREMAIL@gmail.com" # update
 export WEB_HOST=localhost
-export DEVSERVER_HOST=YOUR.NGROK.DOMAIN # update
+export SERVER_HOST=YOUR.NGROK.DOMAIN # update
 export DEVSERVER_PORT=3000
 export APP_HOST=clipcast-local
 export APP_PORT=4051
@@ -50,7 +50,7 @@ export TESTING_URL="https://TESTING_URL" # update
 export PRODUCTION_URL="https://PRODUCTION_URL" # update
 export HASHING_ALGORITHM="pbkdf2_sha256"
 
-export BASE_URL="https://${DEVSERVER_HOST}"
+export BASE_URL="https://${SERVER_HOST}"
 export NODE_ENV=$ENV
 export NODE_VERSION_PREFIX=v
 export NODE_VERSIONS=~/.nvm/versions/node
