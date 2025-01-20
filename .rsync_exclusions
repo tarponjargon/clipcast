@@ -6,7 +6,6 @@ kill_devserver.sh
 push_staging.sh
 push_production.sh
 docker-compose.yml
-package.json
 package-lock.json
 node_modules
 .envrc
