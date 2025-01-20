@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("urlForm");
   const errorDiv = document.getElementById("error");
 
-  const appUrl = "https://properly-fleet-narwhal.duckdns.org/app/add-url";
+  const appUrl = "https://clipcast.it/app/add-url";
 
   // Populate the input field with the current page's URL
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

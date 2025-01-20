@@ -60,7 +60,16 @@ test("User Can Replace Password", async () => {
   await page.getByTestId("edit-password").click();
   await page.locator("#password-field").fill(process.env.TEST_ACCOUNT_PASSWORD);
   await page.locator("#password-confirm-field").fill(process.env.TEST_ACCOUNT_PASSWORD);
-  await page.locator("#password-submit-button").click();
+
+  // listen for updatepassword AJAX request
+  const response = await Promise.all([
+    page.waitForResponse(
+      (response) => response.url().includes("/partials/updatepassword") && response.status() === 200
+    ),
+    await page.locator("#password-submit-button").click(),
+  ]);
+
+  expect(response[0].status()).toBe(200);
 
   // log out and back in with original password
   await page.getByTestId("logout-link").click();
