@@ -3,14 +3,12 @@
 import "../../scss/styles.scss";
 import "../../css/all.min.css";
 import "../../css/animate.min.css";
-import "../../css/perfect-scrollbar.css";
 import "../vendor/iconify-icon.min.js";
 import { isMobile } from "../modules/Utils";
 import { showToast } from "../modules/Toast";
 
 // even though these are specified in ProvidePlugin, it's not available in the window w/o these
 global.bootstrap = require("bootstrap");
-global.PerfectScrollbar = require("perfect-scrollbar").default;
 
 // adds htmx and plugins to window
 window.htmx = require("htmx.org").default;
@@ -46,50 +44,6 @@ window.scrollToSelector = function (selector) {
   if (element) {
     element.scrollIntoView({ behavior: "smooth" });
   }
-};
-
-/* Handle Scrollbar
------------------------------------------------- */
-var handleScrollbar = function () {
-  "use strict";
-  var elms = document.querySelectorAll("[" + app.scrollBar.attr + "]");
-
-  for (var i = 0; i < elms.length; i++) {
-    generateScrollbar(elms[i]);
-  }
-};
-var generateScrollbar = function (elm) {
-  "use strict";
-
-  if (elm.scrollbarInit || (isMobile() && elm.getAttribute(app.scrollBar.skipMobileAttr))) {
-    return;
-  }
-  var dataHeight = !elm.getAttribute(app.scrollBar.heightAttr)
-    ? elm.offsetHeight
-    : elm.getAttribute(app.scrollBar.heightAttr);
-
-  elm.style.height = dataHeight;
-  elm.scrollbarInit = true;
-
-  if (isMobile()) {
-    elm.style.overflowX = "scroll";
-  } else {
-    var dataWheelPropagation = elm.getAttribute(app.scrollBar.wheelPropagationAttr)
-      ? elm.getAttribute(app.scrollBar.wheelPropagationAttr)
-      : false;
-
-    if (elm.closest("." + app.sidebar.class) && elm.closest("." + app.sidebar.class).length !== 0) {
-      app.sidebar.scrollBar.dom = new PerfectScrollbar(elm, {
-        wheelPropagation: dataWheelPropagation,
-      });
-    } else {
-      new PerfectScrollbar(elm, {
-        wheelPropagation: dataWheelPropagation,
-      });
-    }
-  }
-  elm.setAttribute(app.init.attr, true);
-  elm.classList.remove("invisible");
 };
 
 /* 03. Handle Sidebar Menu
@@ -867,7 +821,6 @@ export default class Global {
   };
 
   initComponent = () => {
-    handleScrollbar();
     handleScrollTo();
     handleCardAction();
     handelTooltipPopoverActivation();

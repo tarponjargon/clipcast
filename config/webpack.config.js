@@ -4,14 +4,13 @@ const del = require("del");
 const path = require("path");
 const config = require("config");
 const glob = require("glob-all");
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
-const { VueLoaderPlugin } = require("vue-loader");
 const { getIfUtils, removeEmpty } = require("webpack-config-utils");
 const { ifProduction, ifNotProduction } = getIfUtils(process.argv[3]);
 const basicAuth = require("express-basic-auth");
@@ -54,7 +53,7 @@ module.exports = (env, argv) => {
     resolve: {
       // where webpack is going to look for imported modules when it starts processing the entry files
       modules: ["node_modules", "src"],
-      extensions: ["*", ".js", ".vue"],
+      extensions: ["*", ".js"],
     },
     devServer: {
       devMiddleware: {
@@ -113,10 +112,6 @@ module.exports = (env, argv) => {
       // "loaders" process entry file and dependencies
       rules: [
         {
-          test: /\.vue$/,
-          loader: "vue-loader",
-        },
-        {
           test: /\.js$/,
           exclude: /(node_modules)/,
           use: {
@@ -136,8 +131,6 @@ module.exports = (env, argv) => {
         {
           test: /\.(sa|sc|c)ss$/,
           use: [
-            // i'm not actually sure why vue-style-loader needs to be first (last, in order of processing)
-            "vue-style-loader",
             // MiniCssExtractPlugin extracts all the css from the JS and puts it in a single bundled file
             {
               loader: MiniCssExtractPlugin.loader,
@@ -210,13 +203,12 @@ module.exports = (env, argv) => {
     },
     plugins: removeEmpty([
       // new BundleAnalyzerPlugin(),
-      new VueLoaderPlugin(),
       ifProduction(
         // analyzes the files matching the pattern, and REMOVES any css from the main css chunk that is
         // NOT used in the code.  Have to be careful with this because it can create issues where some styles
         // don't work in production.  i.e. if a style is added via javascript and it's not on the whitelist
         new PurgeCSSPlugin({
-          paths: glob.sync(["./src/**/*", `${templates}/**/*.{j2,html,inc,vue}`], { nodir: true }),
+          paths: glob.sync(["./src/**/*", `${templates}/**/*.{j2,html,inc}`], { nodir: true }),
           safelist: {
             standard: [
               /data-v-.*/,
@@ -324,14 +316,6 @@ module.exports = (env, argv) => {
       // exposes config variables globally to the application as `CFG`
       new webpack.DefinePlugin({
         CFG: JSON.stringify(config),
-        "process.env.BUILD": JSON.stringify("web"), // this is to fix a 'process does not exist' error with wp5 + vuelidate
-        __VUE_PROD_DEVTOOLS__: JSON.stringify(false), // starting around 12/26/23 'ReferenceError: __VUE_PROD_DEVTOOLS__ is not defined' silently crashed anything that loaded vue components
-      }),
-      new webpack.ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery",
-        "window.jQuery": "jquery",
-        "window.$": "jquery",
       }),
       ifProduction(
         // pre-compresses css/js chunks with gzip and adds a .gz extension.  Needs to be config'd with prof webserver too
@@ -415,18 +399,6 @@ module.exports = (env, argv) => {
           });
         },
       },
-      // delay hot reload to allow flask to reload first
-      // {
-      //   apply(compiler) {
-      //     compiler.hooks.done.tap("DelayHotReloadPlugin", (stats) => {
-      //       setTimeout(() => {
-      //         // Trigger a manual reload after the delay
-      //         process.stdout.write("\x1Bc"); // Clear the console
-      //         console.log("Hot reload delayed...");
-      //       }, 1000); // 1-second delay
-      //     });
-      //   },
-      // },
     ]),
   };
 };

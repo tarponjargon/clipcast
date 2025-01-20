@@ -1,15 +1,15 @@
 
 # check clipcast emailbox for content submitted by email, log output to logs dir
 # environment must be loaded with direnv
-*/3 * * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . /usr/local/bin/flask process_email >> /project/logs/email-check-$(date +"\%Y-\%m-\%d").log 2>&1
+# */3 * * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . /usr/local/bin/flask process_email >> /project/logs/email-check-$(date +"\%Y-\%m-\%d").log 2>&1
 
 # keep logs and tmp dir clean, remove files older than 14 days
 0 0 * * * /usr/bin/find /project/logs -type f -mtime +14 -exec rm {} \;
 0 0 * * * /usr/bin/find /project/tmp -type f -mtime +14 -exec rm {} \;
 
 # check for failed jobs and alert
-*/30 * * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . bin/check_for_failed_jobs.sh > 2>&1
+# */30 * * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . bin/check_for_failed_jobs.sh > 2>&1
 
 # clean up S3 files
-0 1 * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . /usr/local/bin/flask delete_old_files >> /project/logs/cleanup-s3-$(date +"\%Y-\%m-\%d").log 2>&1
+# 0 1 * * * cd /project && /usr/bin/direnv allow && /usr/bin/direnv exec . /usr/local/bin/flask delete_old_files >> /project/logs/cleanup-s3-$(date +"\%Y-\%m-\%d").log 2>&1
 
