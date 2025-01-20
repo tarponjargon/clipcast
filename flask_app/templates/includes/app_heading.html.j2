@@ -32,7 +32,7 @@
         href="#"
         data-toggle-class="app-header-menu-search-toggled"
         data-toggle-target=".app"
-        class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 me-3 fs-6 text-nowrap rounded"
+        class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 me-4 fs-6 text-nowrap rounded"
       >
         <i class="fa fa-plus-circle fa-fw me-1"></i> Add a URL<span class="d-none d-sm-inline-block"> to your feed</span>
       </a>
@@ -53,9 +53,10 @@
       hx-get="/partials/app/notifications"
       hx-target="this"
       hx-swap="innerHTML"
-      hx-trigger="load, every 15s"
+      hx-trigger="every 15s"
       class="menu-item align-self-end dropdown dropdown-mobile-full"
     >
+      {% include('partials/profile/notifications.html.j2') %}
     </div>
 
 
@@ -74,6 +75,7 @@
         <a class="dropdown-item d-flex align-items-center" href="/logout">LOGOUT <i class="bi bi-toggle-off ms-auto text-theme fs-16px my-n1"></i></a>
       </div>
     </div>
+
   </div>
   <!-- END menu -->
 
