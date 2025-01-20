@@ -4,7 +4,6 @@ import { logInTestAccount } from "./utils/login";
 
 let page;
 
-test.describe.configure({ mode: "serial" });
 test.use({
   httpCredentials: {
     username: "misc",
@@ -47,7 +46,6 @@ test("User Can Submit Text content", async () => {
   await page.waitForSelector(dataSel + pauseSel);
   const pauseBtn = await page.locator(dataSel + pauseSel);
   expect(pauseBtn).toBeVisible();
-  await page.waitForTimeout(1000);
 
   // pause the episode
   await pauseBtn.click();

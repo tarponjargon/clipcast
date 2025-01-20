@@ -4,7 +4,6 @@ import { logInTestAccount } from "./utils/login";
 
 let page;
 
-test.describe.configure({ mode: "serial" });
 test.use({
   httpCredentials: {
     username: "misc",

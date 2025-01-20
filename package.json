@@ -14,7 +14,7 @@
     "predeploy": "./kill_devserver.sh",
     "deploy": "NODE_ENV=production webpack --mode production --config config/webpack.config.js",
     "postdeploy": "./push_production.sh",
-    "test": "node_modules/.bin/cypress run --spec 'cypress/e2e/**/*' --config-file 'config/cypress-dev.config.js'"
+    "test": "npx playwright test --workers=1'"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",

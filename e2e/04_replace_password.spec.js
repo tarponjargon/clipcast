@@ -5,7 +5,6 @@ import { getForgotPasswordLink } from "./utils/email";
 
 let page;
 
-test.describe.configure({ mode: "serial" });
 test.use({
   httpCredentials: {
     username: "misc",
@@ -27,6 +26,8 @@ test.beforeAll(async ({ browser }) => {
 // });
 
 test("User Can Replace Password", async () => {
+  test.slow();
+
   // fill out forgotpassword form
   await page.goto(process.env.BASE_URL + "/forgotpassword");
   await page.locator("#email-entry-field").fill(process.env.TEST_ACCOUNT_EMAIL);

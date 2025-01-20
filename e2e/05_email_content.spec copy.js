@@ -5,7 +5,6 @@ import { sendEmail } from "./utils/email";
 
 let page;
 
-test.describe.configure({ mode: "serial" });
 test.use({
   httpCredentials: {
     username: "misc",
@@ -28,6 +27,7 @@ test.beforeAll(async ({ browser }) => {
 // });
 
 test("User Can E-Mail Content", async () => {
+  test.slow();
   await updateTestAccountPlan("base");
   await page.getByTestId("add-content-link").click();
   const extractedText = await page.locator("#email-field").textContent();
@@ -59,7 +59,6 @@ test("User Can E-Mail Content", async () => {
   await page.waitForSelector(dataSel + pauseSel);
   const pauseBtn = await page.locator(dataSel + pauseSel);
   expect(pauseBtn).toBeVisible();
-  await page.waitForTimeout(1000);
 
   // pause the episode
   await pauseBtn.click();

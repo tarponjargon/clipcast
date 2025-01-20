@@ -92,6 +92,9 @@ For deveoping tests
 `npx playwright test --workers=1`
 Runs the end-to-end tests.
 
+`npx playwright test --workers=1 e2e/03_add_episode.spec.js --project=webkit --trace=on`
+runs a specific test with a specific browser
+
 `npx playwright test --ui --workers=1`
 Starts the interactive UI mode.
 

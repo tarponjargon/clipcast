@@ -1,9 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { deleteTestAccount } from "./utils/db";
 
-// Annotate entire file as serial.
-test.describe.configure({ mode: "serial" });
-
 test.use({
   httpCredentials: {
     username: "misc",
