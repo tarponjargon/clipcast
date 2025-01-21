@@ -93,6 +93,5 @@ test("User Can Add Podcast Episode", async () => {
 
   // delete the episode
   await page.locator(`a[data-delete="${contentId}"]`).click();
-
   expect(await page.locator(dataSel)).toBeHidden();
 });

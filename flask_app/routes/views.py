@@ -112,6 +112,11 @@ def do_rss_feed_info():
     return render_template("/includes/podcast_feed_url.html.j2")
 
 
+@views.route("/test-article")
+def do_test_article():
+    return render_template("test_article.html.j2")
+
+
 @views.route("/resetpassword")
 def do_resetpassword_view():
     return handle_resetpassword_view()

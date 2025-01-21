@@ -1,0 +1,38 @@
+{% set page = 'testarticle' %}
+{% set title %}The Tarpon{% endset %}
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+{% include 'includes/heading.html.j2' %}
+
+<meta name="author" content="Joe Morgan">
+<meta name="description" content="Learn about the tarpon, a large, powerful fish known for its silvery, reflective scales and remarkable acrobatics.">
+<meta name="keywords" content="tarpon, fish, fishing, angling, saltwater, freshwater, acrobatics, silver, scales">
+<meta name="robots" content="noindex, nofollow">
+
+<main class="container my-4" style="min-height: 40vh;">
+  <h1>The Tarpon</h1>
+  <h3>By Joe Morgan</h3>
+  <div class="row">
+    <div class="col-md-9">
+      <article class="mt-2">
+        <p>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Atlantic_tarpon.jpg/220px-Atlantic_tarpon.jpg" class="float-start me-4 mb-4" alt="A Tarpon">
+          The tarpon is a large, powerful fish known for its silvery, reflective scales and remarkable acrobatics.
+          Found primarily in warm coastal waters, estuaries, and rivers, tarpons are prized by anglers for their
+          strength and ability to leap high into the air when hooked.
+        </p>
+      </article>
+    </div>
+    <div class="col-md-3">
+      <aside id="secondary" class="widget-area">
+        <h5><a href="#">Where to Find Tarpon</a></h5>
+        <h5><a href="#">How to Catch Tarpon</a></h5>
+        <h5><a href="#">Best Tarpon Lures</a></h5>
+        <h5><a href="#">Adopt a Tarpon</a></h5>
+      </aside>
+  </div>
+</main>
+
+{% endblock %}
