@@ -1,4 +1,4 @@
-import "shikwasa/dist/style.css";
+import "../../css/shikwasa.css";
 import { Player } from "shikwasa";
 import { waitForSelector, slideDown, slideUp, isElementVisible } from "../modules/Utils";
 
@@ -87,6 +87,7 @@ export default class ClipCast {
         type: "fixed",
         position: "bottom",
       },
+      theme: "dark",
       themeColor: "#000000",
       audio: {
         title: this.currentlyPlayingEl.getAttribute("data-title"),
