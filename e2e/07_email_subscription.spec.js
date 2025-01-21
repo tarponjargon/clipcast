@@ -43,6 +43,9 @@ test("User Can Subscribe and Unsubscribe", async () => {
   const subscriptionObj = await getSubscriptionStatus();
   expect(subscriptionObj.subscribed).toBe(1);
 
+  // this seems unavoidable
+  await page.waitForTimeout(1000);
+
   // unsubscribe
   const response2 = await Promise.all([
     page.waitForResponse(
@@ -55,9 +58,20 @@ test("User Can Subscribe and Unsubscribe", async () => {
 
   expect(response2[0].status()).toBe(200);
 
-  // const toast2 = await page.locator("#toast-2-body");
-  // expect(toast2).toHaveText("Subscription updated");
-
   const subscriptionObj2 = await getSubscriptionStatus();
   expect(subscriptionObj2.subscribed).toBe(0);
+
+  // subscribe in footer
+  await page.goto(process.env.BASE_URL);
+  await page.getByTestId("footer-subscribe").fill(process.env.TEST_ACCOUNT_EMAIL);
+  const response3 = await Promise.all([
+    page.waitForResponse(
+      (response) => response.url().includes("/partials/subscribe") && response.status() === 200
+    ),
+    page.locator("#subscribe-button").click(),
+  ]);
+  expect(response3[0].status()).toBe(200);
+  expect(await page.locator("#subscribe-container h3")).toHaveText("Thank You");
+  const subscriptionObj3 = await getSubscriptionStatus();
+  expect(subscriptionObj3.subscribed).toBe(1);
 });

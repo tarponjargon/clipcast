@@ -26,7 +26,7 @@ def do_notifications_viwewed():
     """,
         {"user_id": user_id},
     )
-    return {"success": True, "message": str(upd) + "notifications viewed"}
+    return {"success": True, "message": "notifications viewed"}
 
 
 @api.route("/total-episodes")

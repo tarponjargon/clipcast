@@ -6,7 +6,6 @@ import {
   getPlanByVoiceCode,
 } from "./utils/db";
 import { logInTestAccount } from "./utils/login";
-import c from "config";
 
 let page;
 
@@ -15,6 +14,9 @@ test.use({
     username: "misc",
     password: "misc",
   },
+  // launchOptions: {
+  //   slowMo: 500, // Add slowMo option
+  // },
 });
 
 test.beforeAll(async ({ browser }) => {
@@ -24,12 +26,7 @@ test.beforeAll(async ({ browser }) => {
   await logInTestAccount(page);
 });
 
-// test.afterAll(async () => {
-//   await deleteTestAccount();
-// });
-
 test("User Can Add Podcast Episode", async () => {
-  test.slow();
   // make sure plan is base so I don't get charged
   await updateTestAccountPlan("base");
 
@@ -47,16 +44,33 @@ test("User Can Add Podcast Episode", async () => {
   expect(response[0].status()).toBe(200);
 
   // add a podcast episode via form at top
-  await page.getByTestId("add-url-input").click();
   await page.getByTestId("add-url-input").fill("https://htmlforpeople.com/");
   await page.getByTestId("add-url-input").press("Enter");
 
-  // check that the episode is in the list and play it
+  // check that the episode is in the list
   const dataSel = "a[data-content-id][data-hostname='htmlforpeople.com']";
   const playSel = " .fa-play-circle";
   const pauseSel = " .fa-pause-circle";
+  const playEl = await page.locator(dataSel);
+  await playEl.waitFor();
+
+  // capture the content id of the episode
+  const dataEl = await page.locator(dataSel);
+  const contentId = await dataEl.getAttribute("data-content-id");
+  console.log("contentId", contentId);
+
+  // check notification exists
+  const badgeEl = await page.locator("#notifications-badge");
+  await badgeEl.waitFor();
+  expect(badgeEl).toBeVisible();
+  await page.locator("#notifications-link").click();
+  const notificationSel = `[data-notification='${contentId}']`;
+  expect(await page.locator(notificationSel + " .bi-bell-fill")).toBeVisible();
+  expect(badgeEl).toBeHidden();
+
+  // play episode
   await page.locator(dataSel).click();
-  await page.waitForSelector(dataSel + pauseSel);
+  await page.waitForTimeout(2000);
   const pauseBtn = await page.locator(dataSel + pauseSel);
   expect(pauseBtn).toBeVisible();
 
@@ -78,8 +92,6 @@ test("User Can Add Podcast Episode", async () => {
   expect(voicePlan.plan).toBe("base");
 
   // delete the episode
-  const dataEl = await page.locator(dataSel);
-  const contentId = await dataEl.getAttribute("data-content-id");
   await page.locator(`a[data-delete="${contentId}"]`).click();
 
   expect(await page.locator(dataSel)).toBeHidden();

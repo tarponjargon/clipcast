@@ -339,14 +339,13 @@ def get_title(title, content):
     return title
 
 
-def create_episode_filename(title):
+def create_episode_filename(title, content_id):
     """Create a filename for the podcast episode"""
 
     episode_basename = slugify(
         title, max_length=32, word_boundary=True, save_order=True
     )
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    return episode_basename + "-" + timestamp + ".mp3"
+    return episode_basename + "-" + content_id + ".mp3"
 
 
 def upload_to_s3(file_path):
@@ -436,7 +435,7 @@ def process_episode(content_id):
             )
             return errors
 
-        episode_filename = create_episode_filename(title)
+        episode_filename = create_episode_filename(title, content_id)
         final_mp3 = current_app.config.get("TMP_DIR") + f"/{episode_filename}"
 
         # Concatenate the audio files
@@ -493,8 +492,12 @@ def process_episode(content_id):
         # add notification
         DB.insert_query(
             """
-        INSERT INTO notification (user_id, message)
-        VALUES (%s, %s)
+        INSERT INTO notification (user_id, content_id, message)
+        VALUES (%s, %s, %s)
     """,
-            (episode.get("user_id"), f"Your podcast episode '{title}' is ready!"),
+            (
+                episode.get("user_id"),
+                row_id,
+                f"Your podcast episode '{title}' is ready!",
+            ),
         )
