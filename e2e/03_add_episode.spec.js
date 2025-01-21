@@ -15,9 +15,6 @@ test.use({
     username: "misc",
     password: "misc",
   },
-  launchOptions: {
-    slowMo: 500, // Add slowMo option
-  },
 });
 
 test.beforeAll(async ({ browser }) => {
@@ -38,18 +35,16 @@ test("User Can Add Podcast Episode", async () => {
 
   // update voice
   await page.getByTestId("voices-link").click();
-
-  // set listener for response
-  let statusCode;
-  let redirectDetected = false;
-  page.on("response", (response) => {
-    if (response.url().includes("/partials/app/update-voice")) {
-      statusCode = response.status();
-    }
-  });
   const voiceEl = await page.locator('[for="voice-us"]');
-  await voiceEl.click();
-  expect(statusCode).toBe(200);
+  // listen for updatevoice AJAX request
+  const response = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/partials/app/update-voice") && response.status() === 200
+    ),
+    await voiceEl.click(),
+  ]);
+  expect(response[0].status()).toBe(200);
 
   // add a podcast episode via form at top
   await page.getByTestId("add-url-input").click();

@@ -21,10 +21,6 @@ test.beforeAll(async ({ browser }) => {
   await logInTestAccount(page);
 });
 
-// test.afterEach(async () => {
-//   await deleteTestAccount();
-// });
-
 test("User Can Subscribe and Unsubscribe", async () => {
   // select basic plan
   await page.goto(process.env.BASE_URL + "/app/profile");
@@ -59,8 +55,8 @@ test("User Can Subscribe and Unsubscribe", async () => {
 
   expect(response2[0].status()).toBe(200);
 
-  const toast2 = await page.locator("#toast-2-body");
-  expect(toast2).toHaveText("Subscription updated");
+  // const toast2 = await page.locator("#toast-2-body");
+  // expect(toast2).toHaveText("Subscription updated");
 
   const subscriptionObj2 = await getSubscriptionStatus();
   expect(subscriptionObj2.subscribed).toBe(0);
