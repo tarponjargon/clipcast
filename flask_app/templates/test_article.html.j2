@@ -1,12 +1,12 @@
 {% set page = 'testarticle' %}
-{% set title %}The Tarpon{% endset %}
+{% set title %}Tarpon: The Silver King{% endset %}
 {% extends "base.html.j2" %}
 
 {% block content %}
 
 {% include 'includes/heading.html.j2' %}
 
-<meta name="author" content="Joe Morgan">
+<meta name="author" content="Engelbert Humperdinck">
 <meta name="description" content="Learn about the tarpon, a large, powerful fish known for its silvery, reflective scales and remarkable acrobatics.">
 <meta name="keywords" content="tarpon, fish, fishing, angling, saltwater, freshwater, acrobatics, silver, scales">
 <meta name="robots" content="noindex, nofollow">
@@ -15,25 +15,40 @@
 <meta property="article:keywords" content="tarpon, fish, fishing, angling, saltwater, freshwater, acrobatics, silver, scales">
 
 <main class="container my-4" style="min-height: 40vh;">
-  <h1>The Tarpon</h1>
-  <h3 class="author">By Joe Morgan</h3>
+  <h1>Tarpon: The Silver King</h1>
+  <h2 class="author fs-6">By Engelbert Humperdinck</h2>
   <div class="row">
     <div class="col-md-9">
       <article class="mt-2">
         <p>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Atlantic_tarpon.jpg/220px-Atlantic_tarpon.jpg" class="float-start me-4 mb-4" alt="A Tarpon">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Atlantic_tarpon.jpg/220px-Atlantic_tarpon.jpg" width="150" class="float-start me-4 mb-2" alt="A Tarpon">
           The tarpon is a large, powerful fish known for its silvery, reflective scales and remarkable acrobatics.
           Found primarily in warm coastal waters, estuaries, and rivers, tarpons are prized by anglers for their
           strength and ability to leap high into the air when hooked.
+        </p>
+        <p>
+          They can grow up to 8 feet long and weigh over 250 pounds, with a sleek, elongated body built for speed and endurance. Often referred to as the "silver king,"
+          tarpons are equipped with a unique swim bladder that allows them to breathe air, enabling them to thrive in oxygen-poor waters.
         </p>
       </article>
     </div>
     <div class="col-md-3">
       <aside id="secondary" class="widget-area">
-        <h5><a href="#">Where to Find Tarpon</a></h5>
-        <h5><a href="#">How to Catch Tarpon</a></h5>
-        <h5><a href="#">Best Tarpon Lures</a></h5>
-        <h5><a href="#">Adopt a Tarpon</a></h5>
+        <div class="card border-theme bg-theme bg-opacity-25 mb-3">
+          <div class="card-header border-theme fw-bold small text-inverse">MORE LINKS</div>
+          <div class="card-body">
+            <h5><a href="#">Where to Find Tarpon</a></h5>
+            <h5><a href="#">How to Catch Tarpon</a></h5>
+            <h5><a href="#">Best Tarpon Lures</a></h5>
+            <h5><a href="#">Adopt a Tarpon</a></h5>
+          </div>
+          <div class="card-arrow">
+            <div class="card-arrow-top-left"></div>
+            <div class="card-arrow-top-right"></div>
+            <div class="card-arrow-bottom-left"></div>
+            <div class="card-arrow-bottom-right"></div>
+          </div>
+        </div>
       </aside>
   </div>
 </main>

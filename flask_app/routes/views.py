@@ -117,6 +117,11 @@ def do_test_article():
     return render_template("test_article.html.j2")
 
 
+@views.route("/help")
+def do_help():
+    return render_template("help.html.j2")
+
+
 @views.route("/resetpassword")
 def do_resetpassword_view():
     return handle_resetpassword_view()
