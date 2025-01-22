@@ -44,11 +44,11 @@ test("User Can Add Podcast Episode", async () => {
   expect(response[0].status()).toBe(200);
 
   // add a podcast episode via form at top
-  await page.getByTestId("add-url-input").fill("https://htmlforpeople.com/");
+  await page.getByTestId("add-url-input").fill("https://clipcast.it/test-article");
   await page.getByTestId("add-url-input").press("Enter");
 
   // check that the episode is in the list
-  const dataSel = "a[data-content-id][data-hostname='htmlforpeople.com']";
+  const dataSel = "a[data-content-id][data-hostname='clipcast.it']";
   const playSel = " .fa-play-circle";
   const pauseSel = " .fa-pause-circle";
   const playEl = await page.locator(dataSel);
@@ -57,7 +57,6 @@ test("User Can Add Podcast Episode", async () => {
   // capture the content id of the episode
   const dataEl = await page.locator(dataSel);
   const contentId = await dataEl.getAttribute("data-content-id");
-  console.log("contentId", contentId);
 
   // check notification exists
   const badgeEl = await page.locator("#notifications-badge");
@@ -73,6 +72,12 @@ test("User Can Add Podcast Episode", async () => {
   await page.waitForTimeout(2000);
   const pauseBtn = await page.locator(dataSel + pauseSel);
   expect(pauseBtn).toBeVisible();
+
+  // make sure there's a duration value in the player.
+  const durationElement = await page.locator("#podcast-player .shk-time_duration");
+  const durationText = await durationElement.textContent();
+  const durationRegex = /^(\d{2}:)?\d{2}:\d{2}$/;
+  expect(durationText).toMatch(durationRegex);
 
   // pause the episode
   await pauseBtn.click();

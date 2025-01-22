@@ -180,6 +180,7 @@ export default class ClipCast {
   };
 
   closePodcastListener = () => {
+    if (!this.podcastCloseBtn) return;
     this.podcastCloseBtn.addEventListener(
       "click",
       () => {

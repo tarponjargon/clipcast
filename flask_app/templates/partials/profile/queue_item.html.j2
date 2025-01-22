@@ -22,7 +22,7 @@
         data-mp3="{{ sanitize(item.mp3_url) }}"
         data-title="{{ sanitize(item.title)}}"
         data-author="{{ sanitize(item.author) if item.author else sanitize(item.hostname) }}"
-        data-image="{{ sanitize(item.image) }}"
+        data-image="{{ sanitize(item.image) if item.image else config.DEFAULT_IMAGE }}"
         data-duration="{{ sanitize(item.mp3_duration) }}"
         data-voice="{{ sanitize(item.voice_code) }}"
         data-hostname="{{ sanitize(item.hostname) }}"
