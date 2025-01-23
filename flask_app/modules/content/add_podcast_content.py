@@ -96,14 +96,8 @@ def send_to_task_to_queue(content_id):
     if not job_id:
         current_app.logger.error(f"No job ID returned: {result}")
         return None
-    job_result = subprocess.run(
-        [tsp_path, "-o", job_id], check=True, capture_output=True
-    )
-    if not job_result.returncode == 0:
-        current_app.logger.error(f"Error fetching job result: {job_result}")
-        return None
-    job_output_file = job_result.stdout.decode().strip()
-    return job_id, job_output_file
+
+    return job_id
 
 
 def process_episode_content(id):
@@ -131,18 +125,17 @@ def process_episode_content(id):
         print(f"Processing content: {episode.get('content_id')}")
 
         # send the content to the task queue
-        job_id, job_output_file = send_to_task_to_queue(episode.get("content_id"))
-        if not job_id or not job_output_file:
+        job_id = send_to_task_to_queue(episode.get("content_id"))
+        if not job_id:
             return default_error
 
         upd = DB.update_query(
             """
             UPDATE podcast_content SET
-            job_id = %s,
-            job_output_file = %s
+            job_id = %s
             WHERE id = %s
           """,
-            (job_id, job_output_file, id),
+            (job_id, id),
         )
 
         if upd:

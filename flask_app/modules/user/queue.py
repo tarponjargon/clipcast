@@ -1,5 +1,6 @@
 import math
 import os
+import subprocess
 from flask import current_app, session
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid
@@ -102,14 +103,65 @@ def get_queue(user_id, page=1):
     }
 
 
+def check_job_status(content_id):
+    """Check the status of a job and updates the record if it's errored or nonexistent
+
+    Returns:
+      str: The status of the job
+    """
+    if not match_uuid(content_id):
+        return "Invalid content ID"
+
+    q = DB.fetch_one(
+        """
+        SELECT job_id
+        FROM podcast_content
+        WHERE content_id = %s
+      """,
+        (content_id,),
+    )
+
+    tsp_path = subprocess.run(
+        ["which", "tsp"], capture_output=True, text=True
+    ).stdout.strip()
+    job_id = q.get("job_id")
+    res = None
+    job_result = None
+    try:
+        res = subprocess.run(
+            [tsp_path, "-s", str(job_id)], capture_output=True, check=True, text=True
+        )
+        job_result = res.stdout.strip().lower()
+    except subprocess.CalledProcessError as e:
+        job_result = "error checking job status"
+
+    if "cannot be stated" in job_result or "error" in job_result:
+        DB.update_query(
+            """
+          UPDATE podcast_content SET
+          current_status = 'error',
+          error_message = %s,
+          processing_end_time = NOW()
+          WHERE content_id = %s
+        """,
+            (job_result, content_id),
+        )
+        return job_result
+
+    return None
+
+
 def get_queue_item(content_id):
     """Gets a queue item
-    å
-        Returns:
-          dict: The queue item
+    Returns:
+      dict: The queue item
     """
     if not match_uuid(content_id):
         return {}
+
+    status = check_job_status(content_id)
+    if status:
+        current_app.logger.error("Episode %s errored: %s", content_id, status)
 
     item = DB.fetch_one(
         """

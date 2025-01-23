@@ -1,0 +1,69 @@
+{% set page = 'help' %}
+{% set title %}{{ config.STORE_NAME }}{% endset %} Help
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+{% include 'includes/heading.html.j2' %}
+
+<main class="container my-4" style="min-height: 40vh;">
+  <h1>{{ config.STORE_NAME }} Help</h1>
+  <p>
+    If you have any trouble with the app, feed free to <a href="/contact">contact us</a>, or you can
+    <a href="https://github.com/tarponjargon/clipcast/issues" target="_blank">open an issue on GitHub</a>.
+  </p>
+  <div class="row">
+    <div class="col-md-9">
+      <article class="mt-2">
+        <ul class="mb-5">
+          <li class="fs-5"><a href="#overview">What ClipCast Does</a></li>
+          <li class="fs-5"><a href="#">How to add content</a></li>
+          <li class="fs-5"><a href="#">Adding your feed to your podcast app</a></li>
+          <li class="fs-5"><a href="#">Listening: AI is good, but not perfect</a></li>
+        </ul>
+
+        <a name="overview"></a>
+        <h2>What ClipCast Does</h2>
+        <p>
+          ClipCast turns web content that you provide (in the form of links or text) into natural-language audio, and then provides it to a podcast feed just for you.
+        </p>
+        <p>
+          ClipCast clips out just the content from links you provide - excluding ads, menus, footers and comments.
+          It then uses AI to convert the text into natural-sounding speech, and then provides it to you in a podcast feed.
+        </p>
+        <p class="pt-3">
+          {% include 'includes/diagram.html.j2' %}
+        </p>
+        <p class="pt-4">Here is a short video explaining how ClipCast works:</p>
+        <p>
+          <iframe
+          width="100%"
+          height="415"
+          src="https://www.youtube.com/embed/FA5Db6CoeLI?si=JbA214tROeBFhZzO"
+          title="YouTube video player"
+          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+        </p>
+      </article>
+    </div>
+    <div class="col-md-3">
+      <aside id="secondary" class="widget-area">
+        <div class="card border-theme bg-theme bg-opacity-25 mb-3">
+          <div class="card-header border-theme fw-bold small text-inverse">HELP TOPICS</div>
+          <div class="card-body">
+            <!-- TODO: fill this in-->
+          </div>
+          <div class="card-arrow">
+            <div class="card-arrow-top-left"></div>
+            <div class="card-arrow-top-right"></div>
+            <div class="card-arrow-bottom-left"></div>
+            <div class="card-arrow-bottom-right"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
