@@ -52,6 +52,9 @@ class Config(object):
         ".comment-text-content",
         ".comment-text",
         "#comments",
+        ".commentlist",
+        ".comment-list",
+        "#commentlist",
     ]
     EPISODE_RETENTION_DAYS = 90
 

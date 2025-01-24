@@ -16,26 +16,39 @@
     <div class="col-md-9">
       <article class="mt-2">
         <ul class="mb-5">
-          <li class="fs-5"><a href="#overview">What ClipCast Does</a></li>
-          <li class="fs-5"><a href="#">How to add content</a></li>
-          <li class="fs-5"><a href="#">Adding your feed to your podcast app</a></li>
-          <li class="fs-5"><a href="#">Listening: AI is good, but not perfect</a></li>
+          <li class="fs-5"><a href="#overview" data-toggle="scroll-to">What ClipCast Does</a></li>
+          <li class="fs-5"><a href="#how-to-add-content" data-toggle="scroll-to">How to add content</a></li>
+          <li class="fs-5"><a href="#add-your-feed" data-toggle="scroll-to">How to add your ClipCast feed to your podcast app</a></li>
+          <li class="fs-5"><a href="#ai-caveats" data-toggle="scroll-to">AI Text-to-Speech: Pretty good, but not perfect</a></li>
         </ul>
 
         <a name="overview"></a>
-        <h2>What ClipCast Does</h2>
+        <h2 id="overview" class="fs-2">What ClipCast Does</h2>
         <p>
-          ClipCast turns web content that you provide (in the form of links or text) into natural-language audio, and then provides it to a podcast feed just for you.
+          ClipCast turns web content that you provide (in the form of links or text) into natural-language audio and
+          puts it right into your podcast listening app of choice.
+        </p>
+        <p>
+          <h3 class="fs-4">When would I use it?</h3>
+        </p>
+        <p>
+          Let's say your browsing the web and come across an interesting article that you don't have time to read.
+          Simply send the link to ClipCast, and the article will be ready for you to listen to in your podcast app
+          on your next walk, drive, or workout.
+        </p>
+        <p>
+          <h3 class="fs-4">Will it read all the clutter on the article web page (like heading, navigation, footer, etc)?</h3>
         </p>
         <p>
           ClipCast clips out just the content from links you provide - excluding ads, menus, footers and comments.
-          It then uses AI to convert the text into natural-sounding speech, and then provides it to you in a podcast feed.
+          It then uses AI to convert the text into natural-sounding speech, and then provides it to you in a podcast feed
+          compatible with all podcast apps.  Or you can listen to it right on ClipCast.it...no app required!
         </p>
         <p class="pt-3">
           {% include 'includes/diagram.html.j2' %}
         </p>
         <p class="pt-4">Here is a short video explaining how ClipCast works:</p>
-        <p>
+        <!-- <p>
           <iframe
           width="100%"
           height="415"
@@ -44,7 +57,139 @@
           frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerpolicy="strict-origin-when-cross-origin"
           allowfullscreen></iframe>
+        </p> -->
+        <a name="how-to-add-content"></a>
+        <h2 id="how-to-add-content" class="my-5">How to Add Content</h2>
+
+        <div class="d-block my-5">
+          <h3>From a Link</h3>
+          <p>
+            To add content from a link, simply paste the link into the "Add Content" form on your
+            <a href="/app">ClipCast dashboard</a> (which you will see after login/signup).
+          </p>
+          <p>
+            <img
+              src="/assets/img/enter-url-screenshot.jpg"
+              alt="Add content from a link"
+              class="d-block shadow-lg img-fluid"
+              style="border-radius: 15px;"
+            >
+          </p>
+          <p>
+            <strong>* Important Note:</strong> ClipCast can only access publicly-available URLs.  I.e. it can't retrieve content protected by a login.
+          </p>
+        </div>
+        <div class="d-block my-5">
+          <h3>By E-Mail</h3>
+          <p>
+            Add content to your feed by e-mailing links or text to a custom email provided for you.  THe e-mail is available in your
+            <a href="/app">ClipCast dashboard</a>.
+          </p>
+          <p>
+            <img
+              src="/assets/img/email-links-screenshot.jpg"
+              alt="Add content by E-Mail"
+              class="d-block shadow-lg img-fluid"
+              style="border-radius: 15px;"
+            >
+          </p>
+        </div>
+        <div class="d-block my-5">
+          <h3>Paste (or Enter) Text</h3>
+          <p>
+            To add content from text, simply paste the text into the "Add Content" textarea in the <a href="/app">ClipCast dashboard</a>.
+          </p>
+          <p>
+            <img
+              src="/assets/img/add-content-screenshot.jpg"
+              alt="Add content from a link"
+              class="d-block shadow-lg img-fluid"
+              style="border-radius: 15px;"
+            >
+          </p>
+        </div>
+        <div class="d-block my-5">
+          <h3>With the Chrome Extension</h3>
+          <p>
+            Chrome desktop users can install the ClipCast Chrome extension to add content from any web page with a single click.
+          </p>
+          <p>
+            <img
+              src="/assets/img/chrome-screenshot.jpg"
+              alt="Add content from text"
+              class="d-block shadow-lg img-fluid"
+              style="border-radius: 15px;"
+            >
+          </p>
+        </div>
+
+        <a name="add-your-feed"></a>
+        <h2 id="add-your-feed" class="my-5">How to add your ClipCast feed to your podcast app</h2>
+
+        <p>
+          In your <a href="/app">ClipCast dashboard</a> you'll find a link to your podcast feed.
+          Simply copy the link...
         </p>
+        <p>
+          <img
+            src="/assets/img/your-podcast-feed.jpg"
+            alt="Add your ClipCast feed to your podcast app"
+            class="d-block shadow-lg img-fluid"
+            style="border-radius: 15px;"
+          >
+        </p>
+        <p>
+          ...and paste it into your podcast app's "Add Podcast" form.
+          Here is how to do it on Apple Podcasts.
+        </p>
+        <p>
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <img
+                src="/assets/img/apple-podcasts.jpg"
+                alt="Add your ClipCast feed to Apple Podcasts"
+                class="d-block shadow-lg img-fluid"
+                style="border-radius: 15px;"
+              >
+            </div>
+            <div class="col-md-6 text-center">
+              <img
+                src="/assets/img/apple-podcasts2.jpg"
+                alt="Add your ClipCast feed to Apple Podcasts"
+                class="d-block shadow-lg img-fluid"
+                style="border-radius: 15px;"
+              >
+            </div>
+          </div>
+        </p>
+        <p class="my-5">
+          Here's <a target="_new" href="https://www.thepitch.show/blog/how-to-manually-add-an-rss-feed-to-your-podcast-app-on-desktop-ios-android/">how to add the feed to your specific podcast app</a>.
+          Unfortunately, Spotify is the only major pordcast app that doesn't support adding RSS feeds.
+        </p>
+
+        <a name="ai-caveats"></a>
+        <h2 id="ai-caveats" class="my-5">AI Text-to-Speech: Pretty good, but not perfect</h2>
+
+        <p>
+          ClipCast's
+          <a href="javascript:;" class="text-white" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-url="/partials/premium-plan-info">Pro plan</a>
+           uses AI to convert text to speech.  Given a paragraph of text, the AI will sound as good as a human reading it.  However,
+           web pages are much more visual than just text.  Here are some things that can cause the AI to stumble:
+
+          <ul>
+            <li>Graphs and Charts</li>
+            <li>Pull Quotes</li>
+            <li>Image Captions</li>
+            <li>Text in footnotes</li>
+            <li>Text in captions</li>
+            <li>Text in sidebars</li>
+            <li>Text in pull quotes</li>
+            <li>Text in ads</li>
+            <li>Text in comments</li>
+          </ul>
+
+        </p>
+
       </article>
     </div>
     <div class="col-md-3">
