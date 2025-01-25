@@ -33,11 +33,19 @@
           <a href="{{ config.STORE_URL }}/app" class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap">Open App</a>
         </div>
         {% else %}
-        <div class="nav-item me-2">
-          <a data-testid="login-link" href="{{ config.STORE_URL }}/login" class="nav-link link-body-emphasis">Log In</a>
+        <div class="nav-item me-2 d-flex align-items-center my-2 my-lg-0">
+          <a
+            role="button"
+            data-testid="login-link"
+            href="{{ config.STORE_URL }}/login"
+            class="btn btn-outline-light rounded btn-sm fw-semibold text-uppercase fs-6 text-nowrap"
+          >Log In</a>
         </div>
         <div class="nav-item me-2 d-block d-sm-none my-2">
-          <a href="{{ config.STORE_URL }}/signup" class="btn btn-theme btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap">Get Started</a>
+          <a
+            href="{{ config.STORE_URL }}/signup"
+            class="btn btn-theme rounded btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap"
+          >Get Started</a>
         </div>
         {% endif %}
       </div>
@@ -46,15 +54,25 @@
       {% if session.get('user_id') %}
         <a
           href="{{ config.STORE_URL }}/app"
-          class="btn btn-sm fw-semibold text-uppercase rounded px-2 py-1 fs-6 text-nowrap d-none d-sm-inline-block btn-theme">
-          Open App <i class="fa fa-arrow-right ms-1"></i>
+          class="btn btn-sm btn-theme fw-semibold text-uppercase rounded px-2 py-1 fs-6 text-nowrap">
+            <span class="d-none d-sm-inline">
+              Open App <i class="fa fa-arrow-right ms-1"></i>
+            </span>
+            <span class="d-inline d-sm-none">
+              App <i class="fa fa-arrow-right ms-1"></i>
+            </span>
         </a>
       {% else %}
         <a
           data-testid="get-started"
           href="{{ config.STORE_URL }}/signup"
-          class="btn btn-theme rounded btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap d-none d-sm-inline-block">
-          Get started <i class="fa fa-arrow-right ms-1"></i>
+          class="btn btn-theme rounded btn-sm fw-semibold text-uppercase px-2 py-1 fs-6 text-nowrap">
+          <span class="d-none d-sm-inline">
+            Get started <i class="fa fa-arrow-right ms-1"></i>
+          </span>
+          <span class="d-inline d-sm-none">
+            Start
+          </span>
         </a>
       {% endif %}
     </div>

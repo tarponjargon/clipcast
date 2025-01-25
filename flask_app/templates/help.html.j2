@@ -8,13 +8,14 @@
 
 <main class="container my-4" style="min-height: 40vh;">
   <h1>{{ config.STORE_NAME }} Help</h1>
-  <p>
-    If you have any trouble with the app, feed free to <a href="/contact">contact us</a>, or you can
-    <a href="https://github.com/tarponjargon/clipcast/issues" target="_blank">open an issue on GitHub</a>.
-  </p>
+
   <div class="row">
     <div class="col-md-9">
       <article class="mt-2">
+        <p>
+          If you have any trouble with the app, feed free to <a href="/contact">contact us</a>, or you can
+          <a href="https://github.com/tarponjargon/clipcast/issues" target="_blank">open an issue on GitHub</a>.
+        </p>
         <ul class="mb-5">
           <li class="fs-5"><a href="#overview" data-toggle="scroll-to">What ClipCast Does</a></li>
           <li class="fs-5"><a href="#how-to-add-content" data-toggle="scroll-to">How to add content</a></li>
@@ -25,7 +26,7 @@
         <a name="overview"></a>
         <h2 id="overview" class="fs-2">What ClipCast Does</h2>
         <p>
-          ClipCast turns web content that you provide (in the form of links or text) into natural-language audio and
+          ClipCast turns web content that you provide (links or text) into natural-language audio and
           puts it right into your podcast listening app of choice.
         </p>
         <p>
@@ -42,22 +43,15 @@
         <p>
           ClipCast clips out just the content from links you provide - excluding ads, menus, footers and comments.
           It then uses AI to convert the text into natural-sounding speech, and then provides it to you in a podcast feed
-          compatible with all podcast apps.  Or you can listen to it right on ClipCast.it...no app required!
+          compatible with nearly all podcast apps.  Or you can listen to it right on ClipCast.it...no app required!
         </p>
         <p class="pt-3">
           {% include 'includes/diagram.html.j2' %}
         </p>
         <p class="pt-4">Here is a short video explaining how ClipCast works:</p>
-        <!-- <p>
-          <iframe
-          width="100%"
-          height="415"
-          src="https://www.youtube.com/embed/FA5Db6CoeLI?si=JbA214tROeBFhZzO"
-          title="YouTube video player"
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen></iframe>
-        </p> -->
+        <p>
+          <iframe width="100%" height="475" src="https://www.youtube.com/embed/27os7ylO88E?si=gkVLolL_Q5Dj_VPR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </p>
         <a name="how-to-add-content"></a>
         <h2 id="how-to-add-content" class="my-5">How to Add Content</h2>
 
@@ -82,7 +76,7 @@
         <div class="d-block my-5">
           <h3>By E-Mail</h3>
           <p>
-            Add content to your feed by e-mailing links or text to a custom email provided for you.  THe e-mail is available in your
+            Add content to your feed by e-mailing links or text to a custom email provided for you.  The e-mail is available in your
             <a href="/app">ClipCast dashboard</a>.
           </p>
           <p>
@@ -140,7 +134,7 @@
         </p>
         <p>
           ...and paste it into your podcast app's "Add Podcast" form.
-          Here is how to do it on Apple Podcasts.
+          Here is how to do it on Apple Podcasts:
         </p>
         <p>
           <div class="row">
@@ -172,32 +166,27 @@
 
         <p>
           ClipCast's
-          <a href="javascript:;" class="text-white" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-url="/partials/premium-plan-info">Pro plan</a>
-           uses AI to convert text to speech.  Given a paragraph of text, the AI will sound as good as a human reading it.  However,
-           web pages are much more visual than just text.  Here are some things that can cause the AI to stumble:
-
-          <ul>
-            <li>Graphs and Charts</li>
-            <li>Pull Quotes</li>
-            <li>Image Captions</li>
-            <li>Text in footnotes</li>
-            <li>Text in captions</li>
-            <li>Text in sidebars</li>
-            <li>Text in pull quotes</li>
-            <li>Text in ads</li>
-            <li>Text in comments</li>
-          </ul>
-
+          Pro voices
+           use AI to convert text to speech.  Given a paragraph of text, the AI will sound as good as a human reading it.  However,
+           web pages are much more visual than just text.  Images, graphs, charts and diagrams can cause the AI to stumble.
         </p>
+
+        <p>
+          These elements are visual and won't be included in the audio.  So if the text refers to the depictions, it may be a bit confusing.  There are a couple ways to mitigate this:
+        </p>
+
+        <ul>
+          <li>Before sending the content to ClipCast, glance at the depictions to get the context</li>
+          <li>Click the "description" icon in your podcast player where you can find a link back to the original article (where you can see the depictions)</li>
+        </ul>
 
       </article>
     </div>
     <div class="col-md-3">
-      <aside id="secondary" class="widget-area">
-        <div class="card border-theme bg-theme bg-opacity-25 mb-3">
+      <aside id="secondary" class="navbar navbar-sticky widget-area">
+        <div class="card border-theme bg-theme bg-opacity-25 w-100">
           <div class="card-header border-theme fw-bold small text-inverse">HELP TOPICS</div>
           <div class="card-body">
-            <!-- TODO: fill this in-->
           </div>
           <div class="card-arrow">
             <div class="card-arrow-top-left"></div>
