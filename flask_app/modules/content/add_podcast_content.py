@@ -266,6 +266,11 @@ def add_podcast_url(url, user_id):
     if not description:
         description = get_first_n_words(content, 50)
 
+    if author:
+        description += f" by {author}."
+
+    description += f" Original article: {url}"
+
     image = metadata.get("image")
     if not image:
         image = current_app.config.get("DEFAULT_IMAGE")
