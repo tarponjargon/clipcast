@@ -107,6 +107,6 @@ def handle_signup_request():
 
     return render_template(
         "partials/notifications/success_card.html.j2",
-        message="""Thank you for signing up.  Redirecting to app...
-      <script>setTimeout(function(){window.location.href = '/app';}, 2000);</script>""",
+        message="""You are now logged in.  Redirecting the the app...
+    <script>window.location.href = '/app/quickstart';</script>""",
     )
