@@ -149,6 +149,12 @@ def do_app_content():
     return render_template("add_content.html.j2")
 
 
+@views.route("/app/quickstart")
+@login_required
+def do_app_quickstart():
+    return render_template("quick_start.html.j2")
+
+
 @views.route("/app/delete-episodes", methods=["POST", "GET"])
 @login_required
 def do_delete_episodes():

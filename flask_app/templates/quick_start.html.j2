@@ -1,0 +1,19 @@
+{% set page = 'quickstart' %}
+{% extends "base.html.j2" %}
+{% set title %}{{ config.STORE_NAME }} Quick Start{% endset %}
+{% block content %}
+
+{% include 'includes/app_heading.html.j2' %}
+{% include 'includes/app_sidebar.html.j2' %}
+
+<div id="content" class="app-content">
+  <!-- BEGIN container -->
+  <div class="container">
+    {% include 'includes/quick_start.html.j2' %}
+  </div>
+
+</div>
+
+<a href="#" data-toggle="scroll-to-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+
+{% endblock %}

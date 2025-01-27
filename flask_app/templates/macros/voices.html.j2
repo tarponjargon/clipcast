@@ -21,7 +21,7 @@
         <a
           href="#"
           data-content-id="{{ voice.voice_code }}"
-          data-mp3="{{ sanitize(voice.sample_mp3) }}"
+          data-mp3="{{ config.STORE_URL }}{{ sanitize(voice.sample_mp3) }}"
           data-title="{{ loop.index}} {{ voice.language_name }} - {{ voice.gender}}"
           data-author="{{ config.STORE_NAME }}"
           data-image="{{ config.DEFAULT_IMAGE }}"

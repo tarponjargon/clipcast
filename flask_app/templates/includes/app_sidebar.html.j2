@@ -5,6 +5,14 @@
   <div class="app-sidebar-content" data-scrollbar="true" data-height="100%">
     <!-- BEGIN menu -->
     <div class="menu mt-4">
+
+      <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app/quickstart' else '' }}">
+        <a href="/app/quickstart" class="menu-link">
+          <span class="menu-icon"><i class="bi bi-lightning-fill"></i></span>
+          <span class="menu-text">Quick Start</span>
+        </a>
+      </div>
+
       <div class="menu-item {{ 'active' if url_for(request.endpoint) == '/app' else '' }}">
         <a href="/app" class="menu-link">
           <span class="menu-icon"><i class="bi bi-collection-play"></i></span>
