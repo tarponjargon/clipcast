@@ -4,9 +4,7 @@ This is a web application that accepts content in the form of links (or plain te
 
 It uses python/flask on the back end and Bootstrap and HTMX on the front end.
 
-Currently the project is not in production.
-
-![screenshot 1](https://www.thewhiteroom.com/images/clipcast-screenshot1.png)
+![screenshot 1](https://www.thewhiteroom.com/images/clipcast-screenshot.png)
 
 ![screenshot 2](https://www.thewhiteroom.com/images/clipcast-screenshot2.png)
 
@@ -76,7 +74,7 @@ From WITHIN the docker container:
 
 Then do imports:
 
-`from flask_app.tts.modules.openai_tts import OpenAITTS`
+`from flask_app.modules.tts.openai_tts import OpenAITTS`
 
 and call functions:
 

@@ -8,6 +8,7 @@ from flask_app.modules.user.user import (
     verify_password,
     load_user,
     login_user,
+    add_welcome_podcast,
 )
 
 
@@ -107,6 +108,8 @@ def handle_google_login_callback(google):
             error="Problem loading user",
         )
     login_user(user)
+
+    add_welcome_podcast(user_id)
 
     return render_template(
         "partials/notifications/success_card.html.j2",

@@ -1,7 +1,7 @@
 import re
 from flask import Blueprint, request, session, current_app, render_template
 from flask_app.modules.extensions import DB
-from flask_app.modules.helpers import validate_email
+from flask_app.modules.helpers import validate_email, create_uuid
 from flask_app.modules.contact import subscribe_contact
 from flask_app.modules.user.user import (
     User,
@@ -10,6 +10,7 @@ from flask_app.modules.user.user import (
     load_user,
     login_user,
     create_user,
+    add_welcome_podcast,
 )
 
 
@@ -101,6 +102,8 @@ def handle_signup_request():
 
     if marketing_subscribed:
         subscribe_contact(email)
+
+    add_welcome_podcast(user_id)
 
     return render_template(
         "partials/notifications/success_card.html.j2",

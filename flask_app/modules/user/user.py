@@ -3,7 +3,7 @@ import hashlib
 import secrets
 from flask import request, current_app, session
 from flask_app.modules.extensions import DB
-from flask_app.modules.helpers import match_uuid
+from flask_app.modules.helpers import match_uuid, create_uuid
 from flask_app.modules.http import get_env_vars
 
 
@@ -169,6 +169,55 @@ def load_user(user_id):
     sql = f"SELECT * FROM user WHERE user_id = %(user_id)s"
     params = {"user_id": user_id}
     return DB.fetch_one(sql, params)
+
+
+def add_welcome_podcast(user_id):
+
+    if not user_id:
+        return False
+
+    # save to the database
+    mp3_url = (
+        current_app.config.get("STORE_URL") + "/assets/audio/welcome-to-clipcast.mp3"
+    )
+    ins_id = DB.insert_query(
+        """
+        INSERT INTO podcast_content SET
+        user_id = %(user_id)s,
+        content_id = %(content_id)s,
+        url = %(url)s,
+        title = %(title)s,
+        author = %(author)s,
+        description = %(description)s,
+        image = %(image)s,
+        hostname = %(hostname)s,
+        article_date = NOW(),
+        metadata = %(metadata)s,
+        content = %(content)s,
+        content_character_count = '75',
+        total_chunks = 1,
+        mp3_url = %(mp3_url)s,
+        mp3_file_size = 5491,
+        mp3_duration = "00:05",
+        voice_code = "alloy",
+        current_status = "complete"
+    """,
+        {
+            "user_id": user_id,
+            "content_id": create_uuid(),
+            "url": current_app.config.get("STORE_URL") + "/help",
+            "title": "Welcome to Clipcast",
+            "author": "Clipcast",
+            "description": "Welcome to Clipcast",
+            "image": current_app.config.get("DEFAULT_IMAGE"),
+            "hostname": "clipcast.it",
+            "metadata": "{}",
+            "content": "Welcome to Clipcast",
+            "mp3_url": mp3_url,
+        },
+    )
+    if not ins_id:
+        current_app.logger.error(f"Error saving welcome podcast to db")
 
 
 class User(object):

@@ -1,5 +1,5 @@
 {% set page = 'help' %}
-{% set title %}{{ config.STORE_NAME }}{% endset %} Help
+{% set title %}{{ config.STORE_NAME }} Help{% endset %} Help
 {% extends "base.html.j2" %}
 
 {% block content %}
@@ -18,10 +18,11 @@
         </p>
         <ul class="mb-5">
           <li class="fs-5"><a href="#overview" data-toggle="scroll-to">What ClipCast Does</a></li>
-          <li class="fs-5"><a href="#how-to-add-content" data-toggle="scroll-to">How to add content</a></li>
           <li class="fs-5"><a href="#add-your-feed" data-toggle="scroll-to">How to add your ClipCast feed to your podcast app</a></li>
+          <li class="fs-5"><a href="#how-to-add-content" data-toggle="scroll-to">How to add content</a></li>
           <li class="fs-5"><a href="#ai-caveats" data-toggle="scroll-to">AI Text-to-Speech: Pretty good, but not perfect</a></li>
         </ul>
+
 
         <a name="overview"></a>
         <h2 id="overview" class="fs-2">What ClipCast Does</h2>
@@ -49,9 +50,55 @@
           {% include 'includes/diagram.html.j2' %}
         </p>
         <p class="pt-4">Here is a short video explaining how ClipCast works:</p>
-        <p>
+        <a name="overview-video"></a>
+        <p id="overview-video">
           <iframe width="100%" height="475" src="https://www.youtube.com/embed/27os7ylO88E?si=gkVLolL_Q5Dj_VPR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </p>
+
+        <a name="add-your-feed"></a>
+        <h2 id="add-your-feed" class="my-5">How to add your ClipCast feed to your podcast app</h2>
+
+        <p>
+          In your <a href="/app">ClipCast dashboard</a> you'll find a link to your podcast feed.
+          Simply copy the link...
+        </p>
+        <p>
+          <img
+            src="/assets/img/your-podcast-feed.jpg"
+            alt="Add your ClipCast feed to your podcast app"
+            class="d-block shadow-lg img-fluid"
+            style="border-radius: 15px;"
+          >
+        </p>
+        <p>
+          ...and paste it into your podcast app's "Add Podcast" form.
+          Here is how to do it on Apple Podcasts:
+        </p>
+        <p>
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <img
+                src="/assets/img/apple-podcasts.jpg"
+                alt="Add your ClipCast feed to Apple Podcasts"
+                class="d-block shadow-lg img-fluid"
+                style="border-radius: 15px;"
+              >
+            </div>
+            <div class="col-md-6 text-center">
+              <img
+                src="/assets/img/apple-podcasts2.jpg"
+                alt="Add your ClipCast feed to Apple Podcasts"
+                class="d-block shadow-lg img-fluid"
+                style="border-radius: 15px;"
+              >
+            </div>
+          </div>
+        </p>
+        <p class="my-5">
+          Here's <a target="_new" href="https://www.thepitch.show/blog/how-to-manually-add-an-rss-feed-to-your-podcast-app-on-desktop-ios-android/">how to add the feed to your specific podcast app</a>.
+          Unfortunately, Spotify is the only major pordcast app that doesn't support adding RSS feeds.
+        </p>
+
         <a name="how-to-add-content"></a>
         <h2 id="how-to-add-content" class="my-5">How to Add Content</h2>
 
@@ -117,49 +164,6 @@
           </p>
         </div>
 
-        <a name="add-your-feed"></a>
-        <h2 id="add-your-feed" class="my-5">How to add your ClipCast feed to your podcast app</h2>
-
-        <p>
-          In your <a href="/app">ClipCast dashboard</a> you'll find a link to your podcast feed.
-          Simply copy the link...
-        </p>
-        <p>
-          <img
-            src="/assets/img/your-podcast-feed.jpg"
-            alt="Add your ClipCast feed to your podcast app"
-            class="d-block shadow-lg img-fluid"
-            style="border-radius: 15px;"
-          >
-        </p>
-        <p>
-          ...and paste it into your podcast app's "Add Podcast" form.
-          Here is how to do it on Apple Podcasts:
-        </p>
-        <p>
-          <div class="row">
-            <div class="col-md-6 text-center">
-              <img
-                src="/assets/img/apple-podcasts.jpg"
-                alt="Add your ClipCast feed to Apple Podcasts"
-                class="d-block shadow-lg img-fluid"
-                style="border-radius: 15px;"
-              >
-            </div>
-            <div class="col-md-6 text-center">
-              <img
-                src="/assets/img/apple-podcasts2.jpg"
-                alt="Add your ClipCast feed to Apple Podcasts"
-                class="d-block shadow-lg img-fluid"
-                style="border-radius: 15px;"
-              >
-            </div>
-          </div>
-        </p>
-        <p class="my-5">
-          Here's <a target="_new" href="https://www.thepitch.show/blog/how-to-manually-add-an-rss-feed-to-your-podcast-app-on-desktop-ios-android/">how to add the feed to your specific podcast app</a>.
-          Unfortunately, Spotify is the only major pordcast app that doesn't support adding RSS feeds.
-        </p>
 
         <a name="ai-caveats"></a>
         <h2 id="ai-caveats" class="my-5">AI Text-to-Speech: Pretty good, but not perfect</h2>
@@ -187,6 +191,12 @@
         <div class="card border-theme bg-theme bg-opacity-25 w-100">
           <div class="card-header border-theme fw-bold small text-inverse">HELP TOPICS</div>
           <div class="card-body">
+            <ul class="list-unstyled">
+              <li><a href="#overview" data-toggle="scroll-to">ClipCast Overview</a></li>
+              <li><a href="#overview-video" data-toggle="scroll-to">Video Walkthrough</a></li>
+              <li><a href="#add-your-feed" data-toggle="scroll-to">Add to Your Podcast App</a></li>
+              <li><a href="#how-to-add-content" data-toggle="scroll-to">Add Content</a></li>
+            </ul>
           </div>
           <div class="card-arrow">
             <div class="card-arrow-top-left"></div>
