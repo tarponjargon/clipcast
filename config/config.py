@@ -39,6 +39,8 @@ class Config(object):
         "base": 10,
         "premium": 30,
     }
+    PREMIUM_PLAN_COST = 5
+    PREMIUM_PLAN_SKU = "clipcast-premium"
     PAGE_SIZE = 10
     TTS_SENTENCE_CHUNK_SIZE = 4  # how many sentences to chunk together for TTS
     TRANSITION_VOICE = "echo"  # voice to use for intros/outros

@@ -114,5 +114,5 @@ def handle_google_login_callback(google):
     return render_template(
         "partials/notifications/success_card.html.j2",
         message="""You are now logged in.  Redirecting the the app...
-    <script>window.location.href = '/app/quiuckstart';</script>""",
+    <script>window.location.href = '/app/quickstart';</script>""",
     )
