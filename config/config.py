@@ -118,6 +118,9 @@ class Config(object):
     S3_BUCKET = os.environ.get("S3_BUCKET")
     S3_PUBLIC_URL = os.environ.get("S3_PUBLIC_URL")
 
+    # stripe config
+    STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+
     # Google sign-in app
     GOOGLE_LOGIN_APP_CLIENT_ID = os.environ.get("GOOGLE_LOGIN_APP_CLIENT_ID")
     GOOGLE_LOGIN_APP_CLIENT_SECRET = os.environ.get("GOOGLE_LOGIN_APP_CLIENT_SECRET")

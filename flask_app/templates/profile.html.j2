@@ -142,18 +142,10 @@
               <div class="card">
                 <div class="list-group list-group-flush">
                   <div class="list-group-item d-flex align-items-center p-3">
-                    No payment needed at this time
-                    {#--
-                    <div class="flex-1 text-break">
-                      <div>Allowed payment method</div>
-                      <div class="text-inverse text-opacity-50">
-                        Paypal, Credit Card, Apple Pay, Amazon Pay, Google Wallet, Alipay, Wechatpay
-                      </div>
-                    </div>
-                    <div>
-                      <a href="#modalEdit" data-bs-toggle="modal" class="btn btn-outline-default w-100px">Edit</a>
-                    </div>
-                    --#}
+                    <form action="/app/stripe-checkout" method="POST">
+                      <input type="hidden" name="price_id" value="price_1QmPH7HrKmqo1pBdtG7JD1hR" />
+                      <button type="submit" class="btn btn-outline-theme btn-lg">Purchase</button>
+                    </form>
                   </div>
                 </div>
                 <div class="card-arrow">

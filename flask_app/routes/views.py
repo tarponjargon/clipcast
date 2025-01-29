@@ -1,4 +1,6 @@
 import validators
+import stripe
+import json
 from urllib.parse import unquote
 from flask import (
     Blueprint,
@@ -34,6 +36,9 @@ google = oauth.register(
     api_base_url="https://www.googleapis.com/oauth2/v1/",
     client_kwargs={"scope": "email profile"},
 )
+
+# Set your secret key. Remember to switch to your live secret key in production.
+stripe.api_key = current_app.config.get("STRIPE_SECRET_KEY")
 
 
 @views.route("/")
@@ -206,3 +211,68 @@ def do_app_add_url():
     # redirect to the app page
     response = make_response(redirect("/app"))
     return response
+
+
+@views.route("/app/stripe-checkout", methods=["POST"])
+@login_required
+def do_stripe_checkout():
+    price_id = request.form.get("price_id")
+
+    session = stripe.checkout.Session.create(
+        success_url=current_app.config.get("STORE_URL")
+        + "/app/stripe-success?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=current_app.config.get("STORE_URL") + "/app/stripe-cancel",
+        mode="subscription",
+        line_items=[
+            {
+                "price": price_id,
+                # For metered billing, do not pass quantity
+                "quantity": 1,
+            }
+        ],
+    )
+
+    # Redirect to the URL returned on the session
+    return redirect(session.url, code=303)
+
+
+@views.route("/stripe-webhook", methods=["POST"])
+def webhook_received():
+    webhook_secret = request.values.get("STRIPE_WEBHOOK_SECRET")
+    request_data = json.loads(request.data)
+
+    if webhook_secret:
+        # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
+        signature = request.headers.get("stripe-signature")
+        try:
+            event = stripe.Webhook.construct_event(
+                payload=request.data, sig_header=signature, secret=webhook_secret
+            )
+            data = event["data"]
+        except Exception as e:
+            return e
+        # Get the type of webhook event sent - used to check the status of PaymentIntents.
+        event_type = event["type"]
+    else:
+        data = request_data["data"]
+        event_type = request_data["type"]
+    data_object = data["object"]
+
+    if event_type == "checkout.session.completed":
+        # Payment is successful and the subscription is created.
+        # You should provision the subscription and save the customer ID to your database.
+        current_app.logger.info(data)
+    elif event_type == "invoice.paid":
+        # Continue to provision the subscription as payments continue to be made.
+        # Store the status in your database and check when a user accesses your service.
+        # This approach helps you avoid hitting rate limits.
+        current_app.logger.info(data)
+    elif event_type == "invoice.payment_failed":
+        # The payment failed or the customer does not have a valid payment method.
+        # The subscription becomes past_due. Notify your customer and send them to the
+        # customer portal to update their payment information.
+        current_app.logger.error(data)
+    else:
+        current_app.logger.error("Unhandled event type {}".format(event_type))
+
+    return {"status": "success"}
