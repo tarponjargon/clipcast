@@ -61,12 +61,15 @@ module.exports = (env, argv) => {
         writeToDisk: true, // apparently HtmlWebpackPlugin doesn't actually write the assets html file if false
       },
       setupMiddlewares: (middlewares, devServer) => {
-        devServer.app.use(
+        devServer.app.use((req, res, next) => {
+          if (req.path === "/app/subscription-webhook") {
+            return next();
+          }
           basicAuth({
             users: { misc: "misc" }, // Replace with your username/password
             challenge: true,
-          })
-        );
+          })(req, res, next);
+        });
 
         return middlewares;
       },

@@ -120,6 +120,8 @@ class Config(object):
 
     # stripe config
     STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+    STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+    STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID")
 
     # Google sign-in app
     GOOGLE_LOGIN_APP_CLIENT_ID = os.environ.get("GOOGLE_LOGIN_APP_CLIENT_ID")

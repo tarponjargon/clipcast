@@ -1,0 +1,18 @@
+{% set page = 'paymentsuccess' %}
+{% extends "base.html.j2" %}
+{% set title %}{{ config.STORE_NAME }} - Payment Success{% endset %}
+{% block content %}
+
+{% include 'includes/app_heading.html.j2' %}
+{% include 'includes/app_sidebar.html.j2' %}
+
+<div id="content" class="app-content" data-url="{{ request.path }}">
+  <div class="container">
+    <h1>Payment Success</h1>
+    {{ customer.name }}, your payment was successful. Thank you for your purchase.
+  </div>
+</div>
+
+<a href="#" data-toggle="scroll-to-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+
+{% endblock %}

@@ -213,30 +213,44 @@ def do_app_add_url():
     return response
 
 
+@views.route("/app/payment-success")
+@login_required
+def do_payment_success():
+    session = stripe.checkout.Session.retrieve(request.args.get("session_id"))
+    customer = stripe.Customer.retrieve(session.customer)
+    return render_template("payment_success.html.j2", customer=customer)
+
+
+@views.route("/app/payment-cancel")
+@login_required
+def do_payment_cancel():
+    return render_template("payment_cancel.html.j2")
+
+
 @views.route("/app/stripe-checkout", methods=["POST"])
 @login_required
 def do_stripe_checkout():
     price_id = request.form.get("price_id")
-
-    session = stripe.checkout.Session.create(
-        success_url=current_app.config.get("STORE_URL")
-        + "/app/stripe-success?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url=current_app.config.get("STORE_URL") + "/app/stripe-cancel",
+    base_url = current_app.config.get("STORE_URL")
+    stripe_session = stripe.checkout.Session.create(
+        client_reference_id=session.get("user_id"),
+        success_url=base_url + "/app/payment-success?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=base_url + "/app/payment-cancel",
         mode="subscription",
+        payment_method_types=["card"],
         line_items=[
             {
-                "price": price_id,
-                # For metered billing, do not pass quantity
+                "price": current_app.config.get("STRIPE_PRICE_ID"),
                 "quantity": 1,
             }
         ],
     )
 
     # Redirect to the URL returned on the session
-    return redirect(session.url, code=303)
+    return redirect(stripe_session.url, code=303)
 
 
-@views.route("/stripe-webhook", methods=["POST"])
+@views.route("/app/subscription-webhook", methods=["POST"])
 def webhook_received():
     webhook_secret = request.values.get("STRIPE_WEBHOOK_SECRET")
     request_data = json.loads(request.data)
@@ -258,20 +272,24 @@ def webhook_received():
         event_type = request_data["type"]
     data_object = data["object"]
 
+    # Handle the event
     if event_type == "checkout.session.completed":
-        # Payment is successful and the subscription is created.
-        # You should provision the subscription and save the customer ID to your database.
-        current_app.logger.info(data)
+        current_app.logger.info(f"{event_type}: {data}")
+    elif event_type == "customer.subscription.created":
+        current_app.logger.info(f"{event_type}: {data}")
+    elif event_type == "customer.subscription.deleted":
+        current_app.logger.info(f"{event_type}: {data}")
+    elif event_type == "customer.subscription.paused":
+        current_app.logger.info(f"{event_type}: {data}")
+    elif event_type == "invoice.created":
+        current_app.logger.info(f"{event_type}: {data}")
     elif event_type == "invoice.paid":
-        # Continue to provision the subscription as payments continue to be made.
-        # Store the status in your database and check when a user accesses your service.
-        # This approach helps you avoid hitting rate limits.
-        current_app.logger.info(data)
+        current_app.logger.info(f"{event_type}: {data}")
     elif event_type == "invoice.payment_failed":
-        # The payment failed or the customer does not have a valid payment method.
-        # The subscription becomes past_due. Notify your customer and send them to the
-        # customer portal to update their payment information.
-        current_app.logger.error(data)
+        current_app.logger.info(f"{event_type}: {data}")
+    elif event_type == "invoice.payment_succeeded":
+        current_app.logger.info(f"{event_type}: {data}")
+    # ... handle other event types
     else:
         current_app.logger.error("Unhandled event type {}".format(event_type))
 

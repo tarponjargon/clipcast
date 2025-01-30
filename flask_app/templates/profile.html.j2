@@ -143,7 +143,7 @@
                 <div class="list-group list-group-flush">
                   <div class="list-group-item d-flex align-items-center p-3">
                     <form action="/app/stripe-checkout" method="POST">
-                      <input type="hidden" name="price_id" value="price_1QmPH7HrKmqo1pBdtG7JD1hR" />
+                      <input type="hidden" name="price_id" value="{{ config.STRIPE_PRICE_ID }}" />
                       <button type="submit" class="btn btn-outline-theme btn-lg">Purchase</button>
                     </form>
                   </div>
