@@ -13,11 +13,11 @@
   </td>
 
   <td class="align-middle">
-    <a name="{{ item.content_id }}"></a>
     <div class="m-auto w-100px h-100px d-flex align-items-center justify-content-center">
       {% if item.current_status == 'complete' and item.mp3_url %}
       <a
         href="#"
+        id="{{ item.content_id }}"
         data-content-id="{{ item.content_id }}"
         data-mp3="{{ sanitize(item.mp3_url) }}"
         data-title="{{ sanitize(item.title)}}"

@@ -262,14 +262,14 @@ def add_podcast_url(url, user_id):
     if not article_date:
         article_date = datetime.now().strftime("%Y-%m-%d")
 
-    description = metadata.get("description")
-    if not description:
-        description = get_first_n_words(content, 50)
+    description = f"Original article: {url}"
+    if metadata.get("description"):
+        description += metadata.get("description")
+    else:
+        description += get_first_n_words(content, 50)
 
     if author:
         description += f" by {author}."
-
-    description += f" Original article: {url}"
 
     image = metadata.get("image")
     if not image:
