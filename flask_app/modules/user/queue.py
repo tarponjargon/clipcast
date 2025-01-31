@@ -99,9 +99,6 @@ def get_queue(user_id, page=1):
         plan_count >= current_app.config.get("MAX_EPISODES").get(plan)
         and user_data.get("email") not in current_app.config["TEST_EMAILS"]
     ):
-        current_app.logger.debug(
-            f"OVER LIMIT {user_data.get("email")}, {current_app.config["TEST_EMAILS"]}"
-        )
         over_limit = True
 
     return {
