@@ -182,7 +182,6 @@ def check_job_status(content_id):
 
         if e_level != 0:
             job_result = f"Job {str(job_id)} completed with error level {e_level} content_id: {content_id}"
-            current_app.logger.error(job_result)
             DB.update_query(
                 """
               UPDATE podcast_content SET
