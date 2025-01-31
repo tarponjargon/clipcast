@@ -10,7 +10,6 @@ from flask import (
     session,
     make_response,
     current_app,
-    url_for,
 )
 from flask_app.modules.extensions import DB, oauth
 from flask_app.modules.http import login_required, check_if_logged_in_already
@@ -22,6 +21,7 @@ from flask_app.modules.user.rss import serve_rss_feed
 from flask_app.modules.user.queue import get_queue
 from flask_app.modules.user.login import handle_google_login_callback
 from flask_app.modules.content.add_podcast_content import add_podcast_url
+from flask_app.modules.payment.webhooks import handle_webhook
 
 views = Blueprint("views", __name__)
 
@@ -252,45 +252,4 @@ def do_stripe_checkout():
 
 @views.route("/app/subscription-webhook", methods=["POST"])
 def webhook_received():
-    webhook_secret = request.values.get("STRIPE_WEBHOOK_SECRET")
-    request_data = json.loads(request.data)
-
-    if webhook_secret:
-        # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
-        signature = request.headers.get("stripe-signature")
-        try:
-            event = stripe.Webhook.construct_event(
-                payload=request.data, sig_header=signature, secret=webhook_secret
-            )
-            data = event["data"]
-        except Exception as e:
-            return e
-        # Get the type of webhook event sent - used to check the status of PaymentIntents.
-        event_type = event["type"]
-    else:
-        data = request_data["data"]
-        event_type = request_data["type"]
-    data_object = data["object"]
-
-    # Handle the event
-    if event_type == "checkout.session.completed":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "customer.subscription.created":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "customer.subscription.deleted":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "customer.subscription.paused":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "invoice.created":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "invoice.paid":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "invoice.payment_failed":
-        current_app.logger.info(f"{event_type}: {data}")
-    elif event_type == "invoice.payment_succeeded":
-        current_app.logger.info(f"{event_type}: {data}")
-    # ... handle other event types
-    else:
-        current_app.logger.error("Unhandled event type {}".format(event_type))
-
-    return {"status": "success"}
+    return handle_webhook()
