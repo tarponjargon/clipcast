@@ -306,6 +306,38 @@ class User(object):
             current_app.config.get("STORE_URL") + "/profile/rss-feed/" + self.get_id()
         )
 
+    def get_stripe_customer(self):
+        """Gets the user's stripe customer ID
+
+        Returns:
+          str: The stripe customer ID
+        """
+        res = DB.fetch_one(
+            """
+          SELECT stripe_customer
+          FROM subscription
+          WHERE user_id = %(user_id)s
+        """,
+            {"user_id": self.get_id()},
+        )
+        return res.get("stripe_customer") if res else None
+
+    def get_stripe_subscription_id(self):
+        """Gets the user's stripe subscription ID
+
+        Returns:
+          str: The stripe subscription ID
+        """
+        res = DB.fetch_one(
+            """
+          SELECT subscription_id
+          FROM subscription
+          WHERE user_id = %(user_id)s
+        """,
+            {"user_id": self.get_id()},
+        )
+        return res.get("subscription_id") if res else None
+
     @classmethod
     def from_id(cls, user_id):
         """Constructor creates User object from user_id

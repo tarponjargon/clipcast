@@ -146,6 +146,10 @@
                       <input type="hidden" name="price_id" value="{{ config.STRIPE_PRICE_ID }}" />
                       <button type="submit" class="btn btn-outline-theme btn-lg">Purchase</button>
                     </form>
+
+                    <form action="/app/payment-portal" method="POST">
+                      <button type="submit" class="btn btn-outline-theme btn-lg">Manage</button>
+                    </form>
                   </div>
                 </div>
                 <div class="card-arrow">

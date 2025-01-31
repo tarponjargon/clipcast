@@ -20,6 +20,7 @@ from flask_app.modules.user.voices import get_base_voices, get_premium_voices
 from flask_app.modules.user.rss import serve_rss_feed
 from flask_app.modules.user.queue import get_queue
 from flask_app.modules.user.login import handle_google_login_callback
+from flask_app.modules.user.user import User
 from flask_app.modules.content.add_podcast_content import add_podcast_url
 from flask_app.modules.payment.webhooks import handle_webhook
 
@@ -225,6 +226,26 @@ def do_payment_success():
 @login_required
 def do_payment_cancel():
     return render_template("payment_cancel.html.j2")
+
+
+@views.route("/app/payment-portal", methods=["POST"])
+@login_required
+def do_payment_portal():
+    # Get the customer's ID
+    user = User.from_id(session.get("user_id"))
+
+    stripe_customer = user.get_stripe_customer()
+    if not stripe_customer:
+        return render_template("error.html.j2", error="No customer ID found"), 400
+
+    # Create a portal session
+    stripe_session = stripe.billing_portal.Session.create(
+        customer=stripe_customer,
+        return_url=current_app.config.get("STORE_URL") + "/app",
+    )
+
+    # Redirect to the URL returned on the session
+    return redirect(stripe_session.url, code=303)
 
 
 @views.route("/app/stripe-checkout", methods=["POST"])

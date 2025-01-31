@@ -67,6 +67,7 @@ def invoice_paid(data):
           email,
           customer_name,
           stripe_customer,
+          subscription_id,
           created,
           active
         )
@@ -75,17 +76,21 @@ def invoice_paid(data):
           %(email)s,
           %(customer_name)s,
           %(stripe_customer)s,
+          %(subscription_id)s,
           FROM_UNIXTIME(%(created)s),
           1
         )
         ON DUPLICATE KEY UPDATE
-          stripe_customer = %(stripe_customer)s
+          stripe_customer = %(stripe_customer)s,
+          subscription_id = %(subscription_id)s,
+          active = 1
       """,
         {
             "user_id": user_id,
             "email": data["customer_email"],
             "customer_name": data["customer_name"],
             "stripe_customer": data["customer"],
+            "subscription_id": data["lines"]["data"][0]["subscription"],
             "created": data["created"],
         },
     )
