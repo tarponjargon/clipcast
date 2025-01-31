@@ -18,7 +18,7 @@ def get_plan_episode_count(user_id):
 
     # load user data
     user_data = load_user(user_id)
-    if not user_data or user_data.get("email") == os.environ.get("TEST_ACCOUNT_EMAIL"):
+    if not user_data or user_data.get("email") in current_app.config["TEST_EMAILS"]:
         return 0
 
     q = DB.fetch_one(

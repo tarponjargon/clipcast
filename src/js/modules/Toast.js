@@ -25,8 +25,8 @@ export const showToast = function (text, isError = false, delay = 3000) {
     document.addEventListener("keydown", toastKeyListener, false);
   });
   const bodyContainer = toastEl.querySelector(".toast-body");
-  bodyContainer.innerText = "";
+  bodyContainer.innerHTML = "";
   const toast = new bootstrap.Toast(toastEl, { delay });
-  bodyContainer.innerText = text;
+  bodyContainer.innerHTML = text;
   toast.show();
 };

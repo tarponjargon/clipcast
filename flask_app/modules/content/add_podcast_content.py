@@ -213,7 +213,7 @@ def add_podcast_url(url, user_id):
         current_app.logger.error(f"No content could be found failed for: {url}")
         return {
             "response_code": 400,
-            "message": "No content could be extracted from URL",
+            "message": "No content could be extracted from URL.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>",
         }
 
     # parse metadata
@@ -237,7 +237,7 @@ def add_podcast_url(url, user_id):
     if not content:
         return {
             "response_code": 400,
-            "message": "No content could be extracted from URL",
+            "message": "No content could be extracted from URL.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>",
         }
 
     # check content length
@@ -264,9 +264,9 @@ def add_podcast_url(url, user_id):
 
     description = f"Original article: {url}"
     if metadata.get("description"):
-        description += metadata.get("description")
+        description += "Description: " + metadata.get("description")
     else:
-        description += get_first_n_words(content, 50)
+        description += "Description: " + get_first_n_words(content, 50)
 
     if author:
         description += f" by {author}."
