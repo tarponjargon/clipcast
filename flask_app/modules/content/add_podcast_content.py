@@ -180,7 +180,10 @@ def add_podcast_url(url, user_id):
 
     plan_count = get_plan_episode_count(user_id)
     plan = user.get("plan")
-    if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
+    if (
+        plan_count >= current_app.config.get("MAX_EPISODES").get(plan)
+        and user.get("email") not in current_app.config["TEST_EMAILS"]
+    ):
         return {
             "response_code": 401,
             "message": "You have reached the limit of episodes for your plan",
@@ -327,7 +330,10 @@ def add_podcast_content(content, user_id):
 
     plan_count = get_plan_episode_count(user_id)
     plan = user.get("plan")
-    if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
+    if (
+        plan_count >= current_app.config.get("MAX_EPISODES").get(plan)
+        and user.get("email") not in current_app.config["TEST_EMAILS"]
+    ):
         return {
             "response_code": 401,
             "message": "You have reached the limit of episodes for your plan",

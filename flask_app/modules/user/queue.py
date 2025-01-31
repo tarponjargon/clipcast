@@ -93,13 +93,24 @@ def get_queue(user_id, page=1):
     #     has_more_results,
     #     plan_count,
     # )
+    over_limit = False
+    user_data = load_user(user_id)
+    if (
+        plan_count >= current_app.config.get("MAX_EPISODES").get(plan)
+        and user_data.get("email") not in current_app.config["TEST_EMAILS"]
+    ):
+        current_app.logger.debug(
+            f"OVER LIMIT {user_data.get("email")}, {current_app.config["TEST_EMAILS"]}"
+        )
+        over_limit = True
+
     return {
         "results": q.get("results", []),
         "next_page": next_page,
         "previous_page": previous_page,
         "total_episodes": total_results,
         "plan_count": plan_count,
-        "over_limit": plan_count >= current_app.config["MAX_EPISODES"].get(plan),
+        "over_limit": over_limit,
     }
 
 
@@ -135,6 +146,7 @@ def check_job_status(content_id):
     except subprocess.CalledProcessError as e:
         job_result = "error checking job status"
 
+    # if the job is not found, update the record
     if "cannot be stated" in job_result or "error" in job_result:
         DB.update_query(
             """
@@ -148,6 +160,40 @@ def check_job_status(content_id):
         )
         return job_result
 
+    # need to check for instances of when the tsp job is showing finished (tho episode is still showing processing)
+    # and an error level that is not 0
+    if "finished" in job_result:
+        e_level = 0
+        result = subprocess.run(
+            [tsp_path, "-l"],
+            text=True,  # Return output as a string
+            capture_output=True,  # Capture stdout and stderr
+        )
+
+        # Process output with Python
+        if result.stdout:
+            for line in result.stdout.splitlines():
+                columns = line.split()
+                if columns and columns[0] == str(job_id):  # Match Job ID
+                    # E-Level is in the 4th column (index 3)
+                    e_level = columns[3].strip()
+                    print(f"E-Level for job {str(job_id)}: {e_level}")
+                    break
+
+        if e_level != 0:
+            job_result = f"Job {str(job_id)} completed with error level {e_level} content_id: {content_id}"
+            current_app.logger.error(job_result)
+            DB.update_query(
+                """
+              UPDATE podcast_content SET
+              current_status = 'error',
+              error_message = %s,
+              processing_end_time = NOW()
+              WHERE content_id = %s
+            """,
+                (job_result, content_id),
+            )
+            return job_result
     return None
 
 
