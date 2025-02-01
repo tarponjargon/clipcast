@@ -101,9 +101,6 @@ runs a specific test with a specific browser
 `npx playwright test --ui --workers=1`
 Starts the interactive UI mode.
 
-`npx playwright test --project=chromium --workers=1`
-Runs the tests only on Desktop Chrome.
-
 `npx playwright test example --workers=1`
 Runs the tests in a specific file.
 
