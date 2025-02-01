@@ -20,11 +20,11 @@
           <li class="fs-5"><a href="#overview" data-toggle="scroll-to">What ClipCast Does</a></li>
           <li class="fs-5"><a href="#add-your-feed" data-toggle="scroll-to">How to add your ClipCast feed to your podcast app</a></li>
           <li class="fs-5"><a href="#how-to-add-content" data-toggle="scroll-to">How to add content</a></li>
-          <li class="fs-5"><a href="#ai-caveats" data-toggle="scroll-to">AI Text-to-Speech: Pretty good, but not perfect</a></li>
+          <li class="fs-5"><a href="#why-some-content" data-toggle="scroll-to">Why Some Content Doesn't Work</a></li>
+          <li class="fs-5"><a href="#ai-caveats" data-toggle="scroll-to">AI Text-to-Speech: Pretty Good, But Not Perfect</a></li>
         </ul>
 
 
-        <a name="overview"></a>
         <h2 id="overview" class="fs-2">What ClipCast Does</h2>
         <p>
           ClipCast turns web content that you provide (links or text) into natural-language audio and
@@ -50,12 +50,19 @@
           {% include 'includes/diagram.html.j2' %}
         </p>
         <p class="my-5">Here is a short video explaining how ClipCast works:</p>
-        <a name="overview-video"></a>
         <p id="overview-video">
-          <iframe width="800" height="450" src="https://www.youtube.com/embed/27os7ylO88E?si=gkVLolL_Q5Dj_VPR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <div class="video-container">
+            <iframe
+              src="https://www.youtube.com/embed/27os7ylO88E?si=gkVLolL_Q5Dj_VPR"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
         </p>
 
-        <a name="add-your-feed"></a>
         <p class="py-4">
           &nbsp;
         </p>
@@ -107,7 +114,6 @@
           Here's <a target="_new" href="https://www.thepitch.show/blog/how-to-manually-add-an-rss-feed-to-your-podcast-app-on-desktop-ios-android/">how to add the feed to your specific podcast app</a>.
         </p>
 
-        <a name="how-to-add-content"></a>
         <p class="py-4">
           &nbsp;
         </p>
@@ -183,29 +189,57 @@
           </p>
         </div>
 
-
-        <a name="ai-caveats"></a>
         <p class="py-4">
           &nbsp;
         </p>
 
-        <h2 id="ai-caveats" class="mb-3">AI Text-to-Speech: Pretty good, but not perfect</h2>
+        <h2 id="why-some-content" class="mb-3">Why Some Content Doesn't Work</h2>
+
+        <p>
+          Most of the time, ClipCast will work with any publicly-available web page.  However, there are a few reasons why it might not work:
+          <ul>
+            <li class="py-2 fs-5">Content is behind a login or a pay wall</li>
+            <li class="py-2 fs-5">Content is protected against automatic fetching:  This means that the target site detects that the request is coming from a machine and puts measures in place to foil it.  NYTimes.com and FT.com are examples of this.</li>
+            <li class="py-2 fs-5">Content is not completely visible on initial page load: Often when you view an article it will show you a paragraph or two and then show a button "Click to read article".  ClipCast is not able to detect these situations. </li>
+            <li class="py-2 fs-5">Content is loaded client-side only: This means that when you fisit the article url, a secondary request is made to the server to load the content into your browser.  ClipCast can only process server-rendered content (content provided on the initial request)</li>
+            <li class="py-2 fs-5">Content on page is formatted in an atypical way: Occasionally, ClipCast will just not be able to understand the structure of a page it's given.  This is fairly rare.</li>
+            <li class="py-2 fs-5">Content is in a format that ClipCast can't read (like a PDF)</li>
+          </ul>
+        </p>
+
+        <p class="py-4">
+          &nbsp;
+        </p>
+
+        <h2 id="ai-caveats" class="mb-3">AI Text-to-Speech: Pretty Good, But Not Perfect</h2>
 
         <p>
           ClipCast's
           Premium voices
-           use AI to convert text to speech.  Given a paragraph of text, the AI will sound as good as a human reading it.  However,
-           web pages are much more visual than just text.  Images, graphs, charts and diagrams can cause the AI to stumble.
+           use AI to convert text to speech.  Given a paragraph of text, the AI will sound as good as a human reading it.
         </p>
 
+        <h3 class="fs-4">Web Pages are Often Visual</h3>
+        <p>
+          Web pages are much more visual than just text.  Images, graphs, charts and diagrams can cause the AI to stumble.
+        <p>
         <p>
           These elements are visual and won't be included in the audio.  So if the text refers to the depictions, it may be a bit confusing.  There are a couple ways to mitigate this:
         </p>
 
         <ul>
-          <li>Before sending the content to ClipCast, glance at the depictions to get the context</li>
-          <li>Click the "description" icon in your podcast player where you can find a link back to the original article (where you can see the depictions)</li>
+          <li class="py-2 fs-5">Before sending the content to ClipCast, glance at the depictions to get the context</li>
+          <li class="py-2 fs-5">Click the "description" icon in your podcast player where you can find a link back to the original article (where you can see the depictions)</li>
         </ul>
+
+        <h3 class="fs-4">Weird Content in Audio?</h3>
+
+        <p>
+          ClipCast works hard to separate content from clutter, but it's not perfect.  The internet is the "wild west" of content, and there's not alot of enforcement of
+          unifrormity in how content is structure on a page.  Which can sometimes make it hard for ClipCast to separate the content from the clutter.  Thus, occasionally you may hear
+          out-of-context content in your audio.
+        </p>
+
 
       </article>
     </div>

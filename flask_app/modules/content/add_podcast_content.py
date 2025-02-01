@@ -180,8 +180,11 @@ def add_podcast_url(url, user_id):
         }
 
     plan_count = get_plan_episode_count(user_id)
-    plan = session_safe_get("plan", "base")
-    if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
+    plan = user.get("plan")
+    if (
+        plan_count >= current_app.config.get("MAX_EPISODES").get(plan)
+        and user.get("email") not in current_app.config["TEST_EMAILS"]
+    ):
         return {
             "response_code": 401,
             "message": "You have reached the limit of episodes for your plan",
@@ -214,7 +217,7 @@ def add_podcast_url(url, user_id):
         current_app.logger.error(f"No content could be found failed for: {url}")
         return {
             "response_code": 400,
-            "message": "No content could be extracted from URL",
+            "message": "No content could be extracted from URL.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>",
         }
 
     # parse metadata
@@ -238,7 +241,7 @@ def add_podcast_url(url, user_id):
     if not content:
         return {
             "response_code": 400,
-            "message": "No content could be extracted from URL",
+            "message": "No content could be extracted from URL.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>",
         }
 
     # check content length
@@ -263,14 +266,14 @@ def add_podcast_url(url, user_id):
     if not article_date:
         article_date = datetime.now().strftime("%Y-%m-%d")
 
-    description = metadata.get("description")
-    if not description:
-        description = get_first_n_words(content, 50)
+    description = f"Original article: {url}"
+    if metadata.get("description"):
+        description += "Description: " + metadata.get("description")
+    else:
+        description += "Description: " + get_first_n_words(content, 50)
 
     if author:
         description += f" by {author}."
-
-    description += f" Original article: {url}"
 
     image = metadata.get("image")
     if not image:
@@ -327,8 +330,11 @@ def add_podcast_content(content, user_id):
         }
 
     plan_count = get_plan_episode_count(user_id)
-    plan = session_safe_get("plan", "base")
-    if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
+    plan = user.get("plan")
+    if (
+        plan_count >= current_app.config.get("MAX_EPISODES").get(plan)
+        and user.get("email") not in current_app.config["TEST_EMAILS"]
+    ):
         return {
             "response_code": 401,
             "message": "You have reached the limit of episodes for your plan",

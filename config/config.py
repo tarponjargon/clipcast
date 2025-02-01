@@ -43,8 +43,15 @@ class Config(object):
     PREMIUM_PLAN_SKU = "clipcast-premium"
     PAGE_SIZE = 10
     TTS_SENTENCE_CHUNK_SIZE = 4  # how many sentences to chunk together for TTS
+    TTS_MAX_CHUNK_SIZE = 4096  # max characters for TTS
     TRANSITION_VOICE = "echo"  # voice to use for intros/outros
-    TEST_EMAILS = [os.environ.get("TEST_EMAIL1"), os.environ.get("TEST_EMAIL2")]
+    TEST_EMAILS = [
+        os.environ.get("TEST_EMAIL1"),
+        os.environ.get("TEST_EMAIL2"),
+        os.environ.get("TEST_EMAIL3"),
+        os.environ.get("TEST_EMAIL4"),
+        os.environ.get("TEST_EMAIL5"),
+    ]
     COMMENTS_SELECTORS = [
         ".comment",
         ".comments",

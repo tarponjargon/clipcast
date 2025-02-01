@@ -112,6 +112,11 @@ services:
       PRODUCTION: "${PRODUCTION}"
       DEBUG: "${DEBUG}"
       DEVELOPMENT: "${DEVELOPMENT}"
+      TEST_EMAIL1: "${TEST_EMAIL1}"
+      TEST_EMAIL2: "${TEST_EMAIL2}"
+      TEST_EMAIL3: "${TEST_EMAIL3}"
+      TEST_EMAIL4: "${TEST_EMAIL4}"
+      TEST_EMAIL5: "${TEST_EMAIL5}"
 
     depends_on:
       - database_server

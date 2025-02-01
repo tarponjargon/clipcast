@@ -770,6 +770,24 @@ var addModalListeners = function () {
   });
 };
 
+var listenForHashScroll = function () {
+  // handle when page loads with a hash location on the url.  the browser will
+  // nateily scroll there, but it's not going to take into account the sticky header.
+  // I am hijacking the scrolling here to make sure the header is accounted for.
+  if (location.hash) {
+    console.log("Page loaded with hash:", location.hash);
+    var targetElm = document.querySelector(location.hash);
+    var targetHeader = document.querySelector(app.header.id);
+    var targetHeight = targetHeader.offsetHeight;
+    if (targetElm) {
+      var targetTop = targetElm.offsetTop - targetHeight - 24;
+      setTimeout(() => {
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
+      }, 100);
+    }
+  }
+};
+
 window.closeModal = function () {
   const modalClose = document.querySelector(".modal-header [data-bs-dismiss]");
   if (modalClose) {
@@ -807,6 +825,7 @@ export default class Global {
 
   initAppLoad = () => {
     document.querySelector("body").classList.add(app.init.class);
+    listenForHashScroll();
   };
 
   initSidebar = () => {

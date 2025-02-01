@@ -33,6 +33,7 @@ def split_text_to_chunks(text, row_id):
     current_chunk = []
 
     # create a new list that contains every {chunk_size} sentences concatenated together in an element
+    # the reason for using sentences rather than characters is to retain cointinuity of speech in the audio
     for index, sentence in enumerate(sentences):
         current_chunk.append(sentence)
 
@@ -43,7 +44,8 @@ def split_text_to_chunks(text, row_id):
 
     # handle stragglers at the end
     if current_chunk:
-        chunks.append(" ".join(current_chunk))
+        mychunk = " ".join(current_chunk)
+        chunks.append(mychunk)
 
     return chunks
 
@@ -171,7 +173,7 @@ def create_intro_mp3(row):
         return
 
     print(f"INTRO AUDIO: {intro_audio}")
-    # os.remove(intro.get("speech_file_path"))
+    os.remove(intro.get("speech_file_path"))
 
     # concatenate a transition audio file
     transition_file_path = (
@@ -220,6 +222,15 @@ def create_chunk_mp3s(text_chunks, row, start_time):
 
     for count, chunk in enumerate(text_chunks, 1):
         print(f"Chunk {count} (size {len(chunk)}):")
+
+        # limit to max char length.  sometimes text runs together and doesn't get parsed out into
+        # sentences.  this is a backstop to prevent too much text from being sent to the TTS API
+        if len(chunk) > current_app.config.get("TTS_MAX_CHUNK_SIZE"):
+            print(
+                f"Chunk too large: {len(chunk)}, trimming to {current_app.config.get('TTS_MAX_CHUNK_SIZE')}"
+            )
+            chunk = chunk[: current_app.config.get("TTS_MAX_CHUNK_SIZE")]
+
         print(f"CHUNK: {chunk}\n")
 
         # generate tts for each chunk
