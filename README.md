@@ -89,6 +89,9 @@ Testing is with Playwright
 `npx playwright test --workers=1 --ui --headed --debug`
 For deveoping tests
 
+`npx playwright test --workers=1 --trace=on --project=chromium`
+run all tests headless just with chromium
+
 `npx playwright test --workers=1`
 Runs the end-to-end tests.
 

@@ -160,7 +160,7 @@ def check_job_status(content_id):
     # need to check for instances of when the tsp job is showing finished (tho episode is still showing processing)
     # and an error level that is not 0
     if "finished" in job_result:
-        e_level = 0
+        e_level = "0"
         result = subprocess.run(
             [tsp_path, "-l"],
             text=True,  # Return output as a string
@@ -177,7 +177,8 @@ def check_job_status(content_id):
                     print(f"E-Level for job {str(job_id)}: {e_level}")
                     break
 
-        if e_level != 0:
+        # handle e-level as a string
+        if e_level != "0":
             job_result = f"Job {str(job_id)} completed with error level {e_level} content_id: {content_id}"
             DB.update_query(
                 """
