@@ -1,10 +1,15 @@
+import os
 import base64
 import hashlib
 import secrets
+import stripe
 from flask import request, current_app, session
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid, create_uuid
 from flask_app.modules.http import get_env_vars
+from flask_app.modules.payment.stripe import get_subscription_status_by_email
+
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 
 def create_user(email, password):
@@ -105,6 +110,11 @@ def get_user_id_by_email(email):
     return q.get("user_id") if q else None
 
 
+def get_plan_by_email(email):
+    stripe_status = get_subscription_status_by_email(email)
+    return "premium" if stripe_status == "active" else "base"
+
+
 def login_user(user):
     """Logs in a user to the session"""
     if not user or not isinstance(user, User):
@@ -119,6 +129,10 @@ def login_user(user):
 
     # add feed url to the session so you don't have to piece it together
     session["feed_url"] = user.get_feed_url()
+
+    # get the user's stripe status
+    session["plan"] = get_plan_by_email(user.get_email())
+    current_app.logger.debug(f"login_user: plan {session.get('plan')}")
 
     # current_app.logger.debug("login_user: {}".format(user.get_id()))
 
@@ -250,14 +264,6 @@ class User(object):
           str: The user email
         """
         return self.data.get("email")
-
-    def get_plan(self):
-        """Gets user plan
-
-        Returns:
-          str: the plan name
-        """
-        return self.data.get("plan", "base")
 
     def update_voice(self, plan, voice_code):
         """Updates the user's selected voice"""

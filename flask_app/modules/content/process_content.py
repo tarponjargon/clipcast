@@ -14,7 +14,7 @@ from flask import current_app
 from flask_app.modules.extensions import DB
 from flask_app.modules.http import report_error_http
 from flask_app.modules.helpers import get_first_n_words, match_uuid
-from flask_app.modules.user.user import load_user
+from flask_app.modules.user.user import load_user, get_plan_by_email
 from flask_app.modules.tts.google_tts import GoogleTTS
 from flask_app.modules.tts.openai_tts import OpenAITTS
 from flask_app.modules.tts.google_translate_tts import GoogleTranslateTTS
@@ -103,30 +103,22 @@ def polly_tts(file_path, text, voice="Matthew", language_code="en-US"):
 def get_user_selected_voice(user_id):
     """Get the user's selected voice from the database"""
 
-    user = load_user(user_id)
-    plan = user.get("plan") if user and user.get("plan") else "base"
-    sql = "SELECT base_voice FROM user WHERE user_id = %s"
-    key = "base_voice"
-    if plan == "premium":
-        sql = "SELECT premium_voice FROM user WHERE user_id = %s"
-        key = "premium_voice"
+    print(f"GETTING VOICE FOR USER: {user_id}")
 
-    print(f"GETTING VOICE FOR USER: {user_id} PLAN: {plan}")
+    sql = "SELECT premium_voice FROM user WHERE user_id = %s"
     q = DB.fetch_one(sql, (user_id))
 
     print(f"VOICE QUERY RES: {q}")
-    voice_code = q.get(key)
+    voice_code = q.get("premium_voice")
     res = None
     if voice_code == "random":
-
         res = DB.fetch_one(
-            "SELECT * FROM voices WHERE visible = 1 AND plan = %s ORDER BY RAND() LIMIT 1",
-            (plan),
+            "SELECT * FROM voices WHERE visible = 1 AND plan = 'premium' ORDER BY RAND() LIMIT 1",
         )
     else:
         res = DB.fetch_one(
-            "SELECT * FROM voices WHERE voice_code = %s AND plan = %s",
-            (voice_code, plan),
+            "SELECT * FROM voices WHERE voice_code = %s AND plan = 'premium'",
+            (voice_code),
         )
     return res
 

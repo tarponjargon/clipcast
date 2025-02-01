@@ -38,7 +38,6 @@ google = oauth.register(
     client_kwargs={"scope": "email profile"},
 )
 
-# Set your secret key. Remember to switch to your live secret key in production.
 stripe.api_key = current_app.config.get("STRIPE_SECRET_KEY")
 
 

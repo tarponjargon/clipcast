@@ -22,7 +22,7 @@
             <h1><i class="bi bi-broadcast text-theme"></i> Voices</h1>
             <p>Customize the voices for your podcast episodes.  Recommended: "Random Voice per Episode" gives you the most variety.</p>
 
-            <!-- BEGIN #pro voices -->
+            <!-- BEGIN #premium voices -->
             <div id="provoices" class="mb-5">
               <h2>Premium Voices</h2>
               <form>
@@ -53,9 +53,10 @@
                 </div>
               </form>
             </div>
-            <!-- END #basic voices -->
+            <!-- END #premium voices -->
 
             <!-- BEGIN #basic voices -->
+            {#--
             <div id="basicvoices" class="mb-5">
               <h2>Basic Voices</h2>
               <p>These voices are for the basic Starter Plan.  They are a little more Siri or Alexa-like.</p>
@@ -84,6 +85,7 @@
                 </div>
               </form>
             </div>
+            --#}
             <!-- END #basic voices -->
 
           </div>
@@ -91,12 +93,14 @@
           <!-- BEGIN col-3 -->
           <div class="col-xl-3">
             <!-- BEGIN #sidebar-bootstrap -->
+             {#--
             <nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
               <nav class="nav">
                 <a class="nav-link" href="#provoices" data-toggle="scroll-to">Premium Voices</a>
                 <a class="nav-link" href="#basicvoices" data-toggle="scroll-to">Basic Voices</a>
               </nav>
             </nav>
+            --#}
             <!-- END #sidebar-bootstrap -->
           </div>
           <!-- END col-3 -->

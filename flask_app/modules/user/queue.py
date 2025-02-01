@@ -5,6 +5,7 @@ from flask import current_app, session
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid
 from flask_app.modules.user.user import load_user
+from flask_app.modules.http import session_safe_get
 
 
 def get_plan_episode_count(user_id):
@@ -85,7 +86,7 @@ def get_queue(user_id, page=1):
     next_page = page + 1 if has_more_results else None
     previous_page = page - 1 if page > 1 else None
     plan_count = get_plan_episode_count(user_id)
-    plan = session.get("plan", "free")
+    plan = session_safe_get("plan", "base")
 
     # current_app.logger.debug(
     #     "total_results %s has_more_results %s plan_count %s",

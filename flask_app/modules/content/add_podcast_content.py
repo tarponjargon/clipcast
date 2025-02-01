@@ -22,6 +22,7 @@ from flask_app.modules.extensions import DB
 from flask_app.modules.user.user import load_user
 from flask_app.modules.user.queue import get_plan_episode_count
 from flask_app.modules.content.process_content import process_episode
+from flask_app.modules.http import session_safe_get
 
 
 def handle_add_url_post_request(user_id):
@@ -88,7 +89,7 @@ def send_to_task_to_queue(content_id):
     result = subprocess.run(
         [tsp_path, "bash", "-c", command], check=True, capture_output=True
     )
-    print(f"Processing content: {content_id} result {result}")
+    current_app.logger.debug(f"Processing content: {content_id} result {result}")
     if not result.returncode == 0:
         current_app.logger.error(f"Error processing content: {result}")
         return None
@@ -152,7 +153,7 @@ def process_episode_content(id):
                     episode.get("user_id"),
                     episode.get("content_id"),
                     job_id,
-                    user.get("plan"),
+                    session_safe_get("plan", "base"),
                 ),
             )
 
@@ -179,7 +180,7 @@ def add_podcast_url(url, user_id):
         }
 
     plan_count = get_plan_episode_count(user_id)
-    plan = user.get("plan")
+    plan = session_safe_get("plan", "base")
     if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
         return {
             "response_code": 401,
@@ -242,7 +243,7 @@ def add_podcast_url(url, user_id):
 
     # check content length
     maxlength_obj = current_app.config.get("MAX_CHARACTERS")
-    plan = user.get("plan")
+    plan = session_safe_get("plan", "base")
     maxlength = maxlength_obj.get(plan)
     if len(content) > maxlength:
         content = content[:maxlength]
@@ -326,7 +327,7 @@ def add_podcast_content(content, user_id):
         }
 
     plan_count = get_plan_episode_count(user_id)
-    plan = user.get("plan")
+    plan = session_safe_get("plan", "base")
     if plan_count >= current_app.config.get("MAX_EPISODES").get(plan):
         return {
             "response_code": 401,

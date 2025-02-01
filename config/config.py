@@ -36,7 +36,7 @@ class Config(object):
         "premium": 70000,
     }
     MAX_EPISODES = {
-        "base": 10,
+        "base": 5,
         "premium": 30,
     }
     PREMIUM_PLAN_COST = 5
