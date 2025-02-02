@@ -1,4 +1,4 @@
-{% macro render_voices(voices, selected_voice, plan) -%}
+{% macro render_voices(voices, selected_voice) -%}
   {% for voice in voices %}
   <div class="col-md-6">
     <div class="radiobtn">
@@ -12,7 +12,7 @@
         id="voice-{{ voice.voice_code }}"
         name="voice" value="{{ voice.voice_code }}"
         {% if voice.voice_code == selected_voice %}checked{% endif %}
-        hx-get="/partials/app/update-voice?voice={{ voice.voice_code }}&plan={{ plan }}"
+        hx-get="/partials/app/update-voice?voice={{ voice.voice_code }}"
         hx-trigger="click"
         hx-target="#dead-end"
         hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"

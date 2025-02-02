@@ -1,8 +1,16 @@
 import os
 import stripe
-from flask import current_app
+from flask import current_app, session, render_template
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+
+
+def handle_payment_status_request():
+    stripe_status = get_subscription_status_by_email(session.get("email"))
+    current_app.logger.debug(f"stripe_status: {stripe_status}")
+    return render_template(
+        "partials/profile/payment_status.html.j2", status=stripe_status
+    )
 
 
 def get_stripe_customer_by_email(email):

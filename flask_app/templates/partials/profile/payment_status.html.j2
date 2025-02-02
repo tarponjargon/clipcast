@@ -1,0 +1,17 @@
+{% if status %}
+  {% if status =='active' %}
+    <form action="/app/payment-portal" method="POST">
+      <button type="submit" class="btn btn-outline-theme btn-lg">Manage</button>
+    </form>
+  {% else %}
+    <form action="/app/payment-portal" method="POST">
+      <button type="submit" class="btn btn-outline-theme btn-lg">Re-Activate Subscription</button>
+    </form>
+  {% endif %}
+{% else %}
+  <form action="/app/stripe-checkout" method="POST">
+    <input type="hidden" name="price_id" value="{{ config.STRIPE_PRICE_ID }}" />
+    <button type="submit" class="btn btn-outline-theme btn-lg">Purchase</button>
+  </form>
+{% endif %}
+

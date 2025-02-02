@@ -90,7 +90,7 @@
                       hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
                     />
                     <label class="d-flex align-items-center" for="plan-premium">
-                      <span class="ps-2">Premium - $9/mo [<a
+                      <span class="ps-2">Premium - ${{ config.PREMIUM_PLAN_COST }}/mo [<a
                         href="javascript:;"
                         class="text-white"
                         data-bs-toggle="modal"
@@ -102,9 +102,32 @@
               </div>
             </div>
 
+            <!-- BEGIN #payment -->
+            <div id="payment" class="mb-5">
+              <h4><i class="far fa-credit-card fa-fw text-theme"></i> Payment</h4>
+              <div class="card">
+                <div class="list-group list-group-flush">
+                  <div
+                    class="list-group-item d-flex align-items-center p-3"
+                    id="payment-status"
+                    hx-get="/partials/app/payment-status"
+                    hx-trigger="load"
+                    hx-swap="innerHTML"
+                  >
+                  </div>
+                </div>
+                <div class="card-arrow">
+                  <div class="card-arrow-top-left"></div>
+                  <div class="card-arrow-top-right"></div>
+                  <div class="card-arrow-bottom-left"></div>
+                  <div class="card-arrow-bottom-right"></div>
+                </div>
+              </div>
+            </div>
+
             <!-- BEGIN #notifications -->
             <div id="notifications" class="mb-5">
-              <h4 class="mb-3"><i class="far fa-bell fa-fw text-theme"></i> Notifications</h4>
+              <h4 class="mb-3"><i class="far fa-envelope fa-fw text-theme"></i> E-Mail List</h4>
               <div class="card py-2">
                 <div class="list-group list-group-flush">
                   <div class="list-group-item d-flex align-items-center">
@@ -134,32 +157,6 @@
             </div>
             <!-- END #notifications -->
 
-
-
-            <!-- BEGIN #payment -->
-            <div id="payment" class="mb-5">
-              <h4><i class="far fa-credit-card fa-fw text-theme"></i> Payment</h4>
-              <div class="card">
-                <div class="list-group list-group-flush">
-                  <div class="list-group-item d-flex align-items-center p-3">
-                    <form action="/app/stripe-checkout" method="POST">
-                      <input type="hidden" name="price_id" value="{{ config.STRIPE_PRICE_ID }}" />
-                      <button type="submit" class="btn btn-outline-theme btn-lg">Purchase</button>
-                    </form>
-
-                    <form action="/app/payment-portal" method="POST">
-                      <button type="submit" class="btn btn-outline-theme btn-lg">Manage</button>
-                    </form>
-                  </div>
-                </div>
-                <div class="card-arrow">
-                  <div class="card-arrow-top-left"></div>
-                  <div class="card-arrow-top-right"></div>
-                  <div class="card-arrow-bottom-left"></div>
-                  <div class="card-arrow-bottom-right"></div>
-                </div>
-              </div>
-            </div>
           </div>
           <!-- BEGIN col-3 -->
           <div class="col-xl-3">

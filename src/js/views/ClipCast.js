@@ -24,7 +24,21 @@ export default class ClipCast {
       setInterval(() => {
         this.checkForNewPodcasts();
       }, 10000);
+      this.checkForPurchase();
     });
+  };
+
+  checkForPurchase = () => {
+    // if the path is /app/profile and there is a query parameter of purchase_id,
+    // show a toast that says "You are now subscribed.  Thank you" and modify the
+    // url, removing the query parameter
+    const url = new URL(window.location.href);
+    const purchaseId = url.searchParams.get("purchase_id");
+    if (purchaseId) {
+      window.showToast("You are now subscribed.  Thank you");
+      url.searchParams.delete("purchase_id");
+      window.history.replaceState({}, document.title, url);
+    }
   };
 
   checkForNewPodcasts = async () => {

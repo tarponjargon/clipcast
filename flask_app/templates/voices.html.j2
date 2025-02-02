@@ -38,7 +38,7 @@
                         name="voice"
                         value="random"
                         {% if session_safe_get('premium_voice') == 'random' %}checked{% endif %}
-                        hx-get="/partials/app/update-voice?voice=random&plan={{ session_safe_get('plan', 'premium') }}"
+                        hx-get="/partials/app/update-voice?voice=random"
                         hx-trigger="click"
                         hx-target="#dead-end"
                         hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
@@ -49,7 +49,7 @@
                       </label>
                     </div>
                   </div>
-                  {{ render_voices(premium_voices, session_safe_get('premium_voice'), session_safe_get('plan', 'premium')) }}
+                  {{ render_voices(premium_voices, session_safe_get('premium_voice')) }}
                 </div>
               </form>
             </div>
@@ -62,7 +62,7 @@
               <p>These voices are for the basic Starter Plan.  They are a little more Siri or Alexa-like.</p>
               <form>
                 <div class="row custom-radio">
-                  {{ render_voices(base_voices, session_safe_get('base_voice'), "base") }}
+                  {{ render_voices(base_voices, session_safe_get('base_voice')) }}
                   <div class="col-md-6">
                     <div class="radiobtn">
                       <input
@@ -71,7 +71,7 @@
                         name="voice"
                         value="random"
                         {% if session_safe_get('base_voice') == 'random' %}checked{% endif %}
-                        hx-get="/partials/app/update-voice?voice=random&plan={{ session_safe_get('plan', 'base') }}"
+                        hx-get="/partials/app/update-voice?voice=random"
                         hx-trigger="click"
                         hx-target="#dead-end"
                         hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"

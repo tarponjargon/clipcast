@@ -92,11 +92,14 @@ def handle_google_login_callback(google):
             error="Google did not return an E-mail address",
         )
 
-    # # Check if user exists
+    # Check if user exists
+    redirect_path = "/app"
     user_id = get_user_id_by_email(user_info.get("email"))
     if not user_id:
         # # Create user
         user_id = create_user(user_info.get("email"), get_random_string(32))
+        add_welcome_podcast(user_id)
+        redirect_path = "/app/quickstart"
 
     user = User.from_id(user_id)
     if not user:
@@ -109,10 +112,8 @@ def handle_google_login_callback(google):
         )
     login_user(user)
 
-    add_welcome_podcast(user_id)
-
     return render_template(
         "partials/notifications/success_card.html.j2",
-        message="""You are now logged in.  Redirecting the the app...
-    <script>window.location.href = '/app/quickstart';</script>""",
+        message=f"""You are now logged in.  Redirecting the the app...
+    <script>window.location.href = '{redirect_path}';</script>""",
     )

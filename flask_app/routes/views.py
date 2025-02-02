@@ -1,3 +1,4 @@
+import time
 import validators
 import stripe
 import json
@@ -20,9 +21,10 @@ from flask_app.modules.user.voices import get_base_voices, get_premium_voices
 from flask_app.modules.user.rss import serve_rss_feed
 from flask_app.modules.user.queue import get_queue
 from flask_app.modules.user.login import handle_google_login_callback
-from flask_app.modules.user.user import User
+from flask_app.modules.user.user import User, get_plan_by_email
 from flask_app.modules.content.add_podcast_content import add_podcast_url
 from flask_app.modules.payment.webhooks import handle_webhook
+from flask_app.modules.payment.stripe import get_stripe_customer_by_email
 
 views = Blueprint("views", __name__)
 
@@ -135,6 +137,8 @@ def do_resetpassword_view():
 @views.route("/app/profile")
 @login_required
 def do_app_profile():
+    session["plan"] = get_plan_by_email(session.get("email"))
+    current_app.logger.debug("PLAN ON PROFILE VIEW: " + session.get("plan"))
     return render_template("profile.html.j2")
 
 
@@ -218,7 +222,10 @@ def do_app_add_url():
 def do_payment_success():
     session = stripe.checkout.Session.retrieve(request.args.get("session_id"))
     customer = stripe.Customer.retrieve(session.customer)
-    return render_template("payment_success.html.j2", customer=customer)
+    if not customer:
+        return render_template("error.html.j2", error="No customer found"), 400
+    session["plan"] = "premium"
+    return redirect("/app/profile" + "?purchase_id=" + request.args.get("session_id"))
 
 
 @views.route("/app/payment-cancel")
@@ -231,15 +238,14 @@ def do_payment_cancel():
 @login_required
 def do_payment_portal():
     # Get the customer's ID
-    user = User.from_id(session.get("user_id"))
 
-    stripe_customer = user.get_stripe_customer()
+    stripe_customer = get_stripe_customer_by_email(session.get("email"))
     if not stripe_customer:
         return render_template("error.html.j2", error="No customer ID found"), 400
 
     # Create a portal session
     stripe_session = stripe.billing_portal.Session.create(
-        customer=stripe_customer,
+        customer=stripe_customer.id,
         return_url=current_app.config.get("STORE_URL") + "/app",
     )
 

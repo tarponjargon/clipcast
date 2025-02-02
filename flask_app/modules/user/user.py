@@ -265,39 +265,37 @@ class User(object):
         """
         return self.data.get("email")
 
-    def update_voice(self, plan, voice_code):
+    def update_voice(self, voice_code):
         """Updates the user's selected voice"""
-        if plan not in ["base", "premium"]:
-            return False
 
         if not voice_code:
             return False
 
         sql = f"""
             UPDATE user
-            SET {plan}_voice = %(voice_code)s
+            SET premium_voice = %(voice_code)s
             WHERE user_id = %(user_id)s
         """
         params = {"voice_code": voice_code, "user_id": self.get_id()}
         DB.update_query(sql, params)
-        self.data[f"{plan}_voice"] = voice_code
-        session[f"{plan}_voice"] = voice_code
+        self.data[f"premium_voice"] = voice_code
+        session[f"premium_voice"] = voice_code
         return True
 
-    def update_plan(self, plan):
-        """Updates the user's selected plan"""
-        if plan not in ["base", "premium"]:
-            return False
-        sql = f"""
-            UPDATE user
-            SET plan = %(plan)s
-            WHERE user_id = %(user_id)s
-        """
-        params = {"plan": plan, "user_id": self.get_id()}
-        DB.update_query(sql, params)
-        self.data["plan"] = plan
-        session["plan"] = plan
-        return True
+    # def update_plan(self, plan):
+    #     """Updates the user's selected plan"""
+    #     if plan not in ["base", "premium"]:
+    #         return False
+    #     sql = f"""
+    #         UPDATE user
+    #         SET plan = %(plan)s
+    #         WHERE user_id = %(user_id)s
+    #     """
+    #     params = {"plan": plan, "user_id": self.get_id()}
+    #     DB.update_query(sql, params)
+    #     self.data["plan"] = plan
+    #     session["plan"] = plan
+    #     return True
 
     def get_feed_url(self):
         """Gets the uer's feed url
@@ -311,22 +309,6 @@ class User(object):
         return (
             current_app.config.get("STORE_URL") + "/profile/rss-feed/" + self.get_id()
         )
-
-    def get_stripe_customer(self):
-        """Gets the user's stripe customer ID
-
-        Returns:
-          str: The stripe customer ID
-        """
-        res = DB.fetch_one(
-            """
-          SELECT stripe_customer
-          FROM subscription
-          WHERE user_id = %(user_id)s
-        """,
-            {"user_id": self.get_id()},
-        )
-        return res.get("stripe_customer") if res else None
 
     def get_stripe_subscription_id(self):
         """Gets the user's stripe subscription ID

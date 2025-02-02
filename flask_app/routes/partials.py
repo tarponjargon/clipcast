@@ -27,6 +27,7 @@ from flask_app.modules.contact import (
     subscribe_contact,
     toggle_subscription,
 )
+from flask_app.modules.payment.stripe import handle_payment_status_request
 
 partials = Blueprint("partials", __name__, url_prefix="/partials")
 
@@ -140,14 +141,14 @@ def do_updatesubscription_request():
     return toggle_subscription()
 
 
-@partials.route("/app/update-plan")
-@is_authenticated
-def do_updateplan_request():
-    user = User.from_id(session.get("user_id"))
-    if user.update_plan(request.args.get("plan")):
-        return render_template_string("Plan updated")
-    else:
-        return render_template_string("Error updating plan"), 400
+# @partials.route("/app/update-plan")
+# @is_authenticated
+# def do_updateplan_request():
+#     user = User.from_id(session.get("user_id"))
+#     if user.update_plan(request.args.get("plan")):
+#         return render_template_string("Plan updated")
+#     else:
+#         return render_template_string("Error updating plan"), 400
 
 
 @partials.route("/app/notifications")
@@ -173,7 +174,7 @@ def do_addcontent_request():
 @is_authenticated
 def do_updatevoice_request():
     user = User.from_id(session.get("user_id"))
-    if user.update_voice(request.args.get("plan"), request.args.get("voice")):
+    if user.update_voice(request.args.get("voice")):
         return render_template_string("Voice updated")
     else:
         return render_template_string("Error updating voice"), 400
@@ -210,3 +211,9 @@ def do_queue_list_request():
 def do_queue_item_request(content_id):
     item = get_queue_item(content_id)
     return render_template("partials/profile/queue_item.html.j2", item=item)
+
+
+@partials.route("/app/payment-status")
+@is_authenticated
+def do_payment_status():
+    return handle_payment_status_request()
