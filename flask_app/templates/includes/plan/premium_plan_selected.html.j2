@@ -1,0 +1,29 @@
+<a
+  href="/app/payment-portal"
+  class="text-decoration-none"
+>
+  <div class="w-100 rounded bg-theme text-white text-center p-3">
+    <div class="w-100 d-block my-3">
+      <i class="fa fa-star fa-xl fs-1"></i>
+    </div>
+    <div class="w-100 d-block">
+      <span class="fs-3 fw-bold">Premium Plan</span>
+    </div>
+    <div class="w-100 d-block">
+      <span class="fs-5">
+        Just ${{ config.PREMIUM_PLAN_COST }}/mo
+      </span>
+    </div>
+    <div class="w-100 d-block mb-2">
+      <button class="btn btn-lg btn-light bg-white mt-3 border border-light">Manage Subscription</button>
+    </div>
+  </div>
+</a>
+<div class="w-100 d-block my-2">
+  <a
+    href="javascript:;"
+    class="text-white font-small"
+    data-bs-toggle="modal"
+    data-bs-target="#myModal"
+    data-bs-url="/partials/premium-plan-info?show_manage=1">plan details</a>
+</div>

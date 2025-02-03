@@ -217,15 +217,15 @@ def do_app_add_url():
     return response
 
 
-@views.route("/app/payment-success")
-@login_required
-def do_payment_success():
-    session = stripe.checkout.Session.retrieve(request.args.get("session_id"))
-    customer = stripe.Customer.retrieve(session.customer)
-    if not customer:
-        return render_template("error.html.j2", error="No customer found"), 400
-    session["plan"] = "premium"
-    return redirect("/app/profile" + "?purchase_id=" + request.args.get("session_id"))
+# @views.route("/app/payment-success")
+# @login_required
+# def do_payment_success():
+#     session = stripe.checkout.Session.retrieve(request.args.get("session_id"))
+#     customer = stripe.Customer.retrieve(session.customer)
+#     if not customer:
+#         return render_template("error.html.j2", error="No customer found"), 400
+#     session["plan"] = "premium"
+#     return redirect("/app/profile" + "?purchase_id=" + request.args.get("session_id"))
 
 
 @views.route("/app/payment-cancel")
@@ -234,7 +234,7 @@ def do_payment_cancel():
     return render_template("payment_cancel.html.j2")
 
 
-@views.route("/app/payment-portal", methods=["POST"])
+@views.route("/app/payment-portal")
 @login_required
 def do_payment_portal():
     # Get the customer's ID
@@ -246,21 +246,21 @@ def do_payment_portal():
     # Create a portal session
     stripe_session = stripe.billing_portal.Session.create(
         customer=stripe_customer.id,
-        return_url=current_app.config.get("STORE_URL") + "/app",
+        return_url=current_app.config.get("STORE_URL") + "/app/profile",
     )
 
     # Redirect to the URL returned on the session
     return redirect(stripe_session.url, code=303)
 
 
-@views.route("/app/stripe-checkout", methods=["POST"])
+@views.route("/app/stripe-checkout")
 @login_required
 def do_stripe_checkout():
-    price_id = request.form.get("price_id")
+    price_id = current_app.config.get("STRIPE_PRICE_ID")
     base_url = current_app.config.get("STORE_URL")
     stripe_session = stripe.checkout.Session.create(
         client_reference_id=session.get("user_id"),
-        success_url=base_url + "/app/payment-success?session_id={CHECKOUT_SESSION_ID}",
+        success_url=base_url + "/app/profile?purchase_id={CHECKOUT_SESSION_ID}",
         cancel_url=base_url + "/app/payment-cancel",
         mode="subscription",
         payment_method_types=["card"],

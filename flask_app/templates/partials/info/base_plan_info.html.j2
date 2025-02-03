@@ -23,3 +23,24 @@
     <div class="flex-1 ps-3"><span class="font-monospace small">Select male or female basic voices</div>
   </div> -->
 </div>
+{% if request.args.get('show_cta') %}
+<div class="h6 font-monospace">Compare with the Premium Plan...</div>
+<hr class="my-20px">
+<div class="mb-5 text-body text-opacity-75 flex-1">
+  <div class="d-flex align-items-center mb-1">
+    <i class="fa fa-check fa-lg text-theme"></i>
+    <div class="flex-1 ps-3"><span class="font-monospace small">Up to {{ config.MAX_EPISODES.get('premium') }} episodes per month</div>
+  </div>
+  <div class="d-flex align-items-center mb-1">
+    <i class="fa fa-check fa-lg text-theme"></i>
+    <div class="flex-1 ps-3"><span class="font-monospace small">Up to 70,000 characters (10,800 words, or over an hour) per episode </div>
+  </div>
+  <div class="d-flex align-items-center mb-1">
+    <i class="fa fa-check fa-lg text-theme"></i>
+    <div class="flex-1 ps-3"><span class="font-monospace small">Select between male, female and accented Natual Language AI voices</div>
+  </div>
+</div>
+<div class="w-100 d-block my-2 text-center">
+  <a href="/app/stripe-checkout" class="btn btn-lg btn-theme bg-theme">Upgrade for just ${{ config.PREMIUM_PLAN_COST }}</a>
+</div>
+{% endif %}

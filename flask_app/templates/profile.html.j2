@@ -12,6 +12,29 @@
       <div class="col-xl-10">
         <div class="row">
           <div class="col-xl-9">
+
+            <div id="plan" class="mb-5">
+              <h4><i class="fa fa-check-circle fa-fw text-theme"></i> Your Plan</h4>
+              <div class="row">
+
+                <div class="col-12 col-md-6 text-center pb-3">
+                  {% if  session_safe_get('plan') == 'premium' %}
+                    {% include 'includes/plan/base_plan_from_premium.html.j2' %}
+                  {% else %}
+                    {% include 'includes/plan/base_plan_selected.html.j2' %}
+                  {% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 text-center pb-3">
+                  {% if session_safe_get('plan') == 'premium' %}
+                    {% include 'includes/plan/premium_plan_selected.html.j2' %}
+                  {% else %}
+                    {% include 'includes/plan/select_premium_plan.html.j2' %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
             <div id="general" class="mb-5" hx-ext="response-targets">
               <h4 class="mb-3"><i class="far fa-user fa-fw text-theme"></i> Your Profile</h4>
               <div class="card">
@@ -49,83 +72,7 @@
                 </div>
               </div>
             </div>
-            <!-- END #general -->
 
-            <div id="plan" class="mb-5">
-              <h4><i class="fa fa-headphones fa-fw text-theme"></i> Your Plan</h4>
-              <div class="row">
-                <div class="col-12 col-md-6 custom-radio">
-                  <div class="radiobtn" data-testid="plan-basic">
-                    <input
-                      type="radio"
-                      id="plan-basic"
-                      name="plan" value="base"
-                      {% if session_safe_get('plan') == 'base' %}checked{% endif %}
-                      hx-get="/partials/app/update-plan"
-                      hx-trigger="click"
-                      hx-target="#dead-end"
-                      hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
-                    />
-                    <label class="d-flex align-items-center" for="plan-basic">
-                      <span class="ps-2">Starter - FREE [<a
-                        href="javascript:;"
-                        class="text-white"
-                        data-bs-toggle="modal"
-                        data-bs-target="#myModal"
-                        data-bs-url="/partials/base-plan-info">details</a>]
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 custom-radio">
-                  <div class="radiobtn" data-testid="plan-premium">
-                    <input
-                      type="radio"
-                      id="plan-premium"
-                      name="plan" value="premium"
-                      {% if session_safe_get('plan') == 'premium' %}checked{% endif %}
-                      hx-get="/partials/app/update-plan"
-                      hx-trigger="click"
-                      hx-target="#dead-end"
-                      hx-on::after-request="window.showToast(event.detail.xhr.response, !event.detail.successful);"
-                    />
-                    <label class="d-flex align-items-center" for="plan-premium">
-                      <span class="ps-2">Premium - ${{ config.PREMIUM_PLAN_COST }}/mo [<a
-                        href="javascript:;"
-                        class="text-white"
-                        data-bs-toggle="modal"
-                        data-bs-target="#myModal"
-                        data-bs-url="/partials/premium-plan-info">details</a>]</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- BEGIN #payment -->
-            <div id="payment" class="mb-5">
-              <h4><i class="far fa-credit-card fa-fw text-theme"></i> Payment</h4>
-              <div class="card">
-                <div class="list-group list-group-flush">
-                  <div
-                    class="list-group-item d-flex align-items-center p-3"
-                    id="payment-status"
-                    hx-get="/partials/app/payment-status"
-                    hx-trigger="load"
-                    hx-swap="innerHTML"
-                  >
-                  </div>
-                </div>
-                <div class="card-arrow">
-                  <div class="card-arrow-top-left"></div>
-                  <div class="card-arrow-top-right"></div>
-                  <div class="card-arrow-bottom-left"></div>
-                  <div class="card-arrow-bottom-right"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- BEGIN #notifications -->
             <div id="notifications" class="mb-5">
               <h4 class="mb-3"><i class="far fa-envelope fa-fw text-theme"></i> E-Mail List</h4>
               <div class="card py-2">
@@ -155,7 +102,6 @@
                 </div>
               </div>
             </div>
-            <!-- END #notifications -->
 
           </div>
           <!-- BEGIN col-3 -->
@@ -163,9 +109,10 @@
             <!-- BEGIN #sidebar-bootstrap -->
             <nav id="sidebar-bootstrap" class="navbar navbar-sticky d-none d-xl-block">
               <nav class="nav">
+                <a class="nav-link" href="#plan" data-toggle="scroll-to">Your Plan</a>
                 <a class="nav-link" href="#general" data-toggle="scroll-to">Your Profile</a>
                 <a class="nav-link" href="#notifications" data-toggle="scroll-to">Notifications</a>
-                <a class="nav-link" href="#payment" data-toggle="scroll-to">Payment</a>
+
               </nav>
             </nav>
             <!-- END #sidebar-bootstrap -->
