@@ -15,6 +15,15 @@
 
             <div id="plan" class="mb-5">
               <h4><i class="fa fa-check-circle fa-fw text-theme"></i> Your Plan</h4>
+              <p>
+                {% if subscription %}
+                  {% if subscription.cancel_at %}
+                    <span class="text-danger">
+                      Your subscription will cancel on {{ convert_unix_to_date(subscription.get('cancel_at')) }}.
+                    </span>
+                  {% endif %}
+                {% endif %}
+              </p>
               <div class="row">
 
                 <div class="col-12 col-md-6 text-center pb-3">
@@ -34,6 +43,8 @@
                 </div>
               </div>
             </div>
+
+
 
             <div id="general" class="mb-5" hx-ext="response-targets">
               <h4 class="mb-3"><i class="far fa-user fa-fw text-theme"></i> Your Profile</h4>

@@ -33,22 +33,30 @@ def handle_webhook():
 
     # Handle the event
     if event_type == "checkout.session.completed":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
     elif event_type == "customer.subscription.created":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
     elif event_type == "customer.subscription.deleted":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
     elif event_type == "customer.subscription.paused":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
     elif event_type == "invoice.created":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
     elif event_type == "invoice.paid":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
     elif event_type == "invoice.payment_failed":
-        current_app.logger.info(f"{event_type}: {data_json}")
+        # current_app.logger.info(f"{event_type}: {data_json}")pass
+        pass
     elif event_type == "invoice.payment_succeeded":
-        current_app.logger.info(f"{event_type}: {data_json}")
-        invoice_paid(data_object)
+        # current_app.logger.info(f"{event_type}: {data_json}")
+        pass
+        # invoice_paid(data_object)
     # ... handle other event types
     else:
         current_app.logger.error("Unhandled event type {}".format(event_type))

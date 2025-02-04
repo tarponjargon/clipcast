@@ -657,3 +657,25 @@ def remove_pid_file(pid_file):
     if os.path.exists(pid_file):
         os.remove(pid_file)
         print(f"Removed PID file: {pid_file}")
+
+
+def convert_unix_to_date(unix_timestamp):
+    """Convert a Unix timestamp to a formatted date string
+
+    Args:
+      unix_timestamp (int): The Unix timestamp to convert
+
+    Returns:
+      str: The formatted date string
+    """
+
+    if not isinstance(unix_timestamp, (int, float)):
+        raise ValueError("Unix timestamp must be a number.")
+
+    try:
+        dt = datetime.utcfromtimestamp(unix_timestamp)
+    except Exception as e:
+        raise ValueError(f"Invalid Unix timestamp: {e}")
+
+    formatted_date = dt.strftime("%b %d, %Y")
+    return formatted_date

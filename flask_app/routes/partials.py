@@ -52,6 +52,11 @@ def do_premium_plan_partial():
     return render_template("/partials/info/premium_plan_info.html.j2")
 
 
+@partials.route("/cancel-premium-plan")
+def do_cancel_premium_plan():
+    return render_template("/partials/info/cancel_premium_plan.html.j2")
+
+
 @partials.route("/contact-form", methods=["POST"])
 def do_contactform_request():
     return handle_contactform_request()
@@ -141,16 +146,6 @@ def do_updatesubscription_request():
     return toggle_subscription()
 
 
-# @partials.route("/app/update-plan")
-# @is_authenticated
-# def do_updateplan_request():
-#     user = User.from_id(session.get("user_id"))
-#     if user.update_plan(request.args.get("plan")):
-#         return render_template_string("Plan updated")
-#     else:
-#         return render_template_string("Error updating plan"), 400
-
-
 @partials.route("/app/notifications")
 def do_notifications_request():
     return render_template(
@@ -213,7 +208,7 @@ def do_queue_item_request(content_id):
     return render_template("partials/profile/queue_item.html.j2", item=item)
 
 
-@partials.route("/app/payment-status")
-@is_authenticated
-def do_payment_status():
-    return handle_payment_status_request()
+# @partials.route("/app/payment-status")
+# @is_authenticated
+# def do_payment_status():
+#     return handle_payment_status_request()

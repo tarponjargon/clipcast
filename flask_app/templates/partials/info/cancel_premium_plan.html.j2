@@ -1,0 +1,19 @@
+
+<div class="d-flex align-items-center">
+  <div class="flex-1">
+    <div class="h1 fw-semibold mb-0">WAIT!</div>
+  </div>
+</div>
+<hr class="my-20px">
+<div class="mb-5 text-body text-opacity-75 flex-1 font-monospace">
+  You are about to cancel your premium plan.  Are you sure you want to do this?
+  You will lose access to the following features<sup>*</sup>:
+  <hr class="my-20px">
+  {% include 'includes/plan/premium_plan_desc.html.j2' %}
+</div>
+<div class="w-100 d-block mb-4 text-center">
+  <a href="/app/payment-portal" class="btn btn-lg btn-theme bg-theme">Continue to Cancellation</a>
+</div>
+<div class="w-100 d-block my-2 text-start ">
+  <sup>*</sup> Your premium plan will be effective until the end of the current billing cycle.
+</div>

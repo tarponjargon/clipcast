@@ -7,7 +7,7 @@ from flask import request, current_app, session
 from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid, create_uuid
 from flask_app.modules.http import get_env_vars
-from flask_app.modules.payment.stripe import get_subscription_status_by_email
+from flask_app.modules.payment.stripe import get_stripe_subscription_by_email
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
@@ -111,8 +111,10 @@ def get_user_id_by_email(email):
 
 
 def get_plan_by_email(email):
-    stripe_status = get_subscription_status_by_email(email)
-    return "premium" if stripe_status == "active" else "base"
+    stripe_sub = get_stripe_subscription_by_email(email)
+    if not stripe_sub:
+        return "base"
+    return "premium" if stripe_sub and stripe_sub.get("status") == "active" else "base"
 
 
 def login_user(user):

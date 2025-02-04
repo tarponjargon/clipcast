@@ -75,7 +75,12 @@ def create_app():
         app.register_error_handler(404, page_not_found)
         app.register_error_handler(500, error_500)
 
-        from .modules.helpers import match_uuid, get_random_string, sanitize
+        from .modules.helpers import (
+            match_uuid,
+            get_random_string,
+            sanitize,
+            convert_unix_to_date,
+        )
         from .modules.user.user import User, login_user
 
         @app.before_request
@@ -124,6 +129,7 @@ def create_app():
                 session_safe_get=session_safe_get,
                 get_random_string=get_random_string,
                 sanitize=sanitize,
+                convert_unix_to_date=convert_unix_to_date,
             )
 
         from .commands.test import test1

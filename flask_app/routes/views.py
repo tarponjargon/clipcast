@@ -24,7 +24,11 @@ from flask_app.modules.user.login import handle_google_login_callback
 from flask_app.modules.user.user import User, get_plan_by_email
 from flask_app.modules.content.add_podcast_content import add_podcast_url
 from flask_app.modules.payment.webhooks import handle_webhook
-from flask_app.modules.payment.stripe import get_stripe_customer_by_email
+from flask_app.modules.payment.stripe import (
+    get_stripe_customer_by_email,
+    get_stripe_subscription_by_email,
+    get_stripe_subscription_by_id,
+)
 
 views = Blueprint("views", __name__)
 
@@ -137,9 +141,12 @@ def do_resetpassword_view():
 @views.route("/app/profile")
 @login_required
 def do_app_profile():
-    session["plan"] = get_plan_by_email(session.get("email"))
-    current_app.logger.debug("PLAN ON PROFILE VIEW: " + session.get("plan"))
-    return render_template("profile.html.j2")
+    stripe_sub = get_stripe_subscription_by_id(session.get("stripe_customer_id"))
+    session["plan"] = (
+        "premium" if stripe_sub and stripe_sub.get("status") == "active" else "base"
+    )
+    current_app.logger.debug("SUBSCRIPTION ON PROFILE VIEW: {}".format(stripe_sub))
+    return render_template("profile.html.j2", subscription=stripe_sub)
 
 
 @views.route("/app/voices")
@@ -217,21 +224,10 @@ def do_app_add_url():
     return response
 
 
-# @views.route("/app/payment-success")
-# @login_required
-# def do_payment_success():
-#     session = stripe.checkout.Session.retrieve(request.args.get("session_id"))
-#     customer = stripe.Customer.retrieve(session.customer)
-#     if not customer:
-#         return render_template("error.html.j2", error="No customer found"), 400
-#     session["plan"] = "premium"
-#     return redirect("/app/profile" + "?purchase_id=" + request.args.get("session_id"))
-
-
 @views.route("/app/payment-cancel")
 @login_required
 def do_payment_cancel():
-    return render_template("payment_cancel.html.j2")
+    return redirect("/app/profile?payment_cancel=1")
 
 
 @views.route("/app/payment-portal")
@@ -253,6 +249,27 @@ def do_payment_portal():
     return redirect(stripe_session.url, code=303)
 
 
+@views.route("/app/payment-success")
+@login_required
+def do_payment_success():
+    stripe_session = stripe.checkout.Session.retrieve(request.args.get("session_id"))
+    upd = DB.update_query(
+        """
+      UPDATE user SET
+      stripe_customer_id = %(customer)s,
+      stripe_subscription_id = %(subscription)s
+      WHERE user_id = %(user_id)s
+    """,
+        {
+            "customer": stripe_session.customer,
+            "subscription": stripe_session.subscription,
+            "user_id": session.get("user_id"),
+        },
+    )
+    current_app.logger.debug(f"UPDATE: {upd}")
+    return redirect("/app/profile?purchase_id=" + request.args.get("session_id"))
+
+
 @views.route("/app/stripe-checkout")
 @login_required
 def do_stripe_checkout():
@@ -260,8 +277,8 @@ def do_stripe_checkout():
     base_url = current_app.config.get("STORE_URL")
     stripe_session = stripe.checkout.Session.create(
         client_reference_id=session.get("user_id"),
-        success_url=base_url + "/app/profile?purchase_id={CHECKOUT_SESSION_ID}",
-        cancel_url=base_url + "/app/payment-cancel",
+        success_url=base_url + "/app/payment-success?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=base_url + "/app/profile?payment_cancel=1",
         mode="subscription",
         payment_method_types=["card"],
         line_items=[
