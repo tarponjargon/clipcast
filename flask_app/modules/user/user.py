@@ -236,6 +236,26 @@ def add_welcome_podcast(user_id):
         current_app.logger.error(f"Error saving welcome podcast to db")
 
 
+def get_stripe_customer_id(user_id):
+    """Gets the user's stripe customer ID
+
+    Returns:
+      str: The stripe subscription ID
+    """
+    if not user_id:
+        return None
+
+    res = DB.fetch_one(
+        """
+      SELECT stripe_customer_id
+      FROM user
+      WHERE user_id = %(user_id)s
+    """,
+        {"user_id": user_id},
+    )
+    return res.get("stripe_customer_id") if res else None
+
+
 class User(object):
     def __init__(self, user=None):
         if user is None:
@@ -284,21 +304,6 @@ class User(object):
         session[f"premium_voice"] = voice_code
         return True
 
-    # def update_plan(self, plan):
-    #     """Updates the user's selected plan"""
-    #     if plan not in ["base", "premium"]:
-    #         return False
-    #     sql = f"""
-    #         UPDATE user
-    #         SET plan = %(plan)s
-    #         WHERE user_id = %(user_id)s
-    #     """
-    #     params = {"plan": plan, "user_id": self.get_id()}
-    #     DB.update_query(sql, params)
-    #     self.data["plan"] = plan
-    #     session["plan"] = plan
-    #     return True
-
     def get_feed_url(self):
         """Gets the uer's feed url
 
@@ -311,22 +316,6 @@ class User(object):
         return (
             current_app.config.get("STORE_URL") + "/profile/rss-feed/" + self.get_id()
         )
-
-    def get_stripe_subscription_id(self):
-        """Gets the user's stripe subscription ID
-
-        Returns:
-          str: The stripe subscription ID
-        """
-        res = DB.fetch_one(
-            """
-          SELECT subscription_id
-          FROM subscription
-          WHERE user_id = %(user_id)s
-        """,
-            {"user_id": self.get_id()},
-        )
-        return res.get("subscription_id") if res else None
 
     @classmethod
     def from_id(cls, user_id):

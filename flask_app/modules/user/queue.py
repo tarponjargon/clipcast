@@ -175,7 +175,7 @@ def check_job_status(content_id):
                 if columns and columns[0] == str(job_id):  # Match Job ID
                     # E-Level is in the 4th column (index 3)
                     e_level = columns[3].strip()
-                    print(f"E-Level for job {str(job_id)}: {e_level}")
+                    # print(f"E-Level for job {str(job_id)}: {e_level}")
                     break
 
         # handle e-level as a string

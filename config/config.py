@@ -37,7 +37,7 @@ class Config(object):
     }
     MAX_EPISODES = {
         "base": 5,
-        "premium": 30,
+        "premium": 40,
     }
     PREMIUM_PLAN_COST = 5
     PREMIUM_PLAN_SKU = "clipcast-premium"

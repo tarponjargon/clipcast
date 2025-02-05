@@ -266,7 +266,7 @@ def add_podcast_url(url, user_id):
     if not article_date:
         article_date = datetime.now().strftime("%Y-%m-%d")
 
-    description = f"Original article: {url}"
+    description = f"Original article: {url} - "
     if metadata.get("description"):
         description += "Description: " + metadata.get("description")
     else:

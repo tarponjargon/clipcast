@@ -34,13 +34,14 @@ export default class ClipCast {
     // url, removing the query parameter.  Similar for payment_cancel
     const url = new URL(window.location.href);
     const purchaseId = url.searchParams.get("purchase_id");
+    const paymentCancel = url.searchParams.get("payment_cancel");
     if (purchaseId) {
       window.showToast("You are now subscribed.  Thank you");
       url.searchParams.delete("purchase_id");
       window.history.replaceState({}, document.title, url);
     }
     if (paymentCancel) {
-      window.showToast("Yuour payment is cancelled.");
+      window.showToast("Your subscription is cancelled.");
       url.searchParams.delete("payment_cancel");
       window.history.replaceState({}, document.title, url);
     }
