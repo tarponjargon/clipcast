@@ -21,6 +21,13 @@ export async function updateTestAccountPlan(newPlan) {
   return result;
 }
 
+export async function updateVoice(voice) {
+  const updQuery = `UPDATE user SET premium_voice = ? WHERE email = ?`;
+  const result = await runQuery(updQuery, [voice, process.env.TEST_ACCOUNT_EMAIL]);
+  // console.log("Result of update:", result);
+  return result;
+}
+
 export async function getSubscriptionStatus() {
   const selectQuery = `SELECT subscribed FROM contact WHERE email = ?`;
   const resultArr = await runQuery(selectQuery, [process.env.TEST_ACCOUNT_EMAIL]);
