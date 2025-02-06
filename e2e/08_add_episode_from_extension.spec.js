@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { deleteTestAccount, createTestAccount, updateTestAccountPlan } from "./utils/db";
+import { deleteTestAccount, createTestAccount, updateVoice } from "./utils/db";
 
 let page;
 
@@ -17,7 +17,7 @@ test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
   await deleteTestAccount();
   await createTestAccount();
-  await updateTestAccountPlan("base");
+  await updateVoice("us");
 });
 
 test("User Can Add Podcast From Extension", async () => {

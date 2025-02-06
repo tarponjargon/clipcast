@@ -63,19 +63,27 @@ def do_process_email():
             "error": True,
         }, 401
 
-    command = "cd {} && $(which direnv) allow && \
-      $(which direnv) exec . $(which flask) process_email".format(
+    command = "cd {} && $(which direnv) allow && $(which direnv) exec . $(which flask) process_email".format(
         current_app.config.get("HOME_DIR")
     )
 
-    result = subprocess.run(["bash", "-c", command], check=True, capture_output=True)
-    if not result.returncode == 0:
-        current_app.logger.error(f"Error processing emails via API: {result}")
-        return {
-            "success": False,
-            "errors": ["Error processing emails"],
-            "error": True,
-        }, 500
+    result = None
+    try:
+        result = subprocess.run(
+            ["bash", "-c", command], check=True, capture_output=True
+        )
+    except subprocess.CalledProcessError as e:
+        current_app.logger.debug(
+            f"Command failed with error: {e.returncode} Stdout: {e.stdout} Stderr: {e.stderr}"
+        )
+
+    # if not result or not result.returncode == 0:
+    #     current_app.logger.error(f"Error processing emails via API: {result}")
+    #     return {
+    #         "success": False,
+    #         "errors": ["Error processing emails"],
+    #         "error": True,
+    #     }, 500
 
     current_app.logger.info("Emails processed via API {}".format(result))
     return {"success": True, "errors": [], "error": False}

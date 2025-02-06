@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { deleteTestAccount, createTestAccount, updateTestAccountPlan } from "./utils/db";
+import { deleteTestAccount, createTestAccount, updateVoice } from "./utils/db";
 import { logInTestAccount } from "./utils/login";
 import { sendEmail } from "./utils/email";
 
@@ -24,7 +24,8 @@ test.beforeAll(async ({ browser }) => {
 
 test("User Can E-Mail Content", async () => {
   test.slow();
-  await updateTestAccountPlan("base");
+  // make sure voice is us so I don't get charged
+  await updateVoice("us");
   await page.getByTestId("add-content-link").click();
   const extractedText = await page.locator("#email-field").textContent();
   const myEmail = extractedText.trim();

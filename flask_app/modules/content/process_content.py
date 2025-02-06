@@ -119,7 +119,7 @@ def get_user_selected_voice(user_id):
         )
     else:
         res = DB.fetch_one(
-            "SELECT * FROM voices WHERE voice_code = %s AND plan = 'premium'",
+            "SELECT * FROM voices WHERE voice_code = %s",
             (voice_code),
         )
     return res

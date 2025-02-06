@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { deleteTestAccount, createTestAccount, updateTestAccountPlan } from "./utils/db";
+import { deleteTestAccount, createTestAccount, updateVoice } from "./utils/db";
 import { logInTestAccount } from "./utils/login";
 
 let page;
@@ -26,7 +26,7 @@ test.beforeAll(async ({ browser }) => {
 // });
 
 test("User Can Submit Text content", async () => {
-  await updateTestAccountPlan("base");
+  await updateVoice("us");
   await page.getByTestId("add-content-link").click();
   const content = `
     HTML is for people
