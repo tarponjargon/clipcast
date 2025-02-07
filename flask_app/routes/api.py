@@ -5,6 +5,11 @@ from flask import Blueprint, request, session, current_app
 from flask_app.modules.http import is_authenticated
 from flask_app.modules.extensions import DB
 from flask_app.modules.user.user import load_user
+from flask_app.modules.subprocess import (
+    safe_subprocess,
+    get_flask_path,
+    get_direnv_path,
+)
 
 api = Blueprint("account_api", __name__, url_prefix="/api")
 
@@ -63,7 +68,7 @@ def do_process_email():
             "error": True,
         }, 401
 
-    direnv_path = get_dirnev_path()
+    direnv_path = get_direnv_path()
     flask_path = get_flask_path()
     command = f"{direnv_path} exec . {flask_path} process_email"
     result = safe_subprocess(command)
