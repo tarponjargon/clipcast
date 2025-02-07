@@ -55,7 +55,7 @@ def do_process_email():
     if (
         not user_data
         or not user_data.get("email")
-        or not user_data.get("email") == current_app.config.get("TEST_ACCOUNT_EMAIL")
+        or not user_data.get("email") in current_app.config.get("TEST_EMAILS")
     ):
         return {
             "success": False,
@@ -63,27 +63,10 @@ def do_process_email():
             "error": True,
         }, 401
 
-    command = "cd {} && $(which direnv) allow && $(which direnv) exec . $(which flask) process_email".format(
-        current_app.config.get("HOME_DIR")
-    )
-
-    result = None
-    try:
-        result = subprocess.run(
-            ["bash", "-c", command], check=True, capture_output=True
-        )
-    except subprocess.CalledProcessError as e:
-        current_app.logger.debug(
-            f"Command failed with error: {e.returncode} Stdout: {e.stdout} Stderr: {e.stderr}"
-        )
-
-    # if not result or not result.returncode == 0:
-    #     current_app.logger.error(f"Error processing emails via API: {result}")
-    #     return {
-    #         "success": False,
-    #         "errors": ["Error processing emails"],
-    #         "error": True,
-    #     }, 500
+    direnv_path = get_dirnev_path()
+    flask_path = get_flask_path()
+    command = f"{direnv_path} exec . {flask_path} process_email"
+    result = safe_subprocess(command)
 
     current_app.logger.info("Emails processed via API {}".format(result))
     return {"success": True, "errors": [], "error": False}

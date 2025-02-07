@@ -10,6 +10,7 @@ from flask_app.modules.helpers import (
     create_uuid,
     get_first_n_words,
     strip_html,
+    match_uuid,
 )
 from flask import (
     Blueprint,
@@ -23,6 +24,12 @@ from flask_app.modules.user.user import load_user
 from flask_app.modules.user.queue import get_plan_episode_count
 from flask_app.modules.content.process_content import process_episode
 from flask_app.modules.http import session_safe_get
+from flask_app.modules.subprocess import (
+    safe_subprocess,
+    get_direnv_path,
+    get_python_path,
+    get_tsp_path,
+)
 
 
 def handle_add_url_post_request(user_id):
@@ -77,23 +84,18 @@ def extract_content_from_html(html):
 def send_to_task_to_queue(content_id):
     """Send the content to task queue for processing"""
 
-    # gotta set up the environment to run the command
-    command = 'cd {} && $(which direnv) allow && \
-      $(which direnv) exec . $(which python) -m episode_job "{}"'.format(
-        current_app.config.get("HOME_DIR"), content_id
-    )
-
-    tsp_path = subprocess.run(
-        ["which", "tsp"], capture_output=True, text=True
-    ).stdout.strip()
-    result = subprocess.run(
-        [tsp_path, "bash", "-c", command], check=True, capture_output=True
-    )
-    current_app.logger.debug(f"Processing content: {content_id} result {result}")
-    if not result.returncode == 0:
-        current_app.logger.error(f"Error processing content: {result}")
+    if not content_id or not match_uuid(content_id):
+        current_app.logger.error(f"Invalid content ID: {content_id}")
         return None
-    job_id = result.stdout.decode().strip()
+
+    tsp_path = get_tsp_path()
+    direnv_path = get_direnv_path()
+    python_path = get_python_path()
+    command = (
+        f"{tsp_path} {direnv_path} exec . {python_path} -m episode_job {content_id}"
+    )
+    job_id = safe_subprocess(command)
+    current_app.logger.debug(f"Job ID returned from safe_subprocess: {job_id}")
     if not job_id:
         current_app.logger.error(f"No job ID returned: {result}")
         return None

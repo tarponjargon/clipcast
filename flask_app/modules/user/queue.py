@@ -6,6 +6,7 @@ from flask_app.modules.extensions import DB
 from flask_app.modules.helpers import match_uuid
 from flask_app.modules.user.user import load_user
 from flask_app.modules.http import session_safe_get
+from flask_app.modules.subprocess import safe_subprocess, get_tsp_path
 
 
 def get_plan_episode_count(user_id):
@@ -130,19 +131,10 @@ def check_job_status(content_id):
         (content_id,),
     )
 
-    tsp_path = subprocess.run(
-        ["which", "tsp"], capture_output=True, text=True
-    ).stdout.strip()
+    tsp_path = get_tsp_path()
     job_id = q.get("job_id")
     res = None
-    job_result = None
-    try:
-        res = subprocess.run(
-            [tsp_path, "-s", str(job_id)], capture_output=True, check=True, text=True
-        )
-        job_result = res.stdout.strip().lower()
-    except subprocess.CalledProcessError as e:
-        job_result = "error checking job status"
+    job_result = safe_subprocess(f"{tsp_path} -s {job_id}")
 
     # if the job is not found, update the record
     if "cannot be stated" in job_result or "error" in job_result:
@@ -162,15 +154,12 @@ def check_job_status(content_id):
     # and an error level that is not 0
     if "finished" in job_result:
         e_level = "0"
-        result = subprocess.run(
-            [tsp_path, "-l"],
-            text=True,  # Return output as a string
-            capture_output=True,  # Capture stdout and stderr
-        )
+        result = safe_subprocess(f"{tsp_path} -l", False)
 
-        # Process output with Python
-        if result.stdout:
-            for line in result.stdout.splitlines():
+        # the output will be the subprocess job table.  I need to get the e-level for the job id
+        if result:
+            current_app.logger.debug("Job Table: %s", result)
+            for line in result.splitlines():
                 columns = line.split()
                 if columns and columns[0] == str(job_id):  # Match Job ID
                     # E-Level is in the 4th column (index 3)
