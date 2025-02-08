@@ -26,6 +26,7 @@ test.beforeAll(async ({ browser }) => {
 // });
 
 test("User Can Submit Text content", async () => {
+  test.slow();
   await updateVoice("us");
   await page.getByTestId("add-content-link").click();
   const content = `

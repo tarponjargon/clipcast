@@ -17,6 +17,7 @@ test.afterEach(async () => {
 });
 
 test("User Can Sign Up", async ({ page }) => {
+  test.slow();
   // response listener setup
   let statusCode;
   page.on("response", (response) => {

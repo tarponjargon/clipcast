@@ -23,7 +23,6 @@ from flask_app.modules.extensions import DB
 from flask_app.modules.user.user import load_user
 from flask_app.modules.user.queue import get_plan_episode_count
 from flask_app.modules.content.process_content import process_episode
-from flask_app.modules.http import session_safe_get
 from flask_app.modules.subprocess import (
     safe_subprocess,
     get_direnv_path,
@@ -155,7 +154,7 @@ def process_episode_content(id):
                     episode.get("user_id"),
                     episode.get("content_id"),
                     job_id,
-                    session_safe_get("plan", "base"),
+                    user.get("plan"),
                 ),
             )
 
@@ -248,7 +247,6 @@ def add_podcast_url(url, user_id):
 
     # check content length
     maxlength_obj = current_app.config.get("MAX_CHARACTERS")
-    plan = session_safe_get("plan", "base")
     maxlength = maxlength_obj.get(plan)
     if len(content) > maxlength:
         content = content[:maxlength]

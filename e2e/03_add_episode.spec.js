@@ -22,6 +22,7 @@ test.beforeAll(async ({ browser }) => {
 });
 
 test("User Can Add Podcast Episode", async () => {
+  test.slow();
   // make sure voice is us so I don't get charged
   await updateVoice("us");
 

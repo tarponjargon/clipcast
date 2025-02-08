@@ -158,7 +158,7 @@ def check_job_status(content_id):
 
         # the output will be the subprocess job table.  I need to get the e-level for the job id
         if result:
-            current_app.logger.debug("Job Table: %s", result)
+            # current_app.logger.debug("Job Table: %s", result)
             for line in result.splitlines():
                 columns = line.split()
                 if columns and columns[0] == str(job_id):  # Match Job ID

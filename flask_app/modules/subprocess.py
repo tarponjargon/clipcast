@@ -26,11 +26,17 @@ def get_tsp_path():
     ).stdout.strip()
 
 
+def allow_direnv():
+    os.system("/usr/bin/direnv allow")
+
+
 def safe_subprocess(command, strip_output=True):
     cmd_list = command.split(" ")
     print(f"Running command: {cmd_list}")
     result = None
     try:
+        direnv_path = get_direnv_path()
+        subprocess.run([direnv_path, "allow"], check=True)
         result = subprocess.run(
             cmd_list,
             cwd=os.environ.get("HOME_DIR"),

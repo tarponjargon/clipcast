@@ -21,6 +21,7 @@ test.beforeAll(async ({ browser }) => {
 });
 
 test("User Can Add Podcast From Extension", async () => {
+  test.slow();
   // example of a url that would be referred from the chrome extension
   await page.goto(
     process.env.BASE_URL + "/app/add-url?url=https%3A%2F%2Fclipcast.it%2Ftest-article"
