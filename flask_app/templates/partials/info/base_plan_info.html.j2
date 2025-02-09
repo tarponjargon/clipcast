@@ -5,16 +5,26 @@
     <div class="h1 fw-semibold mb-0">FREE!</div>
   </div>
   <div>
-    <iconify-icon icon="solar:usb-bold-duotone" class="display-6 text-body text-opacity-50"></iconify-icon>
+    <i class="fa fa-headphones fa-xl fs-1"></i>
   </div>
 </div>
 <hr class="my-20px">
 {% include 'includes/plan/base_plan_desc.html.j2' %}
+
+{% if request.args.get('show_compare') %}
 <div class="h6 font-monospace">Compare with the Premium Plan...</div>
 <hr class="my-20px">
 {% include 'includes/plan/premium_plan_desc.html.j2' %}
+{% endif %}
+
 {% if request.args.get('show_cta') %}
 <div class="w-100 d-block my-2 text-center">
   <a href="/app/stripe-checkout" class="btn btn-lg btn-theme bg-theme">Upgrade for just ${{ config.PREMIUM_PLAN_COST }}</a>
+</div>
+{% endif %}
+
+{% if request.args.get('show_manage') %}
+<div class="w-100 d-block my-2 text-center">
+  <a href="/app/payment-portal" class="btn btn-lg btn-theme bg-theme">Manage Subscription</a>
 </div>
 {% endif %}

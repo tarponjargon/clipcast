@@ -41,6 +41,12 @@ def handle_add_url_post_request(user_id):
             400,
         )
 
+    if url.endswith((".pdf", ".PDF")):
+        return (
+            render_template_string("PDFs are not supported yet.  Working on it."),
+            400,
+        )
+
     resp = add_podcast_url(request.form.get("url"), user_id)
     if not resp.get("response_code") == 200:
         return render_template_string(resp.get("message")), resp.get("response_code")
