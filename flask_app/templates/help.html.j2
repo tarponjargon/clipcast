@@ -203,7 +203,7 @@
             <li class="py-2 fs-5">Content is not completely visible on initial page load: Often when you view an article it will show you a paragraph or two and then show a button "Click to read article".  ClipCast is not able to detect these situations. </li>
             <li class="py-2 fs-5">Content is loaded client-side only: This means that when you visit the article url, a secondary request is made to the server to load the content into your browser.  ClipCast can only process server-rendered content (content provided on the initial request)</li>
             <li class="py-2 fs-5">Content on page is formatted in an atypical way: Occasionally, ClipCast will just not be able to understand the structure of a page it's given.  This is fairly rare.</li>
-            <li class="py-2 fs-5">Content is in a format that ClipCast can't read (like a PDF)</li>
+            <li class="py-2 fs-5">Content is in a format that ClipCast can't read (like an image)</li>
           </ul>
         </p>
 
@@ -240,6 +240,13 @@
           out-of-context content in your audio.
         </p>
 
+        <h3 class="fs-4">PDFs</h3>
+
+        <p>
+          PDFs can be processed by ClipCast, but sometimes they are laid out in such a way that content doesn't flow strictly left-to-right, top-to-bottom.  And since it's not HTML, it's harder for ClipCast
+          to parse out the content and exclude other elements like headers or table of contents.
+        </p>
+
 
       </article>
     </div>
@@ -253,6 +260,7 @@
               <li><a href="#overview-video" data-toggle="scroll-to">Video Walkthrough</a></li>
               <li><a href="#add-your-feed" data-toggle="scroll-to">Add to Your Podcast App</a></li>
               <li><a href="#how-to-add-content" data-toggle="scroll-to">Add Content</a></li>
+              <li><a href="#why-some-content" data-toggle="scroll-to">Hiccups</a></li>
             </ul>
           </div>
           <div class="card-arrow">

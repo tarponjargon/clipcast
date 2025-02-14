@@ -1,5 +1,8 @@
 import validators
 import json
+import re
+import requests
+import fitz  # PyMuPDF
 import subprocess
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -11,6 +14,7 @@ from flask_app.modules.helpers import (
     get_first_n_words,
     strip_html,
     match_uuid,
+    create_uuid,
 )
 from flask import (
     Blueprint,
@@ -38,12 +42,6 @@ def handle_add_url_post_request(user_id):
     if not url or not validators.url(url):
         return (
             render_template_string("Please enter a valid URL"),
-            400,
-        )
-
-    if url.endswith((".pdf", ".PDF")):
-        return (
-            render_template_string("PDFs are not supported yet.  Working on it."),
             400,
         )
 
@@ -210,6 +208,10 @@ def add_podcast_url(url, user_id):
             "message": "The URL is already in your queue",
         }
 
+    # check if this is a pdf
+    if url.lower().endswith(".pdf"):
+        return add_podcast_pdf(url, user_id)
+
     downloaded = None
     try:
         downloaded = fetch_url(url)
@@ -317,6 +319,55 @@ def add_podcast_url(url, user_id):
         }
 
     return process_episode_content(ins_id)
+
+
+def add_podcast_pdf(url, user_id):
+
+    response = None
+    try:
+        response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        current_app.logger.error(f"Error downloading PDF: {url} " + str(e))
+        return {
+            "response_code": 500,
+            "message": "Error downloading PDF",
+        }
+
+    # get the filename out of the url
+    parsed_url = urlparse(url)
+    path = parsed_url.path
+    file_name = path.split("/")[-1]
+
+    # save pdf
+    file_path = current_app.config.get("TMP_DIR") + "/" + file_name
+    with open(file_path, "wb") as file:
+        file.write(response.content)
+
+    # open an parse the pdf
+    clean_text = ""
+    try:
+        all_text = ""
+        pdf = fitz.open(file_path)
+        for page_number in range(pdf.page_count):
+            page = pdf.load_page(page_number)
+            text = page.get_text("text")
+            all_text += text
+        clean_text = re.sub(r"\s+", " ", all_text).strip()
+        pdf.close()
+    except Exception as e:
+        current_app.logger.error(f"Error extracting text from PDF: {url} " + str(e))
+        return {
+            "response_code": 500,
+            "message": "Error extracting text from PDF",
+        }
+
+    if clean_text:
+        return add_podcast_content(clean_text, user_id)
+    else:
+        return {
+            "response_code": 500,
+            "message": "No content extracted from PDF",
+        }
 
 
 def add_podcast_content(content, user_id):
