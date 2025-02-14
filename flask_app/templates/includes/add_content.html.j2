@@ -8,15 +8,44 @@ data-bs-url="/rss-feed-info"
 title="Your Podcast Feed URL"
 >podcast feed</a>:</p>
 <ol>
-  <li><a href="#enter-url" data-toggle="scroll-to">Enter a URL</a></li>
+  <li><a href="#enter-url" data-toggle="scroll-to">Enter a URL (or URLs)</a></li>
   <li><a href="#email" data-toggle="scroll-to">E-Mail Links or Text</a></li>
   <li><a href="#enter-text" data-toggle="scroll-to">Enter Text</a></li>
   <li><a href="#extension" data-toggle="scroll-to">Chrome Extension</a></li>
 </ol>
 
-<div id="enter-url" class="w-100 mt-4 mb-5">
-  <h2>1. Enter a URL</h2>
-  {% include 'includes/add_url_form.html.j2' %}
+<div id="enter-url" class="w-100 mb-5">
+  <h2>1. Enter a URL (or URLs)</h2>
+  <form
+    hx-post="/partials/app/bulk-add-urls"
+    hx-trigger="submit"
+    hx-target="#dead-end"
+    hx-on::after-request="
+      window.showToast(event.detail.xhr.response, !event.detail.successful);
+      if (event.detail.successful) {setTimeout(function() {
+        window.location.href = '/app';
+      }, 2000);}
+    "
+  >
+    <div class="form-group mb-3">
+      <textarea
+        class="form-control"
+        id="add-urls-textarea"
+        rows="4"
+        name="bulk_urls"
+      ></textarea>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-outline-theme btn-lg d-block fw-500 mb-3 hx-disable"
+      id="bulk-add-submit-button"
+    >
+      <span class="default-button-text">Submit</span>
+      <span id="loading-indicator" class="htmx-indicator">
+        Submitting ... <i class="fa fa-spinner fa-spin"></i>
+      </span>
+    </button>
+  </form>
 </div>
 
 <div id="email" class="w-100 mb-5">
@@ -56,7 +85,7 @@ title="Your Podcast Feed URL"
       <textarea
         class="form-control"
         id="add-content-textarea"
-        rows="6"
+        rows="8"
         name="content"
       ></textarea>
     </div>

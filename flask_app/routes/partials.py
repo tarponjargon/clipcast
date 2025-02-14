@@ -18,6 +18,7 @@ from flask_app.modules.user.updateemail import handle_updateemail_request
 from flask_app.modules.content.add_podcast_content import (
     handle_add_url_post_request,
     handle_add_content_request,
+    handle_bulk_add_request,
 )
 from flask_app.modules.user.queue import get_queue, get_queue_item
 from flask_app.modules.user.user import User
@@ -157,6 +158,12 @@ def do_notifications_request():
 @is_authenticated
 def do_addurl_request():
     return handle_add_url_post_request(session.get("user_id"))
+
+
+@partials.route("/app/bulk-add-urls", methods=["POST"])
+@is_authenticated
+def do_bulk_add_request():
+    return handle_bulk_add_request(session.get("user_id"))
 
 
 @partials.route("/app/add-podcast-content", methods=["POST"])

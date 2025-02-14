@@ -679,3 +679,19 @@ def convert_unix_to_date(unix_timestamp):
 
     formatted_date = dt.strftime("%b %d, %Y")
     return formatted_date
+
+
+def parse_urls_from_text(text):
+    urls = []
+
+    text = text.replace(",", "")
+
+    # Regex pattern for URLs
+    url_pattern = r"https?://[^\s]+"
+
+    # Find all URLs
+    urls = re.findall(url_pattern, text)
+
+    current_app.logger.info(f"Found URLs: {urls}")
+
+    return urls

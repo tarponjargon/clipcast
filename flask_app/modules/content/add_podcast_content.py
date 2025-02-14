@@ -15,6 +15,7 @@ from flask_app.modules.helpers import (
     strip_html,
     match_uuid,
     create_uuid,
+    parse_urls_from_text,
 )
 from flask import (
     Blueprint,
@@ -50,6 +51,53 @@ def handle_add_url_post_request(user_id):
         return render_template_string(resp.get("message")), resp.get("response_code")
 
     return render_template_string(resp.get("message"))
+
+
+def handle_bulk_add_request(user_id):
+    """Handle the request to bulk add URLs.  POST requests are handled with AJAX"""
+
+    # return_messages = []
+    text = request.form.get("bulk_urls")
+    urls = parse_urls_from_text(text)
+    if not urls:
+        return (
+            render_template_string("Please enter a valid URL"),
+            400,
+        )
+    urls = list(set(urls))
+    urls = [url for url in urls if validators.url(url)]
+
+    if len(urls) > 10:
+        urls = urls[:10]
+        # remainder = len(urls) - 10
+        # return_messages.append(
+        #     f"Max 10 per request. Submit another request for the remaining {remainder}."
+        # )
+
+    responses = []
+    for url in urls:
+        resp = add_podcast_url(url, user_id)
+        responses.append(resp)
+
+    current_app.logger.debug(f"responses: {responses}")
+    count_not_200 = len(
+        [r.get("response_code") for r in responses if r.get("response_code") != 200]
+    )
+    current_app.logger.debug("Count of non-200 status codes: " + str(count_not_200))
+    if count_not_200 > 0:
+        if count_not_200 == len(urls):
+            return render_template_string(
+                "There was an error adding the URLs.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>"
+            )
+
+        unprocessed = len(urls) - count_not_200
+        return (
+            render_template_string(
+                "Some content added, but {unprocessed} URLs could not be processed.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>"
+            ),
+        )
+
+    return render_template_string("The content has been added to your queue")
 
 
 def handle_add_content_request(user_id):
