@@ -1,8 +1,13 @@
 FROM python:3.12
 
 # install base packages
-RUN apt-get update && apt-get install -y mariadb-client less curl wget vim locate iputils-ping ssh rsync ffmpeg cron redis-tools task-spooler direnv
+RUN apt-get update && apt-get install -y mariadb-client less curl wget \
+ vim locate iputils-ping ssh rsync ffmpeg cron redis-tools task-spooler \
+ direnv gnupg ca-certificates libnss3 libnspr4 libatk1.0-0 libatspi2.0-0 \
+ libxcomposite1 libxdamage1
+
 RUN pip install --upgrade pip
+
 RUN mkdir /project
 WORKDIR /project
 COPY manage.py /project/manage.py
@@ -11,6 +16,9 @@ RUN pip3 install -r /project/requirements.txt
 COPY clipcast_crontab /etc/cron.d/clipcast_crontab
 RUN chmod 0644 /etc/cron.d/clipcast_crontab
 RUN crontab /etc/cron.d/clipcast_crontab
+
+# installs the chromium browser, necessary for Playwright
+RUN python -m playwright install chromium
 
 COPY bin/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
