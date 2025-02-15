@@ -66,6 +66,8 @@ class Config(object):
         "#commentlist",
     ]
     EPISODE_RETENTION_DAYS = 90
+    FETCH_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+    MAX_BULK_URLS = 5
 
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 465

@@ -8,14 +8,15 @@ data-bs-url="/rss-feed-info"
 title="Your Podcast Feed URL"
 >podcast feed</a>:</p>
 <ol>
-  <li><a href="#enter-url" data-toggle="scroll-to">Enter a URL (or URLs)</a></li>
+  <li><a href="#enter-url" data-toggle="scroll-to">Enter URLs</a></li>
   <li><a href="#email" data-toggle="scroll-to">E-Mail Links or Text</a></li>
   <li><a href="#enter-text" data-toggle="scroll-to">Enter Text</a></li>
   <li><a href="#extension" data-toggle="scroll-to">Chrome Extension</a></li>
 </ol>
 
 <div id="enter-url" class="w-100 mb-5">
-  <h2>1. Enter a URL (or URLs)</h2>
+  <h2>1. Enter a URLs</h2>
+  <p>Enter up to {{ config.MAX_BULK_URLS }} URLs at a time</p>
   <form
     hx-post="/partials/app/bulk-add-urls"
     hx-trigger="submit"

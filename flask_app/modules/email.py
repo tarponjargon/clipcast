@@ -46,15 +46,6 @@ def send_email(
     """
     current_app.logger.info(f"emailing {recipients}")
 
-    # just return true if the email is a test email
-    # if (
-    #     isinstance(recipients, list)
-    #     and len(recipients) == 1
-    #     and recipients[0] in current_app.config["TEST_EMAILS"]
-    # ):
-    #     current_app.logger.info(f"not emailing test email {recipients[0]}")
-    #     return True
-
     msg = Message(
         subject=subject,
         sender=sender,

@@ -8,6 +8,7 @@ from flask_app.modules.content.add_podcast_content import (
     add_podcast_content,
     add_podcast_url,
 )
+from flask_app.modules.helpers import parse_urls_from_text
 
 
 # Account credentials
@@ -71,18 +72,6 @@ def get_msg_body(msg):
     return body
 
 
-def get_body_urls(body):
-    urls = []
-
-    # Regex pattern for URLs
-    url_pattern = r"https?://[^\s]+"
-
-    # Find all URLs
-    urls = re.findall(url_pattern, body)
-
-    return urls
-
-
 def handle_email(response, email_id):
     # Parse a byte email into a message object
     msg = email.message_from_bytes(response[1])
@@ -123,9 +112,12 @@ def handle_email(response, email_id):
         return
 
     # Extract URLs from the email body
-    urls = get_body_urls(body)
+    urls = parse_urls_from_text(body)
 
     if urls and len(urls) > 0:
+        max_bulk_urls = current_app.config.get("MAX_BULK_URLS")
+        if len(urls) > max_bulk_urls:
+            urls = urls[:max_bulk_urls]
         # Output the extracted URLs
         for url in urls:
             print(f"adding url {url}")

@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urlparse
 from trafilatura import fetch_url, extract_metadata, extract
+from playwright.sync_api import sync_playwright, Error
 from flask_app.modules.helpers import (
     convert_to_ascii,
     create_uuid,
@@ -67,37 +68,39 @@ def handle_bulk_add_request(user_id):
     urls = list(set(urls))
     urls = [url for url in urls if validators.url(url)]
 
-    if len(urls) > 10:
-        urls = urls[:10]
-        # remainder = len(urls) - 10
-        # return_messages.append(
-        #     f"Max 10 per request. Submit another request for the remaining {remainder}."
-        # )
+    max_bulk_urls = current_app.config.get("MAX_BULK_URLS")
+    if len(urls) > max_bulk_urls:
+        urls = urls[:max_bulk_urls]
 
     responses = []
     for url in urls:
         resp = add_podcast_url(url, user_id)
         responses.append(resp)
 
-    current_app.logger.debug(f"responses: {responses}")
+    # current_app.logger.debug(f"responses: {responses}")
     count_not_200 = len(
         [r.get("response_code") for r in responses if r.get("response_code") != 200]
     )
-    current_app.logger.debug("Count of non-200 status codes: " + str(count_not_200))
+    # current_app.logger.debug(
+    #     f"Count of non-200 status codes: {count_not_200} number of ulrs {len(urls)}"
+    # )
+
+    return_message, return_status = "The content has been added to your queue", 200
     if count_not_200 > 0:
-        if count_not_200 == len(urls):
-            return render_template_string(
-                "There was an error adding the URLs.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>"
+        processed = len(urls) - count_not_200
+        if processed > 0:
+            return_message = f"Content added, but {count_not_200} URL(s) \
+              could not be processed.  <a class='text-white' \
+                href='/help#why-some-content'>Why some content doesn't work</a>"
+        else:
+            return_message, return_status = (
+                "There was an error adding the URLs.  \
+                  <a class='text-white' href='/help#why-some-content'>Why \
+                  some content doesn't work</a>",
+                400,
             )
 
-        unprocessed = len(urls) - count_not_200
-        return (
-            render_template_string(
-                "Some content added, but {unprocessed} URLs could not be processed.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>"
-            ),
-        )
-
-    return render_template_string("The content has been added to your queue")
+    return render_template_string(return_message), return_status
 
 
 def handle_add_content_request(user_id):
@@ -260,11 +263,34 @@ def add_podcast_url(url, user_id):
     if url.lower().endswith(".pdf"):
         return add_podcast_pdf(url, user_id)
 
+    # fetch content with playwright to get computed source
+    # and if we're lucky, get past any low bot checker hurdles
     downloaded = None
     try:
-        downloaded = fetch_url(url)
+        custom_headers = {
+            "User-Agent": current_app.config.get("FETCH_USER_AGENT"),
+            "Accept-Language": "en-US,en;q=0.9",
+        }
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(extra_http_headers=custom_headers)
+            page = context.new_page()
+            page.goto(url)
+            page.wait_for_load_state("networkidle")
+            html_source = page.content()
+            # current_app.logger.debug(html_source)
+            downloaded = html_source
+            browser.close()
+
+    except Error as e:
+        current_app.logger.error(f"Playwright error: {url} " + str(e))
+        return {
+            "response_code": 400,
+            "message": "There was an error downloading the URL",
+        }
+
     except Exception as e:
-        current_app.logger.error(f"Error extracting metadata: {url} " + str(e))
+        current_app.logger.error(f"Playwright exception: {url} " + str(e))
         return {
             "response_code": 400,
             "message": "There was an error downloading the URL",
@@ -274,7 +300,8 @@ def add_podcast_url(url, user_id):
         current_app.logger.error(f"No content could be found failed for: {url}")
         return {
             "response_code": 400,
-            "message": "No content could be extracted from URL.  <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>",
+            "message": "No content could be extracted from URL. \
+               <a class='text-white' href='/help#why-some-content'>Why some content doesn't work</a>",
         }
 
     # parse metadata
