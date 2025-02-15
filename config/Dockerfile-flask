@@ -1,6 +1,6 @@
 FROM python:3.12
 
-# install base packages
+# install base packages, the lib stuff is necessary for chromium/playwright
 RUN apt-get update && apt-get install -y mariadb-client less curl wget \
  vim locate iputils-ping ssh rsync ffmpeg cron redis-tools task-spooler \
  direnv gnupg ca-certificates libnss3 libnspr4 libatk1.0-0 libatspi2.0-0 \
