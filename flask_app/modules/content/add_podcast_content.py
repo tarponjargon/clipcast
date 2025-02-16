@@ -2,6 +2,7 @@ import validators
 import json
 import re
 import requests
+import time
 import fitz  # PyMuPDF
 import subprocess
 from bs4 import BeautifulSoup
@@ -266,35 +267,45 @@ def add_podcast_url(url, user_id):
     # fetch content with playwright to get computed source
     # and if we're lucky, get past any low bot checker hurdles
     downloaded = None
-    try:
-        custom_headers = {
-            "User-Agent": current_app.config.get("FETCH_USER_AGENT"),
-            "Accept-Language": "en-US,en;q=0.9",
-        }
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(extra_http_headers=custom_headers)
-            page = context.new_page()
-            page.goto(url)
-            page.wait_for_load_state("networkidle")
-            html_source = page.content()
-            # current_app.logger.debug(html_source)
-            downloaded = html_source
-            browser.close()
+    retry_delay = current_app.config.get("FETCH_RETRY_DELAY")
+    fetch_attempts = current_app.config.get("FETCH_ATTEMPTS")
+    for attempt in range(fetch_attempts):
+        try:
+            custom_headers = {
+                "User-Agent": current_app.config.get("FETCH_USER_AGENT"),
+                "Accept-Language": "en-US,en;q=0.9",
+            }
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                context = browser.new_context(extra_http_headers=custom_headers)
+                page = context.new_page()
+                page.goto(url)
+                page.wait_for_load_state("networkidle")
+                html_source = page.content()
+                # current_app.logger.debug(html_source)
+                downloaded = html_source
+                browser.close()
 
-    except Error as e:
-        current_app.logger.error(f"Playwright error: {url} " + str(e))
-        return {
-            "response_code": 400,
-            "message": "There was an error downloading the URL",
-        }
+        except Error as e:
+            current_app.logger.error(
+                f"Playwright error, attempt {attempt + 1}: {url} {e}"
+            )
+            # if this was the last attempt, return an error
+            if (attempt + 1) == fetch_attempts:
+                return {
+                    "response_code": 400,
+                    "message": "There was an error downloading the URL",
+                }
+            else:
+                time.sleep(retry_delay)
 
-    except Exception as e:
-        current_app.logger.error(f"Playwright exception: {url} " + str(e))
-        return {
-            "response_code": 400,
-            "message": "There was an error downloading the URL",
-        }
+        except Exception as e:
+            current_app.logger.error(f"Playwright exception: {url} " + str(e))
+            return {
+                "response_code": 400,
+                "message": "There was an error downloading the URL",
+            }
+            break
 
     if not downloaded:
         current_app.logger.error(f"No content could be found failed for: {url}")
