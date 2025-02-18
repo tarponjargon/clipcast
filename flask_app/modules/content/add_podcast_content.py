@@ -269,6 +269,7 @@ def add_podcast_url(url, user_id):
     downloaded = None
     retry_delay = current_app.config.get("FETCH_RETRY_DELAY")
     fetch_attempts = current_app.config.get("FETCH_ATTEMPTS")
+    fetch_timeout = current_app.config.get("FETCH_TIMEOUT")
     for attempt in range(fetch_attempts):
         try:
             custom_headers = {
@@ -279,8 +280,8 @@ def add_podcast_url(url, user_id):
                 browser = p.chromium.launch(headless=True)
                 context = browser.new_context(extra_http_headers=custom_headers)
                 page = context.new_page()
-                page.goto(url)
-                page.wait_for_load_state("networkidle")
+                page.goto(url, timeout=fetch_timeout)
+                page.wait_for_load_state("networkidle", timeout=fetch_timeout)
                 html_source = page.content()
                 # current_app.logger.debug(html_source)
                 downloaded = html_source
