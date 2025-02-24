@@ -64,6 +64,8 @@ class Config(object):
         ".commentlist",
         ".comment-list",
         "#commentlist",
+        ".webcomments",
+        ".webmentions",
     ]
     EPISODE_RETENTION_DAYS = 90
     FETCH_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"

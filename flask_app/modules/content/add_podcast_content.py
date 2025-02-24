@@ -220,6 +220,33 @@ def process_episode_content(id):
         }
 
 
+def fetch_with_requests(url, timeout=current_app.config.get("FETCH_TIMEOUT")):
+    """Fetch a URL with requests.
+
+    This is a fallback method in case playwright fails to fetch the content.
+
+    Args:
+      url (str): The URL to fetch
+      timeout (int): The timeout in milliseconds
+
+    Returns:
+      str: The content of the URL
+
+    """
+    try:
+        response = requests.get(url, timeout=timeout)
+        response.raise_for_status()
+        return response.text
+    except requests.exceptions.Timeout:
+        current_app.logger.error(
+            f"requests fetch of {url} timed out at {timeout} milliseconds"
+        )
+        return ""
+    except requests.exceptions.RequestException as e:
+        current_app.logger.error(f"requests fetch of {url} error: {e}")
+        return ""
+
+
 def add_podcast_url(url, user_id):
     """Add a podcast URL to the user's account"""
 
@@ -265,48 +292,39 @@ def add_podcast_url(url, user_id):
         return add_podcast_pdf(url, user_id)
 
     # fetch content with playwright to get computed source
-    # and if we're lucky, get past any low bot checker hurdles
+    # and if we're lucky, get past any low bot checker hurdles.
+    # if the fetch fails, try with requests
     downloaded = None
     retry_delay = current_app.config.get("FETCH_RETRY_DELAY")
-    fetch_attempts = current_app.config.get("FETCH_ATTEMPTS")
     fetch_timeout = current_app.config.get("FETCH_TIMEOUT")
-    for attempt in range(fetch_attempts):
-        try:
-            custom_headers = {
-                "User-Agent": current_app.config.get("FETCH_USER_AGENT"),
-                "Accept-Language": "en-US,en;q=0.9",
-            }
-            with sync_playwright() as p:
-                browser = p.chromium.launch(headless=True)
-                context = browser.new_context(extra_http_headers=custom_headers)
-                page = context.new_page()
-                page.goto(url, timeout=fetch_timeout)
-                page.wait_for_load_state("networkidle", timeout=fetch_timeout)
-                html_source = page.content()
-                # current_app.logger.debug(html_source)
-                downloaded = html_source
-                browser.close()
+    playwright_error = False
+    try:
+        custom_headers = {
+            "User-Agent": current_app.config.get("FETCH_USER_AGENT"),
+            "Accept-Language": "en-US,en;q=0.9",
+        }
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(extra_http_headers=custom_headers)
+            page = context.new_page()
+            page.goto(url, timeout=fetch_timeout)
+            page.wait_for_load_state("networkidle", timeout=fetch_timeout)
+            html_source = page.content()
+            # current_app.logger.debug(html_source)
+            downloaded = html_source
+            browser.close()
 
-        except Error as e:
-            current_app.logger.error(
-                f"Playwright error, attempt {attempt + 1}: {url} {e}"
-            )
-            # if this was the last attempt, return an error
-            if (attempt + 1) == fetch_attempts:
-                return {
-                    "response_code": 400,
-                    "message": "There was an error downloading the URL",
-                }
-            else:
-                time.sleep(retry_delay)
+    except Error as e:
+        current_app.logger.error(f"Playwright error fetching {url} {e}")
+        playwright_error = True
 
-        except Exception as e:
-            current_app.logger.error(f"Playwright exception: {url} " + str(e))
-            return {
-                "response_code": 400,
-                "message": "There was an error downloading the URL",
-            }
-            break
+    except Exception as e:
+        current_app.logger.error(f"Playwright exception: {url} " + str(e))
+        playwright_error = True
+
+    if playwright_error:
+        current_app.logger.info(f"Playwright failed, trying requests: {url}")
+        downloaded = fetch_with_requests(url, fetch_timeout)
 
     if not downloaded:
         current_app.logger.error(f"No content could be found failed for: {url}")
@@ -409,7 +427,6 @@ def add_podcast_url(url, user_id):
 
 
 def add_podcast_pdf(url, user_id):
-
     response = None
     try:
         response = requests.get(url)

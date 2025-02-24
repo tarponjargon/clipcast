@@ -82,6 +82,40 @@ and call functions:
 
 `OpenAITTS("/project/tmp/tests.mp3", "Thank you for using clipcast", “fable”).synthesize_speech()`
 
+## DEBUGGING URL FETCHES
+
+to try to figure out why "content not found" happens for certain urls, here are ways to run the 2 fetching
+methods in the REPL
+
+`flask shell`
+
+from playwright.sync_api import sync_playwright, Error
+
+url = "https://techxplore.com/news/2025-02-indiana-jones-jailbreak-approach-highlights.html"
+fetch_timeout=8000
+custom_headers = {
+"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+"Accept-Language": 'en-US,en;q=0.9'
+}
+with sync_playwright() as p:
+browser = p.chromium.launch(headless=True)
+context = browser.new_context(extra_http_headers=custom_headers)
+browser = p.chromium.launch(headless=True)
+page = context.new_page()
+page.goto(url, timeout=fetch_timeout)
+page.wait_for_load_state("networkidle", timeout=fetch_timeout)
+html_source = page.content()
+print(html_source)
+browser.close()
+
+# with "requests"
+
+import requests
+url="https://techxplore.com/news/2025-02-indiana-jones-jailbreak-approach-highlights.html"
+response = requests.get(url, timeout=8000)
+response.raise_for_status()
+print(response.text)
+
 ## TESTING
 
 Testing is with Playwright
