@@ -17,7 +17,7 @@ services:
       - my_network
 
   database_server:
-    image: mysql
+    image: mysql:8.2.0
     container_name: ${MYSQL_HOST}
     restart: unless-stopped
     tty: true
