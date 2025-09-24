@@ -102,7 +102,15 @@ def handle_email(response, email_id):
 
     # get body
     body_bytes = get_msg_body(msg)
-    body = body_bytes.decode("utf-8")
+    if isinstance(body_bytes, bytes):
+        try:
+            body = body_bytes.decode("utf-8")
+        except UnicodeDecodeError:
+            # Try with a more lenient encoding if UTF-8 fails
+            body = body_bytes.decode("utf-8", errors="replace")
+    else:
+        # If get_msg_body returned an empty string or None
+        body = body_bytes if body_bytes else ""
 
     subject = msg.get("Subject", "")
     print(f"Subject: {subject}")
